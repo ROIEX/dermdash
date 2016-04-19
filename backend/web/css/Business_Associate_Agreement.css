@@ -1,0 +1,145 @@
+
+body {margin-top: 0px;margin-left: 0px;}
+
+#page_1 {position:relative; overflow: hidden;margin: 100px 0px 120px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_2 {position:relative; overflow: hidden;margin: 100px 0px 128px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_3 {position:relative; overflow: hidden;margin: 100px 0px 144px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_4 {position:relative; overflow: hidden;margin: 100px 0px 109px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_5 {position:relative; overflow: hidden;margin: 100px 0px 146px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_6 {position:relative; overflow: hidden;margin: 98px 0px 385px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+#page_7 {position:relative; overflow: hidden;margin: 118px 0px 478px 100px;padding: 0px;border: none;width: 716px;}
+
+
+
+
+
+.ft0{font: bold 16px 'Times';line-height: 19px;}
+.ft1{font: 16px 'Times';line-height: 19px;}
+.ft2{font: bold 16px 'Times New Roman';line-height: 19px;}
+.ft3{font: 16px 'Times';line-height: 18px;}
+.ft4{font: bold 16px 'Times';line-height: 18px;}
+.ft5{font: 16px 'Times';line-height: 15px;}
+.ft6{font: bold 16px 'Times';text-decoration: underline;line-height: 19px;}
+.ft7{font: 16px 'Times';line-height: 13px;}
+.ft8{font: bold 16px 'Times';text-decoration: underline;line-height: 18px;}
+.ft9{font: bold 16px 'Times New Roman';line-height: 18px;}
+.ft10{font: bold 16px 'Times New Roman';text-decoration: underline;margin-left: 32px;line-height: 19px;}
+.ft11{font: bold 16px 'Times New Roman';text-decoration: underline;line-height: 19px;}
+.ft12{font: 16px 'Times';margin-left: 4px;line-height: 19px;}
+.ft13{font: bold 16px 'Times New Roman';margin-left: 4px;line-height: 19px;}
+.ft14{font: 16px 'Times';margin-left: 4px;line-height: 18px;}
+.ft15{font: bold 16px 'Times';line-height: 14px;}
+.ft16{font: bold 16px 'Times';text-decoration: underline;line-height: 14px;}
+.ft17{font: 16px 'Times';line-height: 14px;}
+.ft18{font: 16px 'Times';margin-left: 30px;line-height: 19px;}
+.ft19{font: 16px 'Times';margin-left: 29px;line-height: 19px;}
+.ft20{font: bold 15px 'Times New Roman';line-height: 17px;}
+.ft21{font: 15px 'Times';line-height: 17px;}
+.ft22{font: bold 16px 'Times';text-decoration: underline;margin-left: 25px;line-height: 19px;}
+.ft23{font: 16px 'Times';text-decoration: underline;line-height: 19px;}
+.ft24{font: bold 16px 'Times';line-height: 15px;}
+
+.p0{text-align: left;padding-left: 167px;margin-top: 0px;margin-bottom: 0px;}
+.p1{text-align: left;padding-right: 143px;margin-top: 10px;margin-bottom: 0px;}
+.p2{text-align: left;padding-right: 127px;margin-top: 1px;margin-bottom: 0px;text-indent: 296px;}
+.p3{text-align: left;padding-right: 124px;margin-top: 3px;margin-bottom: 0px;}
+.p4{text-align: left;padding-right: 127px;margin-top: 2px;margin-bottom: 0px;}
+.p5{text-align: left;padding-left: 267px;margin-top: 35px;margin-bottom: 0px;}
+.p6{text-align: left;margin-top: 17px;margin-bottom: 0px;}
+.p7{text-align: left;margin-top: 0px;margin-bottom: 0px;}
+.p8{text-align: left;padding-right: 139px;margin-top: 40px;margin-bottom: 0px;}
+.p9{text-align: left;padding-left: 255px;margin-top: 21px;margin-bottom: 0px;}
+.p10{text-align: left;padding-left: 24px;margin-top: 18px;margin-bottom: 0px;}
+.p11{text-align: left;margin-top: 22px;margin-bottom: 0px;}
+.p12{text-align: left;padding-right: 105px;margin-top: 1px;margin-bottom: 0px;}
+.p13{text-align: left;padding-right: 105px;margin-top: 0px;margin-bottom: 0px;}
+.p14{text-align: left;padding-right: 100px;margin-top: 0px;margin-bottom: 0px;}
+.p15{text-align: left;margin-top: 21px;margin-bottom: 0px;}
+.p16{text-align: left;padding-right: 101px;margin-top: 0px;margin-bottom: 0px;}
+.p17{text-align: left;padding-right: 140px;margin-top: 17px;margin-bottom: 0px;}
+.p18{text-align: justify;margin-top: 15px;margin-bottom: 0px;}
+.p19{text-align: left;padding-right: 118px;margin-top: 20px;margin-bottom: 0px;text-indent: 48px;}
+.p20{text-align: left;padding-right: 100px;margin-top: 3px;margin-bottom: 0px;}
+.p21{text-align: justify;padding-right: 232px;margin-top: 21px;margin-bottom: 0px;text-indent: 48px;}
+.p22{text-align: left;padding-right: 145px;margin-top: 12px;margin-bottom: 0px;text-indent: 48px;}
+.p23{text-align: justify;padding-right: 165px;margin-top: 19px;margin-bottom: 0px;text-indent: 48px;}
+.p24{text-align: left;padding-right: 148px;margin-top: 16px;margin-bottom: 0px;text-indent: 48px;}
+.p25{text-align: justify;padding-right: 121px;margin-top: 2px;margin-bottom: 0px;}
+.p26{text-align: left;padding-right: 101px;margin-top: 33px;margin-bottom: 0px;text-indent: 48px;}
+.p27{text-align: left;margin-top: 3px;margin-bottom: 0px;}
+.p28{text-align: left;margin-top: 4px;margin-bottom: 0px;}
+.p29{text-align: left;padding-left: 48px;margin-top: 0px;margin-bottom: 0px;}
+.p30{text-align: justify;padding-right: 101px;margin-top: 5px;margin-bottom: 0px;}
+.p31{text-align: justify;padding-right: 100px;margin-top: 21px;margin-bottom: 0px;text-indent: 48px;}
+.p32{text-align: left;padding-right: 100px;margin-top: 17px;margin-bottom: 0px;text-indent: 48px;}
+.p33{text-align: left;padding-left: 48px;margin-top: 25px;margin-bottom: 0px;}
+.p34{text-align: left;padding-right: 146px;margin-top: 17px;margin-bottom: 0px;text-indent: 48px;}
+.p35{text-align: left;padding-right: 148px;margin-top: 35px;margin-bottom: 0px;text-indent: 48px;}
+.p36{text-align: left;padding-right: 141px;margin-top: 32px;margin-bottom: 0px;text-indent: 48px;}
+.p37{text-align: justify;padding-right: 100px;margin-top: 17px;margin-bottom: 0px;text-indent: 48px;}
+.p38{text-align: justify;padding-right: 100px;margin-top: 0px;margin-bottom: 0px;text-indent: 48px;}
+.p39{text-align: justify;padding-right: 100px;margin-top: 23px;margin-bottom: 0px;text-indent: 48px;}
+.p40{text-align: justify;padding-right: 95px;margin-top: 2px;margin-bottom: 0px;}
+.p41{text-align: justify;padding-right: 101px;margin-top: 3px;margin-bottom: 0px;}
+.p42{text-align: left;padding-right: 109px;margin-top: 16px;margin-bottom: 0px;text-indent: 48px;}
+.p43{text-align: left;margin-top: 1px;margin-bottom: 0px;}
+.p44{text-align: justify;margin-top: 19px;margin-bottom: 0px;}
+.p45{text-align: left;padding-right: 108px;margin-top: 17px;margin-bottom: 0px;text-indent: 48px;}
+.p46{text-align: left;padding-left: 48px;margin-top: 17px;margin-bottom: 0px;}
+.p47{text-align: justify;padding-right: 100px;margin-top: 0px;margin-bottom: 0px;}
+.p48{text-align: justify;padding-right: 100px;margin-top: 1px;margin-bottom: 0px;}
+.p49{text-align: left;margin-top: 32px;margin-bottom: 0px;}
+.p50{text-align: left;padding-right: 106px;margin-top: 1px;margin-bottom: 0px;text-indent: 48px;}
+.p51{text-align: left;padding-left: 48px;margin-top: 36px;margin-bottom: 0px;}
+.p52{text-align: left;padding-right: 160px;margin-top: 1px;margin-bottom: 0px;}
+.p53{text-align: left;padding-left: 48px;margin-top: 15px;margin-bottom: 0px;}
+.p54{text-align: left;padding-right: 100px;margin-top: 4px;margin-bottom: 0px;}
+.p55{text-align: left;padding-right: 100px;margin-top: 16px;margin-bottom: 0px;text-indent: 48px;}
+.p56{text-align: left;padding-right: 102px;margin-top: 2px;margin-bottom: 0px;}
+.p57{text-align: left;padding-right: 107px;margin-top: 2px;margin-bottom: 0px;}
+.p58{text-align: left;padding-right: 101px;margin-top: 3px;margin-bottom: 0px;}
+.p59{text-align: left;margin-top: 36px;margin-bottom: 0px;}
+.p60{text-align: left;padding-right: 104px;margin-top: 16px;margin-bottom: 0px;text-indent: 48px;}
+.p61{text-align: left;padding-left: 48px;margin-top: 21px;margin-bottom: 0px;}
+.p62{text-align: left;padding-right: 137px;margin-top: 0px;margin-bottom: 0px;}
+.p63{text-align: left;padding-right: 100px;margin-top: 0px;margin-bottom: 0px;text-indent: 48px;}
+.p64{text-align: left;padding-right: 101px;margin-top: 1px;margin-bottom: 0px;}
+.p65{text-align: left;padding-right: 100px;margin-top: 2px;margin-bottom: 0px;}
+.p66{text-align: left;padding-left: 48px;margin-top: 31px;margin-bottom: 0px;}
+.p67{text-align: left;padding-right: 104px;margin-top: 2px;margin-bottom: 0px;}
+.p68{text-align: left;padding-right: 108px;margin-top: 18px;margin-bottom: 0px;text-indent: 48px;}
+.p69{text-align: left;margin-top: 2px;margin-bottom: 0px;}
+.p70{text-align: left;padding-right: 106px;margin-top: 17px;margin-bottom: 0px;text-indent: 48px;}
+.p71{text-align: left;padding-left: 158px;margin-top: 21px;margin-bottom: 0px;}
+.p72{text-align: left;margin-top: 18px;margin-bottom: 0px;}
+.p73{text-align: left;margin-top: 55px;margin-bottom: 0px;}
