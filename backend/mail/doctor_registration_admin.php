@@ -5,7 +5,7 @@ use common\components\dateformatter\FormatDate;
 
 ?>
 
-<?php echo Yii::t('app', 'New doctor is Registered with Botox App.')?> <br/><br/>
+<?php echo Yii::t('app', 'New doctor is Registered with DermDash.')?> <br/><br/>
 <?php echo Yii::t('app', 'His/her email id (User Name) is')?> "<?php echo $doctor->user->email ?>"<br>
 <?php echo Yii::t('app', 'First Name')?>: "<?php echo $doctor->profile->firstname ?>"<br>
 <?php echo Yii::t('app', 'Last Name')?>: "<?php echo $doctor->profile->lastname ?>"<br>
@@ -15,4 +15,4 @@ use common\components\dateformatter\FormatDate;
 <?php echo Yii::t('app', 'Contact no')?>: "<?php echo $doctor->profile->phone ?>"<br>
 <?php echo Yii::t('app', 'Medical License')?> # : "<?php echo $doctor->license ?>"<br>
 
-<?php echo Yii::t('app', 'Thank you so much for registering with Botox App.');?>
+<?php echo Yii::t('app', 'Thank you so much for registering with DermDash.');?>

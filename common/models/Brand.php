@@ -232,7 +232,6 @@ class Brand extends \yii\db\ActiveRecord
     {
         $brand_param_list = [];
         $brand_array =  self::find()->with('brandParams')->all();
-        $brand_param_array = BrandParam::find()->all();
 
         if (!empty($brand_array)) {
             foreach ($brand_array as $brand) {
