@@ -57,6 +57,7 @@ class GetDoctorList extends Model
                 $returnData[$userProfile->user_id] = [
                     'doctor_id'=>$userProfile->user_id,
                     'clinic'=> $list->user->doctor->clinic,
+                    'city' => $list->user->userProfile->city,
                     'photo'=>$userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'price'=>$list->price,
                     'rating'=>[
