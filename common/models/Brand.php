@@ -157,7 +157,7 @@ class Brand extends \yii\db\ActiveRecord
      */
     public function getActiveBrandParams()
     {
-        return $this->hasMany(BrandParam::className(), ['brand_id' => 'id'])->where([BrandParam::tableName() . 'status' => StatusHelper::STATUS_ACTIVE]);
+        return $this->hasMany(BrandParam::className(), ['brand_id' => 'id'])->where([BrandParam::tableName() . '.`status`' => StatusHelper::STATUS_ACTIVE]);
     }
 
     /**
