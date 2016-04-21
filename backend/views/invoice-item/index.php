@@ -20,7 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Clinic',
                 'format' => 'raw',
                 'value' => function($data) {
-                    return Html::a($data->user->doctor->clinic, Url::toRoute(['doctor/view', 'id' => $data->user->doctor->id]))   ;
+                    if (Yii::$app->user->can('administrator')) {
+                        return Html::a($data->user->doctor->clinic, Url::toRoute(['doctor/view', 'id' => $data->user->doctor->id]));
+                    } else {
+                        return $data->user->doctor->clinic;
+                    }
+
                 }
             ],
             [
