@@ -31,6 +31,7 @@ use yii\helpers\VarDumper;
  *
  * @property Treatment $treatment
  * @property BrandParam[] $brandParams
+ * @property BrandParam[] $activeBrandParams
  */
 class Brand extends \yii\db\ActiveRecord
 {
@@ -149,6 +150,14 @@ class Brand extends \yii\db\ActiveRecord
     public function getBrandParams()
     {
         return $this->hasMany(BrandParam::className(), ['brand_id' => 'id']);
+    }
+
+    /**
+     * @return $this
+     */
+    public function getActiveBrandParams()
+    {
+        return $this->hasMany(BrandParam::className(), ['brand_id' => 'id'])->where([BrandParam::tableName() . 'status' => StatusHelper::STATUS_ACTIVE]);
     }
 
     /**

@@ -60,12 +60,12 @@ class CollectData
     private function getBrandsData()
     {
         $returnData = [];
-        $allBrands = Brand::find()->where(['status'=>StatusHelper::STATUS_ACTIVE])->all();
+        $allBrands = Brand::find()->where(['status' => StatusHelper::STATUS_ACTIVE])->all();
         foreach ($allBrands as $brand) {
             /* @var $brand Brand */
             $icon_url = $brand->icon_path ? $brand->icon_base_url . '/' . $brand->icon_path : false;
             $params = [];
-            foreach ($brand->brandParams as $param) {
+            foreach ($brand->activeBrandParams as $param) {
                 $params[] = [
                     'param_id'=>$param->id,
                     'body_part'=>Brand::getBodyPart($param->body_part),
