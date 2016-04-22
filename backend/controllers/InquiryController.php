@@ -39,16 +39,18 @@ class InquiryController extends Controller
 
             case Inquiry::STATUS_COMPLETED:
                 $completed_query = Payment::find()->where(['status' =>  Payment::STATUS_SUCCEEDED]);
-                $completed_offers = $completed_query->all();
-                $completed_id_list = ArrayHelper::map($completed_offers, 'inquiry_id', 'inquiry_id');
 
                 if (!Yii::$app->user->can('administrator')) {
                     $completed_query->andWhere(['doctor_id' => Yii::$app->user->id]);
-                    Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
                 }
+
+                $completed_offers = $completed_query->all();
+                $completed_id_list = ArrayHelper::map($completed_offers, 'inquiry_id', 'inquiry_id');
 
                 if (Yii::$app->user->can('administrator')) {
                     Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
+                } else {
+                    Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
                 }
 
                 $query = $inquiry->find()->where(['in', 'id', $completed_id_list]);
