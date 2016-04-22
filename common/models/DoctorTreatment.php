@@ -96,11 +96,16 @@ class DoctorTreatment extends \yii\db\ActiveRecord
 
         $treatment_param_array = array_filter($treatment_param_array);
         $brand_provided_treatment_array = array_filter($brand_provided_treatment_array);
-        $treatment_discounts = array_filter($treatment_discounts, function ($item) {
-            if (!empty(array_filter($item))) {
-                return $item;
+
+        $trimmed_discounts = [];
+        foreach ($treatment_discounts as $treatment_id => $discounts) {
+            foreach ($discounts as $discount_id => $discount_value) {
+                if (trim($discount_value) != '') {
+                    $trimmed_discounts[$treatment_id] = $discounts;
+                }
             }
-        });
+        }
+        $treatment_discounts = $trimmed_discounts;
 
         if (!empty($treatment_param_array)) {
             foreach ($treatment_param_array as $treatment_param_id => $treatment_param_value) {
@@ -132,6 +137,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                 $treatment_params = $treatment->treatmentParams;
                 if ($treatment->treatmentIntensity) {
                         foreach ($treatment->treatmentSessions as $session) {
+
                             if ($session->session_count != 1) {
                                 $intensity_discounts[] = [
                                     'treatment_id' => $treatment->id,

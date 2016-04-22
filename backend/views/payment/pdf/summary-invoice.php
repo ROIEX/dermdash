@@ -2,18 +2,16 @@
 /** @var \common\components\Invoice $invoice */
 /* @var $this yii\web\View */
 $total_price = 0;
+
+
 ?>
 
 <div class="container">
     <div class="row">
         <div class="col-xs-6">
             <h1>
-                <img src="logo.png">
-                Logo here
+                <img src="<?php echo Yii::getAlias('@backendUrl') . '/img/dermdash-logo-website.jpg'?>">
             </h1>
-        </div>
-        <div class="col-xs-6">
-            <h1><small><?php echo $invoice_number?></small></h1>
         </div>
     </div>
 
@@ -32,7 +30,7 @@ $total_price = 0;
         </div>
 
         <div class="col-xs-6">
-            <?php echo Yii::t('app', 'Phone :  {address}', ['address' => $invoice['location']]) ?>
+            <?php echo Yii::t('app', 'Phone :  {phone}', ['phone' => $invoice['phone']]) ?>
         </div>
 
     </div>
@@ -70,9 +68,9 @@ $total_price = 0;
                         <td>1</td>
                         <td class="text-right"><?php echo \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($item['purchase_date'])?></td>
                         <td class="text-right"><?php echo $item['param'] . ' ( ' . $item['used_brands'] . ' items )'?></td>
-                        <td class="text-right"><?php echo $item['price'] ?></td>
+                        <td class="text-right"><?php echo '$ ' . $item['price'] ?></td>
                         <td class="text-right"><?php echo $invoice['fee'] . ' %'?></td>
-                        <td class="text-right"><?php echo ($item['price'] * (1 - $invoice['fee'] / 100) )?></td>
+                        <td class="text-right"><?php echo '$ ' . ($item['price'] * (1 - $invoice['fee'] / 100) )?></td>
                     </tr>
                 <?php endforeach?>
             </tbody>

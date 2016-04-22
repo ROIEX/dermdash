@@ -144,6 +144,7 @@ class PaymentController extends Controller
             $generation->save();
             $generation->refresh();
 
+
             foreach ($invoices->invoice_items as $user_id => $invoice) {
                 $this->summaryInvoiceGenerate($invoice, $user_id, $generation->id);
             }
@@ -171,10 +172,9 @@ class PaymentController extends Controller
             mkdir(Yii::getAlias('@storage/web/source/invoice'));
         }
 
-        $invoice_number = time() . $user_id;
         $pdf =
             [
-                'content' => $this->renderPartial('pdf/summary-invoice', ['invoice' => $invoice, 'invoice_number' => $invoice_number]),
+                'content' => $this->renderPartial('pdf/summary-invoice', ['invoice' => $invoice]),
                 'filename' => Yii::$app->security->generateRandomString(16) . '.pdf',
             ];
 
@@ -183,13 +183,16 @@ class PaymentController extends Controller
             'filename'=> Yii::getAlias('@storage/web/source/invoice/') . $pdf['filename'],
             'format' => Pdf::FORMAT_A4,
             'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_FILE,
+            'destination' => Pdf::DEST_File,
             'content' => $pdf['content'],
         ]);
 
         $create_pdf->render();
+
+
+        var_dump($net_total);exit;
         $document = new \common\models\Invoice();
-        return $document->savePdf($pdf, $user_id, $generation_date_id, $invoice_number);
+        return $document->savePdf($pdf, $user_id, $generation_date_id);
     }
 
     private function invoiceGenerate($invoice, $user_id)

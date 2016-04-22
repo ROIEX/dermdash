@@ -84,15 +84,18 @@ class SummaryInvoice
 
 
         if ($inquiry->inquiryTreatments) {
+            $treatment['net_total'] = 0;
             foreach ($offer_list as $inquiry_item) {
 
                 /** @var InquiryDoctorList $inquiry_item */
                 $desc_treatment_name = $inquiry_item->treatmentParam->treatment->name;
                 $treatment = [
+                    'invoice_number' => $payment->inquiry_id,
                     'param' => $desc_treatment_name . ', ' . $inquiry_item->treatmentParam->value,
                     'price' => $inquiry_item->price,
-                    'purchase_date' => $payment->created_at
+                    'purchase_date' => $payment->created_at,
                 ];
+
 
                 $inquiry_treatment = $inquiry_item->inquiryTreatment;
 
