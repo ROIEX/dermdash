@@ -27,6 +27,7 @@ use common\models\Brand;
                         ->label(Yii::t('app', 'Please check box in order to receive submissions')) ?>
                 <?php endif ?>
                 <div class="row">
+                    <?php $i = 0;?>
                     <?php foreach ($treatment->treatmentParams as $param) : ?>
                         <?php if (!empty($param->filledSeverity) || !empty($param->brandProvided) || !empty($treatment->treatmentIntensity)) : ?>
                             <div class="col-xs-12">
@@ -122,13 +123,18 @@ use common\models\Brand;
                             </div>
                             <?php break; ?>
                         <?php else : ?>
+                            <?php $i++; ?>
                             <div class="col-xs-6">
                                 <?php $label = $param->reg_description ? $param->reg_description : $param->value ?>
                                 <?php echo Html::activeLabel($model, "treatments[$param->id]", ['label' => $label]) ?>
                                 <div class="units-dollar">
                                     <?php echo $form->field($model, "treatments[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price')])->label(false) ?>
                                 </div>
+
                             </div>
+                            <?php if ($i % 2 == 0) :?>
+                                <div class="clearfix"></div>
+                            <?php endif ?>
                         <?php endif ?>
                     <?php endforeach ?>
                 </div>
