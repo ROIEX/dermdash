@@ -148,7 +148,7 @@ class SignInController extends \yii\web\Controller
             'body'=>Yii::t('frontend', 'Activation successful! Thank you for registration.'),
             'options'=>['class'=>'alert-success']
         ]);
-        return $this->redirect(['/site/index']);
+        return $this->redirect('https://www.dermdash.com/user-registration-confirmation');
     }
 
     public function actionResetPassword($token)

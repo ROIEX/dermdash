@@ -11,6 +11,7 @@ use Yii;
 use common\models\Payment;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -104,7 +105,6 @@ class PaymentController extends Controller
             $payment_id_list = ArrayHelper::map($payment_list, 'id', 'id');
             Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
 
-
             foreach ($payment_list as $payment) {
                 $invoice = new Invoice($payment, true);
                 $this->invoiceGenerate($invoice, $payment->doctor_id);
@@ -144,10 +144,10 @@ class PaymentController extends Controller
             $generation->save();
             $generation->refresh();
 
-
-            foreach ($invoices->invoice_items as $user_id => $invoice) {
-                $this->summaryInvoiceGenerate($invoice, $user_id, $generation->id);
+            foreach ($invoices->invoice_items as $user_id => $invoice_item) {
+                $this->summaryInvoiceGenerate($invoice_item, $user_id, $generation->id, $invoices->net_total);
             }
+
             Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
 
             Yii::$app->session->setFlash('alert', [
@@ -166,7 +166,7 @@ class PaymentController extends Controller
         }
     }
 
-    private function summaryInvoiceGenerate($invoice, $user_id, $generation_date_id)
+    private function summaryInvoiceGenerate($invoice, $user_id, $generation_date_id, $net_total)
     {
         if (!is_dir(Yii::getAlias('@storage/web/source/invoice'))) {
             mkdir(Yii::getAlias('@storage/web/source/invoice'));
@@ -183,16 +183,13 @@ class PaymentController extends Controller
             'filename'=> Yii::getAlias('@storage/web/source/invoice/') . $pdf['filename'],
             'format' => Pdf::FORMAT_A4,
             'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_File,
+            'destination' => Pdf::DEST_FILE,
             'content' => $pdf['content'],
         ]);
 
         $create_pdf->render();
-
-
-        var_dump($net_total);exit;
         $document = new \common\models\Invoice();
-        return $document->savePdf($pdf, $user_id, $generation_date_id);
+        return $document->savePdf($pdf, $user_id, $generation_date_id, $net_total);
     }
 
     private function invoiceGenerate($invoice, $user_id)

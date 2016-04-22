@@ -17,8 +17,6 @@ use yii\helpers\VarDumper;
 
 class SummaryInvoice
 {
-    public $purchase_date;
-    public $item_description;
     public $total_price;
     public $fee;
     public $net_total;
@@ -41,7 +39,7 @@ class SummaryInvoice
 
     }
 
-    public function doctorSummaryInvoice($payments)
+    private function doctorSummaryInvoice($payments)
     {
         $invoice_array = [];
         $doctor_id_list = [];
@@ -50,7 +48,7 @@ class SummaryInvoice
             $doctor_id_list[] = $payment->doctor_id;
         }
         $doctor_id_list = array_unique($doctor_id_list);
-
+        $this->net_total = 0;
         foreach ($doctor_id_list as $doctor_id) {
             $items = [];
             foreach ($payments as $payment) {
@@ -65,11 +63,12 @@ class SummaryInvoice
                 'address' => $this->address,
                 'location' => $this->location,
                 'phone' => $this->phone,
+                'net_total' => $this->phone,
                 'items' => $items
-
             ];
         }
 
+        $this->net_total *= (1 - $this->fee / 100);
         return $invoice_array;
     }
 
@@ -82,9 +81,12 @@ class SummaryInvoice
 
         $inquiry = Inquiry::findOne($payment->inquiry_id);
 
+        /** @var InquiryDoctorList $offer */
+        foreach ($offer_list as $offer ) {
+            $this->net_total += $offer->price;
+        }
 
         if ($inquiry->inquiryTreatments) {
-            $treatment['net_total'] = 0;
             foreach ($offer_list as $inquiry_item) {
 
                 /** @var InquiryDoctorList $inquiry_item */
@@ -95,7 +97,6 @@ class SummaryInvoice
                     'price' => $inquiry_item->price,
                     'purchase_date' => $payment->created_at,
                 ];
-
 
                 $inquiry_treatment = $inquiry_item->inquiryTreatment;
 
@@ -116,7 +117,6 @@ class SummaryInvoice
            return $treatment;
 
         } elseif ($inquiry->inquiryBrands) {
-
             /** @var InquiryDoctorList $inquiry_item */
             foreach ($offer_list as $inquiry_item) {
 

@@ -36,7 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => Yii::t('app', 'Net Total')
+                'label' => Yii::t('app', 'Net Total'),
+                'value' => function($data){
+                    return $data->net_total . ' $';
+                }
             ]
         ],
     ]); ?>

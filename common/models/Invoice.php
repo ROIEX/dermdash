@@ -55,14 +55,16 @@ class Invoice extends \yii\db\ActiveRecord
         ];
     }
 
-    public function savePdf(array $pdf, $user_id, $generation_date_id, $invoice_number = null)
+    public function savePdf(array $pdf, $user_id, $generation_date_id, $net_total, $invoice_number = null)
     {
         $this->user_id = $user_id;
         $this->file_path = Yii::getAlias('@storageUrl/source/invoice/') . $pdf['filename'];
         $this->date_id = $generation_date_id;
+        $this->net_total = $net_total;
         if ($invoice_number) {
             $this->number = $invoice_number;
         }
+
         if(!$this->save()) {
             return false;
         }
