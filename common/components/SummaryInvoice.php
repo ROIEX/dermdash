@@ -70,7 +70,7 @@ class SummaryInvoice
                 'doctor_clinic' => $doctor->clinic,
                 'doctor_location' => $doctor->profile->address . ', ' . $doctor->profile->zipcode . ', ' . $doctor->profile->state->name,
                 'doctor_phone' => $doctor->profile->phone,
-                'items' => $items
+                'items' => array_filter($items)
             ];
         }
 
@@ -92,11 +92,11 @@ class SummaryInvoice
         }
 
         if ($inquiry->inquiryTreatments) {
-            foreach ($offer_list as $inquiry_id => $inquiry_item) {
+            foreach ($offer_list as $inquiry_item) {
 
                 /** @var InquiryDoctorList $inquiry_item */
                 $desc_treatment_name = $inquiry_item->treatmentParam->treatment->name;
-                $treatment[$inquiry_id] = [
+                $treatment = [
                     'invoice_number' => $inquiry_item->treatmentParam->treatment->id,
                     'param' => $desc_treatment_name . ', ' . $inquiry_item->treatmentParam->value,
                     'price' => $inquiry_item->price,
@@ -115,7 +115,7 @@ class SummaryInvoice
                 } elseif ($inquiry_treatment->treatment_intensity_id) {
 
                     $treatment_intensity = $inquiry_treatment->treatmentIntensity;
-                    $treatment[$inquiry_id]['used_brands'] = $treatment_intensity->brandParam->brand->name . ', '. $treatment_intensity->count * $inquiry_treatment->session->session_count;
+                    $treatment['used_brands'] = $treatment_intensity->brandParam->brand->name . ', '. $treatment_intensity->count * $inquiry_treatment->session->session_count;
                 }
             }
 
