@@ -115,7 +115,7 @@ class PaymentController extends Controller
                 $this->summaryInvoiceGenerate($invoice_item, $user_id, $generation->id);
             }
 
-            //Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
+            Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
 
             Yii::$app->session->setFlash('alert', [
                 'options' => ['class' => 'alert-success'],
