@@ -116,6 +116,8 @@ class SummaryInvoice
 
                     $treatment_intensity = $inquiry_treatment->treatmentIntensity;
                     $treatment['used_brands'] = $treatment_intensity->brandParam->brand->name . ', '. $treatment_intensity->count * $inquiry_treatment->session->session_count;
+                } else {
+                    $treatment['used_brands'] = '';
                 }
             }
 

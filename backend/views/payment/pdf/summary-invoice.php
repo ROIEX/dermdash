@@ -73,7 +73,7 @@ $total_price = 0;
                     <tr>
                         <td><?php echo $item['invoice_number']?></td>
                         <td class="text-right"><?php echo \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($item['purchase_date'], true)?></td>
-                        <td class="text-right"><?php echo $item['param'] . ' ( ' . $item['used_brands'] . ' items )'?></td>
+                        <td class="text-right"><?php echo $item['param'] . (!empty($item['used_brands']) ? ' ( ' . $item['used_brands']  .' items )' : '')?></td>
                         <td class="text-right"><?php echo '$ ' . $item['price'] ?></td>
                         <td class="text-right"><?php echo $invoice['fee'] . ' %'?></td>
                         <td class="text-right"><?php echo '$ ' . ($item['price'] * (1 - $invoice['fee'] / 100) )?></td>
