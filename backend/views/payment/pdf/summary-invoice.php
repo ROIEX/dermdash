@@ -69,14 +69,13 @@ $total_price = 0;
             </thead>
             <tbody>
                 <?php foreach ($invoice['items'] as $item) : ?>
-                    <?php $total_price += $item['price']?>
                     <tr>
                         <td><?php echo $item['invoice_number']?></td>
                         <td class="text-right"><?php echo \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($item['purchase_date'], true)?></td>
                         <td class="text-right"><?php echo $item['param'] . (!empty($item['used_brands']) ? ' ( ' . $item['used_brands']  .' items )' : '')?></td>
-                        <td class="text-right"><?php echo '$ ' . $item['price'] ?></td>
+                        <td class="text-right"><?php echo '$ ' . round($item['price'], 2) ?></td>
                         <td class="text-right"><?php echo $invoice['fee'] . ' %'?></td>
-                        <td class="text-right"><?php echo '$ ' . ($item['price'] * (1 - $invoice['fee'] / 100) )?></td>
+                        <td class="text-right"><?php echo '$ ' . round($item['price'] * (1 - $invoice['fee'] / 100) )?></td>
                     </tr>
                 <?php endforeach?>
             </tbody>
@@ -86,7 +85,7 @@ $total_price = 0;
         <div class="col-xs-4 col-xs-offset-8">
             <p>
                 <strong>
-                   <?php echo Yii::t('app', 'Total : {total} $', ['total' =>  $total_price * (1 - $invoice['fee'] / 100)])?><br>
+                   <?php echo Yii::t('app', 'Total : {total} $', ['total' =>  $invoice['net_total'] ])?><br>
                 </strong>
             </p>
         </div>

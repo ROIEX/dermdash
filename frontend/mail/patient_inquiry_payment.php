@@ -756,7 +756,10 @@ Dr. Office<br>
                                                                                     <?php echo $doctor_email ?><br>
 <br>
 <br>
-Voucher Number: <?php echo $invoice_number?></span></div>
+Voucher Number: <?php echo $invoice_number?><br/>
+Item: <?php echo $item?>
+                                                                                </span></div>
+
 
                                                                         </td>
                                                                     </tr>
@@ -765,15 +768,8 @@ Voucher Number: <?php echo $invoice_number?></span></div>
                                                             </td>
                                                         </tr>
                                                         </tbody>
-                                                    </table><table class="mcnCodeBlock" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                        <tbody class="mcnTextBlockOuter">
-                                                        <tr>
-                                                            <td class="mcnTextBlockInner" valign="top">
-                                                                <div class="mcnTextContent">Use your own custom HTML</div>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width:100%;">
+                                                    </table>
+                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width:100%;">
                                                         <tbody class="mcnButtonBlockOuter">
                                                         <tr>
                                                             <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" valign="top" align="center" class="mcnButtonBlockInner">

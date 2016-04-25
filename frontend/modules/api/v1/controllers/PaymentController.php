@@ -69,6 +69,7 @@ class PaymentController extends Controller
                 /** @var InquiryDoctorList $list_model */
                 foreach ($list_models as $list_model) {
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
+                    $item = $list_model->inquiry->getInquiryItem();
 
                     Yii::$app->mailer->compose('patient_inquiry_payment', [
                         'mailing_address' => getenv('ADMIN_EMAIL'),
@@ -82,7 +83,8 @@ class PaymentController extends Controller
                         'doctor_phone' => $doctor->profile->phone,
                         'doctor_email' => $doctor->user->email,
                         'doctor_state' => State::getShortName($doctor->profile->state_id),
-                        'invoice_number' => $list_model->inquiry_id
+                        'invoice_number' => $list_model->inquiry_id,
+                        'item' => $item
 
                     ])
                         ->setTo(Yii::$app->user->identity->email)
@@ -98,7 +100,8 @@ class PaymentController extends Controller
                         'last_name' => Yii::$app->user->identity->userProfile->lastname,
                         'phone' => Yii::$app->user->identity->userProfile->phone,
                         'email' => Yii::$app->user->identity->email,
-                        'invoice_number' => $list_model->inquiry_id
+                        'invoice_number' => $list_model->inquiry_id,
+                        'item' => $item
 
                     ])
                         ->setTo($doctor->user->email)

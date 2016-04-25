@@ -110,7 +110,7 @@ class Payment extends Model
         }
 
         $amount = $this->amount - $bonuses - $promo_bonus;
-        $amount = ($amount <= 0) ? 0.5 : $amount;
+        $amount = ($amount <= 0) ? 0.5 : round($amount, 2);
 
         $payment = new StripePayment(
             $this->stripeToken,

@@ -100,8 +100,6 @@ class PaymentController extends Controller
             ->andWhere(['offer_status' => Payment::OFFER_COMPLETED])
             ->all();
 
-
-
         if (!empty($payment_list)) {
 
             $payment_id_list = ArrayHelper::map($payment_list, 'id', 'id');

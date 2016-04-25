@@ -66,7 +66,7 @@ class SummaryInvoice
                 'address' => $this->address,
                 'location' => $this->location,
                 'phone' => $this->phone,
-                'net_total' => $this->net_total * (1 - $this->fee / 100),
+                'net_total' => round($this->net_total* (1 - $this->fee / 100), 2),
                 'doctor_clinic' => $doctor->clinic,
                 'doctor_location' => $doctor->profile->address . ', ' . $doctor->profile->zipcode . ', ' . $doctor->profile->state->name,
                 'doctor_phone' => $doctor->profile->phone,
@@ -82,14 +82,10 @@ class SummaryInvoice
         $offer_list = InquiryDoctorList::find()
             ->where(['inquiry_id' => $payment->inquiry_id])
             ->andWhere(['status' => InquiryDoctorList::STATUS_FINALIZED])
+            ->andWhere(['user_id' => $payment->doctor_id])
             ->all();
 
         $inquiry = Inquiry::findOne($payment->inquiry_id);
-
-        /** @var InquiryDoctorList $offer */
-        foreach ($offer_list as $offer ) {
-            $this->net_total += $offer->price;
-        }
 
         if ($inquiry->inquiryTreatments) {
             foreach ($offer_list as $inquiry_item) {
@@ -102,7 +98,7 @@ class SummaryInvoice
                     'price' => $inquiry_item->price,
                     'purchase_date' => $payment->created_at,
                 ];
-
+                $this->net_total += $inquiry_item->price;
                 $inquiry_treatment = $inquiry_item->inquiryTreatment;
 
                 if ($inquiry_treatment->severity_id) {
@@ -134,6 +130,7 @@ class SummaryInvoice
                     'price' => $inquiry_item->price,
                     'purchase_date' => $payment->created_at
                 ];
+                $this->net_total += $inquiry_item->price;
             }
 
             return $brand;

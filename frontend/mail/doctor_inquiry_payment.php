@@ -751,7 +751,9 @@
                                                                                 Email: <?php echo $email?><br>
                                                                                 <br>
                                                                                 <br>
-                                                                                Voucher Number: <?php echo $invoice_number?></div>
+                                                                                Voucher Number: <?php echo $invoice_number?><br/>
+                                                                                Item: <?php echo $item?>
+                                                                            </div>
 
                                                                         </td>
                                                                     </tr>
