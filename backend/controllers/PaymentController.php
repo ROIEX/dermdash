@@ -92,6 +92,73 @@ class PaymentController extends Controller
         }
     }
 
+    public function actionSummaryInvoice()
+    {
+        $payment_list = Payment::find()
+            ->where(['invoice_status' => Payment::INVOICE_NOT_SENT])
+            ->andWhere(['status' => Payment::STATUS_SUCCEEDED])
+            ->andWhere(['offer_status' => Payment::OFFER_COMPLETED])
+            ->all();
+
+
+
+        if (!empty($payment_list)) {
+
+            $payment_id_list = ArrayHelper::map($payment_list, 'id', 'id');
+            $invoices = new SummaryInvoice($payment_list);
+            $generation = new InvoiceGeneration();
+            $generation->created_at = time();
+            $generation->save();
+            $generation->refresh();
+
+            foreach ($invoices->invoice_items as $user_id => $invoice_item) {
+                $this->summaryInvoiceGenerate($invoice_item, $user_id, $generation->id);
+            }
+
+            Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
+
+            Yii::$app->session->setFlash('alert', [
+                'options' => ['class' => 'alert-success'],
+                'body' => Yii::t('app', 'Invoices sent')
+            ]);
+
+            return $this->redirect(Yii::$app->request->referrer);
+
+        } else {
+            Yii::$app->session->setFlash('alert', [
+                'options' => ['class' => 'alert-danger'],
+                'body' => Yii::t('app', 'Invoices for existing payments are already sent')
+            ]);
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+    }
+
+    private function summaryInvoiceGenerate($invoice, $user_id, $generation_date_id)
+    {
+        if (!is_dir(Yii::getAlias('@storage/web/source/invoice'))) {
+            mkdir(Yii::getAlias('@storage/web/source/invoice'));
+        }
+
+        $pdf =
+            [
+                'content' => $this->renderPartial('pdf/summary-invoice', ['invoice' => $invoice]),
+                'filename' => Yii::$app->security->generateRandomString(16) . '.pdf',
+            ];
+
+        $create_pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE,
+            'filename'=> Yii::getAlias('@storage/web/source/invoice/') . $pdf['filename'],
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_FILE,
+            'content' => $pdf['content'],
+        ]);
+
+        $create_pdf->render();
+        $document = new \common\models\Invoice();
+        return $document->savePdf($pdf, $user_id, $generation_date_id, $invoice['net_total']);
+    }
+
     public function actionInvoice()
     {
         $payment_list = Payment::find()
@@ -124,72 +191,6 @@ class PaymentController extends Controller
             ]);
             return $this->redirect(Yii::$app->request->referrer);
         }
-    }
-
-    public function actionSummaryInvoice()
-    {
-        $payment_list = Payment::find()
-            ->where(['invoice_status' => Payment::INVOICE_NOT_SENT])
-            ->andWhere(['status' => Payment::STATUS_SUCCEEDED])
-            ->andWhere(['offer_status' => Payment::OFFER_COMPLETED])
-            ->all();
-
-        if (!empty($payment_list)) {
-
-            $payment_id_list = ArrayHelper::map($payment_list, 'id', 'id');
-            $invoices = new SummaryInvoice($payment_list);
-
-            $generation = new InvoiceGeneration();
-            $generation->created_at = time();
-            $generation->save();
-            $generation->refresh();
-
-            foreach ($invoices->invoice_items as $user_id => $invoice_item) {
-                $this->summaryInvoiceGenerate($invoice_item, $user_id, $generation->id, $invoices->net_total);
-            }
-
-            Payment::updateAll(['invoice_status' => Payment::INVOICE_SENT], ['id' => $payment_id_list]);
-
-            Yii::$app->session->setFlash('alert', [
-                'options' => ['class' => 'alert-success'],
-                'body' => Yii::t('app', 'Invoices sent')
-            ]);
-
-            return $this->redirect(Yii::$app->request->referrer);
-
-        } else {
-            Yii::$app->session->setFlash('alert', [
-                'options' => ['class' => 'alert-danger'],
-                'body' => Yii::t('app', 'Invoices for existing payments are already sent')
-            ]);
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-    }
-
-    private function summaryInvoiceGenerate($invoice, $user_id, $generation_date_id, $net_total)
-    {
-        if (!is_dir(Yii::getAlias('@storage/web/source/invoice'))) {
-            mkdir(Yii::getAlias('@storage/web/source/invoice'));
-        }
-
-        $pdf =
-            [
-                'content' => $this->renderPartial('pdf/summary-invoice', ['invoice' => $invoice]),
-                'filename' => Yii::$app->security->generateRandomString(16) . '.pdf',
-            ];
-
-        $create_pdf = new Pdf([
-            'mode' => Pdf::MODE_CORE,
-            'filename'=> Yii::getAlias('@storage/web/source/invoice/') . $pdf['filename'],
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_FILE,
-            'content' => $pdf['content'],
-        ]);
-
-        $create_pdf->render();
-        $document = new \common\models\Invoice();
-        return $document->savePdf($pdf, $user_id, $generation_date_id, $net_total);
     }
 
     private function invoiceGenerate($invoice, $user_id)

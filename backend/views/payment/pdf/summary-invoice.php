@@ -2,8 +2,6 @@
 /** @var \common\components\Invoice $invoice */
 /* @var $this yii\web\View */
 $total_price = 0;
-
-
 ?>
 
 <div class="container">
@@ -16,23 +14,32 @@ $total_price = 0;
     </div>
 
     <div class="row">
+            <div class="col-xs-6">
+                <div>
+                    <?php echo Yii::t('app', 'Company Name :  {company_name}', ['company_name' => $invoice['company_name']]) ?>
+                </div>
+                <div>
+                    <?php echo Yii::t('app', 'Address :  {address}', ['address' => $invoice['address']]) ?>
+                </div>
+                <div>
+                    <?php echo Yii::t('app', 'Address :  {address}', ['address' => $invoice['location']]) ?>
+                </div>
+                <div>
+                    <?php echo Yii::t('app', 'Phone :  {phone}', ['phone' => $invoice['phone']]) ?>
+                </div>
+            </div>
 
-        <div class="col-xs-6">
-            <?php echo Yii::t('app', 'Company Name :  {company_name}', ['company_name' => $invoice['company_name']]) ?>
-        </div>
-
-        <div class="col-xs-6">
-            <?php echo Yii::t('app', 'Address :  {address}', ['address' => $invoice['address']]) ?>
-        </div>
-
-        <div class="col-xs-6">
-            <?php echo Yii::t('app', 'Address :  {address}', ['address' => $invoice['location']]) ?>
-        </div>
-
-        <div class="col-xs-6">
-            <?php echo Yii::t('app', 'Phone :  {phone}', ['phone' => $invoice['phone']]) ?>
-        </div>
-
+            <div class="col-xs-4">
+                <div>
+                    <?php echo Yii::t('app', 'Company Name :  {company_name}', ['company_name' => $invoice['doctor_clinic']]) ?>
+                </div>
+                <div>
+                    <?php echo Yii::t('app', 'Address :  {address}', ['address' => $invoice['doctor_location']]) ?>
+                </div>
+                <div>
+                    <?php echo Yii::t('app', 'Phone :  {phone}', ['phone' => $invoice['doctor_phone']]) ?>
+                </div>
+            </div>
     </div>
 
     <!-- / end client details section -->
@@ -41,7 +48,7 @@ $total_price = 0;
             <thead>
             <tr>
                 <th>
-                    <h4><?php echo Yii::t('app', 'Item Number')?></h4>
+                    <h4><?php echo Yii::t('app', 'Invoice number')?></h4>
                 </th>
                 <th>
                     <h4><?php echo Yii::t('app', 'Date of Purchase')?></h4>
@@ -61,12 +68,11 @@ $total_price = 0;
             </tr>
             </thead>
             <tbody>
-
                 <?php foreach ($invoice['items'] as $item) : ?>
                     <?php $total_price += $item['price']?>
                     <tr>
-                        <td>1</td>
-                        <td class="text-right"><?php echo \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($item['purchase_date'])?></td>
+                        <td><?php echo $item['invoice_number']?></td>
+                        <td class="text-right"><?php echo \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($item['purchase_date'], true)?></td>
                         <td class="text-right"><?php echo $item['param'] . ' ( ' . $item['used_brands'] . ' items )'?></td>
                         <td class="text-right"><?php echo '$ ' . $item['price'] ?></td>
                         <td class="text-right"><?php echo $invoice['fee'] . ' %'?></td>
@@ -76,7 +82,6 @@ $total_price = 0;
             </tbody>
         </table>
     </div>
-
     <div class="row text-right">
         <div class="col-xs-4 col-xs-offset-8">
             <p>
@@ -86,7 +91,6 @@ $total_price = 0;
             </p>
         </div>
     </div>
-
 </div>
 
 

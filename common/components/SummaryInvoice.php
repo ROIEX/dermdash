@@ -9,10 +9,12 @@
 namespace common\components;
 
 
+use common\models\Doctor;
 use common\models\Inquiry;
 use common\models\InquiryDoctorList;
 use common\models\Payment;
 use common\models\Settings;
+use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 
 class SummaryInvoice
@@ -36,7 +38,6 @@ class SummaryInvoice
         $this->location = \Yii::$app->params['company']['location'];
         $this->phone = \Yii::$app->params['company']['phone'];
         $this->invoice_items = $this->doctorSummaryInvoice($payments);
-
     }
 
     private function doctorSummaryInvoice($payments)
@@ -48,8 +49,10 @@ class SummaryInvoice
             $doctor_id_list[] = $payment->doctor_id;
         }
         $doctor_id_list = array_unique($doctor_id_list);
-        $this->net_total = 0;
-        foreach ($doctor_id_list as $doctor_id) {
+        $doctors = Doctor::find()->where(['in', 'user_id', $doctor_id_list])->all();
+        $doctors = ArrayHelper::index($doctors, 'user_id');
+        foreach ($doctors  as $doctor_id => $doctor) {
+            $this->net_total = 0;
             $items = [];
             foreach ($payments as $payment) {
                 if ($payment->doctor_id == $doctor_id) {
@@ -63,12 +66,14 @@ class SummaryInvoice
                 'address' => $this->address,
                 'location' => $this->location,
                 'phone' => $this->phone,
-                'net_total' => $this->phone,
+                'net_total' => $this->net_total * (1 - $this->fee / 100),
+                'doctor_clinic' => $doctor->clinic,
+                'doctor_location' => $doctor->profile->address . ', ' . $doctor->profile->zipcode . ', ' . $doctor->profile->state->name,
+                'doctor_phone' => $doctor->profile->phone,
                 'items' => $items
             ];
         }
 
-        $this->net_total *= (1 - $this->fee / 100);
         return $invoice_array;
     }
 
@@ -92,7 +97,7 @@ class SummaryInvoice
                 /** @var InquiryDoctorList $inquiry_item */
                 $desc_treatment_name = $inquiry_item->treatmentParam->treatment->name;
                 $treatment = [
-                    'invoice_number' => $payment->inquiry_id,
+                    'invoice_number' => $inquiry_item->treatmentParam->treatment->id,
                     'param' => $desc_treatment_name . ', ' . $inquiry_item->treatmentParam->value,
                     'price' => $inquiry_item->price,
                     'purchase_date' => $payment->created_at,
@@ -121,6 +126,7 @@ class SummaryInvoice
             foreach ($offer_list as $inquiry_item) {
 
                 $brand = [
+                    'invoice_number' => $inquiry_item->brandParam->brand->id,
                     'param' => $inquiry_item->brandParam->brand->name,
                     'used_brands' => $inquiry_item->brandParam->value,
                     'price' => $inquiry_item->price,
