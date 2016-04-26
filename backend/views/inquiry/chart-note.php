@@ -35,7 +35,7 @@ if (isset($model)) { ?>
 
                         <p><?php echo Yii::t('app', 'Cost: ') . $offer_item['price'] ?></p>
 
-                    <? else : ?>
+                    <?php else : ?>
                         <p><?php echo Yii::t('app', 'Treatment: {item}', ['item' => $model->getInquiryItem()]) ?></p>
                         <p><?php echo Yii::t('app', 'Area: ') . $offer_item['param'] ?></p>
                         <?php if($model->getInquiryItem() != $offer_item['procedure_name']) : ?>
@@ -47,7 +47,8 @@ if (isset($model)) { ?>
                                 ($offer_item['param_name'] . ': ' . $offer_item['amount']) ?></p>
                         <p><?php echo Yii::t('app', 'Cost: ') . $offer_item['price'] ?></p>
 
-                    <? endif ?>
+                    <?php endif ?>
+
                     <p><?php echo Yii::t('app', 'Status: {status}', ['status' => $model->getInquiryStatus($model, true)]) ?></p>
 
                 <?php endforeach ?></h3>
@@ -56,34 +57,6 @@ if (isset($model)) { ?>
         </div>
         <?php endforeach ?>
     <?php endif?>
-
-    <?php if (Yii::$app->user->can('administrator')) { ?>
-        <div class="col-xs-12">
-            <h4><?php echo Yii::t('app', 'Doctor offers') ?></h4>
-
-            <?php if ($model->inquiryDoctorList) {
-
-                foreach ($model->inquiryDoctorList as $offer) { ?>
-
-                    <?php echo Yii::t('app', 'Doctor', [
-                            'price' => $offer->price]) . ' :' . Html::a($offer->user->getPublicIdentity(), Url::toRoute(['doctor/view', 'id' => $offer->user->doctor->id]));
-                    ?><br/>
-
-                    <?php if ($offer->status == \common\models\InquiryDoctorList::STATUS_ANSWER_YES || $offer->status == \common\models\InquiryDoctorList::STATUS_FINALIZED) { ?>
-
-                        <?php echo Yii::t('app', 'Offer price: {price}', [
-                            'price' => $offer->price
-                        ])?><br/>
-
-                    <?php } ?>
-                    <hr>
-
-                <?php } ?>
-
-            <?php } ?>
-
-        </div>
-    <?php } ?>
 
 <?php } ?>
 
