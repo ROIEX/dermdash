@@ -26,7 +26,7 @@ class InquiryController extends Controller
             case Inquiry::STATUS_PENDING:
 
                 $query = $inquiry->getPendingInquiryList();
-                $pending_offers = $query ->all();
+                $pending_offers = $query->all();
                 $pending_id_list = ArrayHelper::map($pending_offers, 'id', 'id');
                 if (Yii::$app->user->can('administrator')) {
                     Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['id' => $pending_id_list]);
@@ -44,7 +44,7 @@ class InquiryController extends Controller
                     $completed_query->andWhere(['doctor_id' => Yii::$app->user->id]);
                 }
 
-                $completed_offers = $completed_query->all();
+                $completed_offers = $completed_query->orderBy(['created_at' => SORT_DESC])->all();
                 $completed_id_list = ArrayHelper::map($completed_offers, 'inquiry_id', 'inquiry_id');
 
                 if (Yii::$app->user->can('administrator')) {
@@ -53,7 +53,7 @@ class InquiryController extends Controller
                     Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
                 }
 
-                $query = $inquiry->find()->where(['in', 'id', $completed_id_list]);
+                $query = $inquiry->find()->where(['in', 'id', $completed_id_list])->orderBy(['created_at' => SORT_DESC]);;
 
                 break;
 

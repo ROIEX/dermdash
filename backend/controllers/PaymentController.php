@@ -40,7 +40,7 @@ class PaymentController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Payment::find(),
+            'query' => Payment::find()->orderBy(['created_at' => SORT_DESC]),
         ]);
 
         return $this->render('index', [

@@ -35,7 +35,7 @@ class InvoiceController extends Controller
         if (!Yii::$app->user->can('administrator')) {
             $query = InvoiceGeneration::find()->joinWith('doctorInvoices');
         } else {
-            $query = InvoiceGeneration::find();
+            $query = InvoiceGeneration::find()->orderBy(['created_at' => SORT_DESC]);;
         }
 
         $dataProvider = new ActiveDataProvider([

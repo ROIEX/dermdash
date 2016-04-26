@@ -281,8 +281,8 @@ class Inquiry extends \yii\db\ActiveRecord
                 ['>=', 'inquiry.created_at', $days_ago_date],
                 ['not in', 'list.inquiry_id',$this->getFinalizedInquiryListId()],
 
-            ]);
-
+            ])
+            ->orderBy(['inquiry.created_at' => SORT_DESC]);
     }
 
     /**
@@ -297,7 +297,8 @@ class Inquiry extends \yii\db\ActiveRecord
                     ['not in', 'list.inquiry_id', $this->getFinalizedInquiryListId()],
                     ['not in', 'list.inquiry_id', $this->getPendingInquiryListId()],
                 ]
-            );
+            )
+            ->orderBy(['inquiry.created_at' => SORT_DESC]);
     }
 
     /**

@@ -39,14 +39,14 @@ class PatientController extends Controller
     {
         $model = $this->findModel((int)$id);
         if (Yii::$app->user->can('administrator')) {
-            $query = Inquiry::find()->where(['user_id' => $id])->orderBy('created_at')->all();
+            $query = Inquiry::find()->where(['user_id' => $id])->orderBy(['created_at' => SORT_DESC])->all();
         }
         else {
             $query = Inquiry::find()
                 ->where(['inquiry.user_id' => $id])
                 ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
                 ->andWhere(['list.user_id' => Yii::$app->user->id])
-                ->orderBy('created_at')
+                ->orderBy(['inquiry.created_at' => SORT_DESC])
                 ->all();
         }
 
