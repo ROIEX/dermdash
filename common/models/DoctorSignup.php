@@ -367,10 +367,10 @@ class DoctorSignup extends Model
 
             if($this->afterSignup($user, $doctor)) {
                 Yii::$app->getUser()->login($user);
-                $brands = new DoctorBrand();
-                $brands->saveBrands(Yii::$app->user->id, $this->brands, $this->dropdown_price);
-                $treatments = new DoctorTreatment();
-                $treatments->saveTreatments(Yii::$app->user->id, $this->treatments, $this->treatment_discounts, $this->brand_provided_treatments);
+                //$brands = new DoctorBrand();
+                //$brands->saveBrands(Yii::$app->user->id, $this->brands, $this->dropdown_price);
+                //$treatments = new DoctorTreatment();
+                //$treatments->saveTreatments(Yii::$app->user->id, $this->treatments, $this->treatment_discounts, $this->brand_provided_treatments);
                 return true;
             }
 
@@ -401,14 +401,14 @@ class DoctorSignup extends Model
             $chimp->verify_ssl = false;
         }
 
-        $chimp->post("lists/". \Yii::$app->params['mailChimpDoctorList'] ."/members", [
+        $chimp->post("lists/". \Yii::$app->params['mailChimpDoctorList'] . "/members", [
             'email_address' => $user->email,
-            'status'        => 'subscribed',
+            'status' => 'subscribed',
             "merge_fields"=> [
-                "FNAME"=> $user->userProfile->firstname,
-                "LNAME"=> $user->userProfile->lastname,
-                "COMPANY"=> $doctor->clinic,
-                "PHONE"=> $user->userProfile->phone
+                "FNAME" => $user->userProfile->firstname,
+                "LNAME" => $user->userProfile->lastname,
+                "COMPANY" => $doctor->clinic,
+                "PHONE" => $user->userProfile->phone
             ]
         ]);
 

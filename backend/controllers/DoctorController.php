@@ -95,7 +95,6 @@ class DoctorController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            $this->AgreementSign($model);
             Yii::$app->session->setFlash('alert', [
                 'options' => ['class' => 'alert-success'],
                 'body' => Yii::t('app', 'Account has been successfully created')
