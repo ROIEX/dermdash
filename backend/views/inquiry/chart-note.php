@@ -3,87 +3,59 @@
 use common\components\dateformatter\FormatDate;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
-$url = Url::toRoute('/inquiry/deny');
-$js = <<<SCRP
-$(document).on('click', '#deny-inquiry', function(){
-    denyInquiry('{$url}', $(this).data('inquiry_id'), $(this).data('user_id'));
-     return false;
-})
-SCRP;
-
-$this->registerCss("
-
-.gallery-item > img {
-    width:200px;
-}
-");
-
+use common\models\Inquiry;
+use yii\helpers\BaseInflector;
 ?>
+<?php
+/** @var Inquiry $model */
+if (isset($model)) { ?>
+    <?php if ($offers) : ?>
+        <?php foreach($offers as $offer) : ?>
+        <div class="well">
+            <h3><?php foreach ($offer['data'] as $offer_item): ?>
 
-<?php if (isset($model)) { ?>
+                    <?php if(Yii::$app->user->can('administrator')) : ?>
+                        <p><?php echo Yii::t('app', 'Doctor: ') . $offer['doctor'] ?></p>
+                        <p><?php echo Yii::t('app', 'Clinic: ') . $offer['clinic'] ?></p>
+                    <?php endif ?>
 
-    <div class="col-xs-12">
-        <?php if ($model->existingDoctorOffer) { ?>
+                    <?php if (isset($offer_item['brand'])) : ?>
+                        <p><?php echo Yii::t('app', 'Item: ') . $offer_item['brand'] ?></p>
 
-            <h3><?php echo Yii::t('app', 'Your offer') ?></h3>
+                        <?php if (is_numeric((int)$offer_item['param_value'])) : ?>
 
-            <?php echo Yii::t('app', 'Offer price: {price}', [
-                'price' => $model->existingDoctorOffer->price
-            ])?><br/>
+                            <p><?php echo (int)$offer_item['param_value'] > 1 ?
+                                    (BaseInflector::pluralize($offer_item['param_name']) . ': ' . $offer_item['param_value']) :
+                                    ($offer_item['param_name'] . ' ' . $offer_item['param_value']) ?></p>
 
-            <?php echo Yii::t('app', 'Offer date: {date}', [
-                'date' => FormatDate::AmericanFormatFromTimestamp($model->existingDoctorOffer->created_at)
-            ])?><br/>
+                        <?php else : ?>
+                            <p> <?php echo $offer_item['param_name'] . ': ' . $offer_item['param_value'] ; ?></p>
 
-            <?php if ($model->finalizedInquiry) { ?>
+                        <?php endif ?>
 
-                <?php if($model->finalizedInquiry[0]->user_id == Yii::$app->user->id) {
-                    echo Html::tag('div',  Yii::t('app', 'Purchased'), ['class' => 'text-success']);
-                } else {
-                    echo Html::tag('div', Yii::t('app', 'Not purchased'), ['class' => 'text-warning']);
-                } ?><hr>
+                        <p><?php echo Yii::t('app', 'Cost: ') . $offer_item['price'] ?></p>
 
-            <?php } ?>
+                    <? else : ?>
+                        <p><?php echo Yii::t('app', 'Treatment: {item}', ['item' => $model->getInquiryItem()]) ?></p>
+                        <p><?php echo Yii::t('app', 'Area: ') . $offer_item['param'] ?></p>
+                        <?php if($model->getInquiryItem() != $offer_item['procedure_name']) : ?>
+                            <p><?php echo Yii::t('app', 'Used brand: ') . $offer_item['procedure_name'] ?></p>
+                        <?php endif ?>
 
-            <?php } ?>
-    </div>
-        <div class="col-xs-12">
-            <h3><?php echo Yii::t('app', 'Notes detail') ?></h3>
+                        <p><?php echo (int)$offer_item['amount'] > 1 ?
+                                (BaseInflector::pluralize($offer_item['param_name']) . ': ' . $offer_item['amount']) :
+                                ($offer_item['param_name'] . ': ' . $offer_item['amount']) ?></p>
+                        <p><?php echo Yii::t('app', 'Cost: ') . $offer_item['price'] ?></p>
 
-            <?php echo Yii::t('app', 'Category: {category}', [
-                'category' => $model->getInquiryCureType()
-            ]) ?><br/>
+                    <? endif ?>
+                    <p><?php echo Yii::t('app', 'Status: {status}', ['status' => $model->getInquiryStatus($model, true)]) ?></p>
 
-            <?php echo Yii::t('app', 'Item: {item}', [
-                'item' => $model->getInquiryItem()
-            ]) ?><br/>
+                <?php endforeach ?></h3>
 
-            <?php echo Yii::t('app', 'Selected params:')?>
-            <br/>
 
-            <?php if ($model->getInquiryParams()) {
-                foreach ($model->getInquiryParams() as $param) {
-                    echo implode(', ', $param) . '<br/>';
-                }
-            }?>
-
-            <?php if ($model->inquiryTreatments) {
-                foreach ($model->inquiryTreatments as $treatment) {
-                    if (!empty($treatment->severityParam)) {
-                        echo $treatment->severityParam->severity->name . "</br>";
-                    }
-
-                }
-            }
-
-            ?>
-
-            <?php echo Yii::t('app', 'Status: {status}', [
-                'status' => $model->getInquiryStatus($model, true)
-            ]) ?><br/><br/>
-
-        </div><hr>
+        </div>
+        <?php endforeach ?>
+    <?php endif?>
 
     <?php if (Yii::$app->user->can('administrator')) { ?>
         <div class="col-xs-12">

@@ -90,21 +90,33 @@ class InquiryController extends Controller
         if(Yii::$app->request->isAjax && Yii::$app->request->post('note_id')) {
 
             $model = $this->findModel((int)Yii::$app->request->post('note_id'));
+            $inquiry_doctor_list_doctors = $model->inquiryDoctorLists;
+            foreach ($inquiry_doctor_list_doctors as $offer) {
+                $offers[] = $model->getOfferData($model->id, $offer->user_id);
+            }
+
             return $this->renderAjax('chart-note', [
                 'model' => $model,
+                'offers' => $offers
             ]);
         } else {
             $model = $this->findModel((int)Yii::$app->request->get('note_id'));
             if ($model->doctorIsParticipant) {
 
+                $offers[] = $model->getOfferData($model->id, Yii::$app->user->id);
+
                 $model->is_viewed = Inquiry::IS_VIEWED;
                 $model->update(false);
-                return $this->render('chart-note', [
-                    'model' => $model,
-                ]);
+
             } else {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
+
+            return $this->render('chart-note', [
+                'model' => $model,
+                'offers' => $offers
+            ]);
+
         }
     }
 
