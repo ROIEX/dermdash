@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Payment;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -44,6 +45,15 @@ $this->registerJs($js);
                     'label' => Yii::t('app', 'Item'),
                     'value' => function($data) {
                         return $data->getInquiryItem();
+                    }
+                ],
+                [
+                    'label' => Yii::t('app', 'Purchase Status'),
+                    'value' => function($data) {
+                        if (isset($data->payment)) {
+                            return Payment::getOfferStatus($data->payment->offer_status);
+                        }
+                        return Yii::t('app', 'None');
                     }
                 ],
                 [

@@ -108,6 +108,11 @@ class InquiryController extends Controller
                 $model->is_viewed = Inquiry::IS_VIEWED;
                 $model->update(false);
 
+            } elseif(Yii::$app->user->can('administrator')) {
+                $offers[] = $model->getOfferData($model->id, (int)Yii::$app->request->get('doctor_id'));
+                $model->is_viewed_by_admin = Inquiry::IS_VIEWED;
+                $model->update(false);
+
             } else {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }

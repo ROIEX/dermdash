@@ -45,6 +45,7 @@ class PatientController extends Controller
             $query = Inquiry::find()
                 ->where(['inquiry.user_id' => $id])
                 ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
+                ->joinWith('payment')
                 ->andWhere(['list.user_id' => Yii::$app->user->id])
                 ->orderBy(['inquiry.created_at' => SORT_DESC])
                 ->all();
