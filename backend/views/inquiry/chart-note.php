@@ -1,19 +1,18 @@
 <?php
 
-use common\components\dateformatter\FormatDate;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use common\models\Inquiry;
 use yii\helpers\BaseInflector;
+
 ?>
 <?php
+
 /** @var Inquiry $model */
 if (isset($model)) { ?>
     <?php if ($offers) : ?>
         <?php foreach($offers as $offer) : ?>
-        <div class="well">
-            <h3><?php foreach ($offer['data'] as $offer_item): ?>
 
+            <h3><?php foreach ($offer['data'] as $offer_item): ?>
+                <div class="well">
                     <?php if(Yii::$app->user->can('administrator')) : ?>
                         <p><?php echo Yii::t('app', 'Doctor: ') . $offer['doctor'] ?></p>
                         <p><?php echo Yii::t('app', 'Clinic: ') . $offer['clinic'] ?></p>
@@ -50,11 +49,9 @@ if (isset($model)) { ?>
                     <?php endif ?>
 
                     <p><?php echo Yii::t('app', 'Status: {status}', ['status' => $model->getInquiryStatus($model, true)]) ?></p>
-
+                    </div>
                 <?php endforeach ?></h3>
 
-
-        </div>
         <?php endforeach ?>
     <?php endif?>
 

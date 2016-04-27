@@ -325,8 +325,8 @@ class Inquiry extends \yii\db\ActiveRecord
     public static function getAnswerStatus($status)
     {
         $array = [
-            self::STATUS_PENDING => Yii::t('app','Pending'),
-            self::STATUS_COMPLETED => Yii::t('app','Completed'),
+            self::STATUS_PENDING => Yii::t('app','Not purchased'),
+            self::STATUS_COMPLETED => Yii::t('app','Purchased'),
             self::STATUS_ABANDONED => Yii::t('app','Voided'),
             self::STATUS_REFUNDED => Yii::t('app','Refunded'),
         ];
