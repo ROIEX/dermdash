@@ -48,16 +48,16 @@ $this->registerJs($js);
                     }
                 ],
                 [
-                    'label' => Yii::t('app', 'Purchase Status'),
+                    'label' => Yii::t('app', 'Visit Status'),
                     'value' => function($data) {
                         if (isset($data->payment)) {
                             return Payment::getOfferStatus($data->payment->offer_status);
                         }
-                        return Yii::t('app', 'None');
+                        return Yii::t('app', 'Not Purchased');
                     }
                 ],
                 [
-                    'label' => Yii::t('app', 'Status'),
+                    'label' => Yii::t('app', 'Purchase Status'),
                     'value' => function($data) {
                         return $data->getInquiryStatus($data, true);
                     }

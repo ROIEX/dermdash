@@ -164,10 +164,11 @@ $config = [
             'name' => 'DermDash',
             'address' => '520 Santa Monica Ave',
             'location' => 'Santa Monica, CA 90401',
-            'phone' => '12345'
+            'phone' => '424-500-8611'
         ],
         'mailchimpApiKey'=>'2d87e7a0c9975a4382574a9528aa582b-us12',
         'mailChimpDoctorList' => 'afe8fb8c0d',
+        'mailChimpPasswordResetList' => 'a3287c6351',
         'mailChimpPatientList' => '06e0e9efe0',
         'yelp'=>[
             'consumerKey' => 'iFpPPkR5ZrZrOBjGPWRvYA',

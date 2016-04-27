@@ -5,6 +5,7 @@ use common\models\Doctor;
 use common\models\InquiryDoctorList;
 use common\models\State;
 use common\models\User;
+use DrewM\MailChimp\MailChimp;
 use frontend\modules\api\v1\models\DiscountWithPromo;
 use frontend\modules\api\v1\models\Payment;
 use frontend\modules\api\v1\resources\ModelError;
@@ -90,7 +91,6 @@ class PaymentController extends Controller
                         ->setTo(Yii::$app->user->identity->email)
                         ->setSubject(Yii::t('app', 'Inquiry payment'))
                         ->send();
-
 
                     Yii::$app->mailer->compose('doctor_inquiry_payment', [
                         'mailing_address' => getenv('ADMIN_EMAIL'),
