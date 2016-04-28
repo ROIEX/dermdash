@@ -4,11 +4,13 @@ namespace common\models;
 use cheatsheet\Time;
 use common\commands\command\AddToTimelineCommand;
 use common\commands\command\SendEmailCommand;
+use common\components\Mandrill;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\web\IdentityInterface;
 use DrewM\MailChimp\MailChimp;
 
@@ -312,21 +314,44 @@ class User extends ActiveRecord implements IdentityInterface
         $profile->load($profileData, '');
         $this->link('userProfile', $profile);
         $this->trigger(self::EVENT_AFTER_SIGNUP);
-        // Default role
         $auth =  Yii::$app->authManager;
         $auth->assign($auth->getRole(User::ROLE_USER), $this->getId());
-        Yii::$app->commandBus->handle(new SendEmailCommand([
-            'from' => [Yii::$app->params['adminEmail'] => Yii::$app->name],
-            'to' => $this->email,
-            'subject' => Yii::t('frontend', 'Activation request for {name}', ['name'=>Yii::$app->name]),
-            'view' => 'activation',
-            'params' => [
-                'user' => $this,
-                'mailing_address' => getenv('ADMIN_EMAIL'),
-                'current_year' => date('Y'),
-                'app_name' => Yii::$app->name,
-            ]
-        ]));
+
+        $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
+
+        $message = [
+            'to' => [
+                [
+                    'email' => $this->email,
+                    'name' => $this->email,
+                ]
+            ],
+            'merge_vars' => [
+                [
+                    'rcpt' => $this->email,
+                    'vars' => [
+                        [
+                            'name' => 'link',
+                            'content' => Html::encode(Yii::$app->urlManager->createAbsoluteUrl(['/user/sign-in/activate', 'token' => $this->activation_token])),
+                        ],
+                        [
+                            'name' => 'list_address_html',
+                            'content' => getenv('ADMIN_EMAIL'),
+                        ],
+                        [
+                            'name' => 'current_year',
+                            'content' => date('Y'),
+                        ],
+                        [
+                            'name' => 'company',
+                            'content' => Yii::$app->name,
+                        ],
+                    ]
+                ]
+            ],
+        ];
+        $result = $mandrill->messages->sendTemplate('Verification Email', [] , $message);
+
         if ($promo_code) {
             $promoModel = PromoCode::findOne(['text'=>$promo_code]);
             if ($promoModel !== null) {

@@ -43,25 +43,19 @@ $this->registerJs($js);
             'visible' => Yii::$app->user->can('administrator'),
         ],
         [
-            'label' => Yii::t('app', 'Doctor'),
+            'label' => Yii::t('app', 'Clinic'),
             'format' => 'raw',
             'value' => function ($data) {
-                $doctor_user = $data->doctorAccepted->user;
-                return Html::a($doctor_user->email, Url::toRoute(['doctor/view', 'id' => $doctor_user->doctor->id]));
+                $doctor = $data->doctorAccepted->user->doctor;
+
+                return Html::a($doctor->clinic, Url::toRoute(['doctor/view', 'id' => $doctor->id]));
             },
             'visible' => Yii::$app->user->can('administrator') && $completed_page,
         ],
         [
             'label' => Yii::t('app', 'Date'),
-            'format' => 'raw',
             'value' => function($data) {
-                if (Yii::$app->user->can('administrator')) {
-                    $url = Url::toRoute(['patient/view', 'id' => $data->user->id]);
-                } else {
-                    $url = Url::toRoute(['inquiry/view', 'note_id' => $data->id]);
-                }
-
-                return Html::a(FormatDate::AmericanFormatFromTimestamp($data->created_at), $url);
+                return FormatDate::AmericanFormatFromTimestamp($data->created_at);
             }
         ],
 

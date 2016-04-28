@@ -17,22 +17,21 @@ $this->registerJs($js);
 
 ?>
     <div class="col-xs-12">
-        <h3 ><?php echo Yii::t('app', 'Chart notes:') ?></h3>
 
         <?php echo GridView::widget([
             'dataProvider' => $model,
             'columns' => [
                 [
-                    'label'=>Yii::t('app', 'Name'),
+                    'label' => Yii::t('app', 'Date'),
                     'value' => function($data) {
-                        return $data->user->getPublicIdentity();
+                        return FormatDate::AmericanFormatFromTimestamp($data->created_at);
                     }
                 ],
                 [
-                    'label' => Yii::t('app', 'Date'),
+                    'label' => Yii::t('app', 'Invoice #'),
                     'format' => 'raw',
                     'value' => function($data) {
-                        return Html::a(FormatDate::AmericanFormatFromTimestamp($data->created_at), '', ['id' => 'get_note', 'data'=>['note_id' => $data->id]]);
+                        return Html::a($data->id, '', ['id' => 'get_note', 'data'=>['note_id' => $data->id]]);
                     }
                 ],
                 [

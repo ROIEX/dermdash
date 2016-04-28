@@ -65,7 +65,8 @@
     "yiisoft/yii2-faker": "^2.0",
     "budyaga/yii2-cropper": "*",
     "linslin/yii2-curl": "*",
-    "kartik-v/yii2-mpdf": "dev-master"
+    "kartik-v/yii2-mpdf": "dev-master",
+    "mandrill/mandrill": "1.0.*"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.0.0",

@@ -167,6 +167,7 @@ $config = [
             'phone' => '424-500-8611'
         ],
         'mailchimpApiKey'=>'2d87e7a0c9975a4382574a9528aa582b-us12',
+        'mandrillApiKey'=>'P2sCaW7ONIrrznODFCx3hg',
         'mailChimpDoctorList' => 'afe8fb8c0d',
         'mailChimpPasswordResetList' => 'a3287c6351',
         'mailChimpPatientList' => '06e0e9efe0',

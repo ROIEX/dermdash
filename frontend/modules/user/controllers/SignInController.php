@@ -137,7 +137,7 @@ class SignInController extends \yii\web\Controller
      */
     public function actionActivate($token)
     {
-        $model = User::findOne(['activation_token'=>$token]);
+        $model = User::findOne(['activation_token' => $token]);
         if (!$model) {
             throw new NotFoundHttpException;
         }
