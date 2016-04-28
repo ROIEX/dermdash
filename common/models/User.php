@@ -39,8 +39,9 @@ use DrewM\MailChimp\MailChimp;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    const STATUS_DELETED = 2;
     const STATUS_ACTIVE = 1;
+    const STATUS_NOT_ACTIVE = 0;
 
     const ROLE_USER = 'user';
     const ROLE_MANAGER = 'manager';
@@ -91,7 +92,7 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::merge(
             parent::scenarios(),
             [
-                'oauth_create'=>[
+                'oauth_create' => [
                     'oauth_client', 'oauth_client_user_id', 'email', 'username', '!status'
                 ]
             ]
@@ -107,8 +108,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['username', 'email'], 'unique'],
             ['email', 'email'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            [['username'],'filter','filter'=>'\yii\helpers\Html::encode'],
+            ['status', 'default', 'value' => self::STATUS_NOT_ACTIVE],
+            [['username'], 'filter', 'filter' => '\yii\helpers\Html::encode'],
             [['activation_token'], 'string', 'max' => 64]
         ];
     }
@@ -203,7 +204,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-//            'status' => self::STATUS_ACTIVE
+            'status' => self::STATUS_ACTIVE
         ]);
     }
 
@@ -353,7 +354,7 @@ class User extends ActiveRecord implements IdentityInterface
         $result = $mandrill->messages->sendTemplate('Verification Email', [] , $message);
 
         if ($promo_code) {
-            $promoModel = PromoCode::findOne(['text'=>$promo_code]);
+            $promoModel = PromoCode::findOne(['text' => $promo_code]);
             if ($promoModel !== null) {
                 $profile->reward = $promoModel->value;
                 $profile->update(false);
@@ -372,9 +373,11 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         $chimp = new MailChimp(\Yii::$app->params['mailchimpApiKey']);
+
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $chimp->verify_ssl = false;
         }
+
         $chimp->post("lists/". \Yii::$app->params['mailChimpPatientList'] ."/members", [
             'email_address' => $this->email,
             'status'        => 'subscribed',

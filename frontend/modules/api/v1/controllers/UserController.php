@@ -111,9 +111,9 @@ class UserController extends ActiveController
             throw new BadRequestHttpException;
         }
         $model = Login::find()
-            ->where(["username" => $post["username"]])
-            ->orWhere(['email'=>$post["username"]])
-            ->andWhere(['status'=> Login::STATUS_ACTIVE])
+            ->where(['username' => $post["username"]])
+            ->orWhere(['email' => $post["username"]])
+            ->andWhere(['status' => Login::STATUS_ACTIVE])
             ->one();
         /* @var $model User */
         if (empty($model)) {
