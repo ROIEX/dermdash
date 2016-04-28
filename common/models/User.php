@@ -319,7 +319,6 @@ class User extends ActiveRecord implements IdentityInterface
         $auth->assign($auth->getRole(User::ROLE_USER), $this->getId());
 
         $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
-
         $message = [
             'to' => [
                 [
@@ -351,7 +350,7 @@ class User extends ActiveRecord implements IdentityInterface
                 ]
             ],
         ];
-        $result = $mandrill->messages->sendTemplate('Verification Email', [] , $message);
+        $mandrill->messages->sendTemplate('Verification Email', [] , $message);
 
         if ($promo_code) {
             $promoModel = PromoCode::findOne(['text' => $promo_code]);

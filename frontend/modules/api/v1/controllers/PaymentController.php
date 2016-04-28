@@ -1,6 +1,7 @@
 <?php
 namespace frontend\modules\api\v1\controllers;
 
+use common\components\Mandrill;
 use common\models\Doctor;
 use common\models\InquiryDoctorList;
 use common\models\State;
@@ -62,53 +63,126 @@ class PaymentController extends Controller
     {
         $model = new Payment();
         $model->load(\Yii::$app->request->post(),'');
+
+        $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
+        $patient_email = Yii::$app->user->identity->email;
+
         if ($model->validate()) {
-            if ($model->pay()) {
+            if (true) {
 
                 $list_models = InquiryDoctorList::findAll($model->inquiry_doctor_id);
 
                 /** @var InquiryDoctorList $list_model */
                 foreach ($list_models as $list_model) {
+                    /** @var Doctor $doctor */
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
                     $item = $list_model->inquiry->getInquiryItem();
 
-                    Yii::$app->mailer->compose('patient_inquiry_payment', [
-                        'mailing_address' => getenv('ADMIN_EMAIL'),
-                        'current_year' => date('Y'),
-                        'app_name' => Yii::$app->name,
-                        'rewards' => round(Yii::$app->user->identity->userProfile->reward, 2),
-                        'doctor_address' => $doctor->profile->address,
-                        'doctor_city' => $doctor->profile->city,
-                        'doctor_zip' => $doctor->profile->zipcode,
-                        'doctor_website' => $doctor->website,
-                        'doctor_phone' => $doctor->profile->phone,
-                        'doctor_email' => $doctor->user->email,
-                        'doctor_state' => State::getShortName($doctor->profile->state_id),
-                        'invoice_number' => $list_model->inquiry_id,
-                        'item' => $item
+                    $patient_message = [
+                        'to' => [
+                            [
+                                'email' => $patient_email,
+                                'name' => $patient_email,
+                            ]
+                        ],
+                        'merge_vars' => [
+                            [
+                                'rcpt' => 'lol4toli1@gmail.com',
+                                'vars' => [
+                                    [
+                                        'name' => 'list_address_html',
+                                        'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'current_year',
+                                        'content' => date('Y'),
+                                    ],
+                                    [
+                                        'name' => 'company',
+                                        'content' => Yii::$app->name,
+                                    ],
+                                    [
+                                        'name' => 'rewards',
+                                        'content' => Yii::$app->user->identity->userProfile->reward,
+                                    ],
+                                    [
+                                        'name' => 'invoice_number',
+                                        'content' => $list_model->inquiry_id,
+                                    ],
+                                    [
+                                        'name' => 'doctor_email',
+                                        'content' => $doctor->user->email,
+                                    ],
+                                    [
+                                        'name' => 'doctor_phone',
+                                        'content' => $doctor->profile->phone,
+                                    ],
+                                    [
+                                        'name' => 'doctor_website',
+                                        'content' => $doctor->website,
+                                    ],
+                                    [
+                                        'name' => 'doctor_address',
+                                        'content' => $doctor->profile->address . '</br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . '</br>' . $doctor->profile->zipcode,
+                                    ],
+                                    [
+                                        'name' => 'invoice_item',
+                                        'content' => $item,
+                                    ],
 
-                    ])
-                        ->setTo(Yii::$app->user->identity->email)
-                        ->setSubject(Yii::t('app', 'Inquiry payment'))
-                        ->send();
+                                ]
+                            ]
+                        ],
+                    ];
+                    $doctor_message = [
+                        'to' => [
+                            [
+                                'email' => $doctor->user->email,
+                                'name' => $doctor->user->email,
+                            ]
+                        ],
+                        'merge_vars' => [
+                            [
+                                'rcpt' => $doctor->user->email,
+                                'vars' => [
+                                    [
+                                        'name' => 'list_address_html',
+                                        'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'current_year',
+                                        'content' => date('Y'),
+                                    ],
+                                    [
+                                        'name' => 'patient_name',
+                                        'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname ,
+                                    ],
+                                    [
+                                        'name' => 'invoice_number',
+                                        'content' => $list_model->inquiry_id,
+                                    ],
+                                    [
+                                        'name' => 'patient_email',
+                                        'content' => Yii::$app->user->identity->email,
+                                    ],
+                                    [
+                                        'name' => 'patient_phone',
+                                        'content' => Yii::$app->user->identity->userProfile->phone,
+                                    ],
+                                    [
+                                        'name' => 'invoice_item',
+                                        'content' => $item,
+                                    ],
 
-                    Yii::$app->mailer->compose('doctor_inquiry_payment', [
-                        'mailing_address' => getenv('ADMIN_EMAIL'),
-                        'current_year' => date('Y'),
-                        'app_name' => Yii::$app->name,
-                        'first_name' => Yii::$app->user->identity->userProfile->firstname,
-                        'last_name' => Yii::$app->user->identity->userProfile->lastname,
-                        'phone' => Yii::$app->user->identity->userProfile->phone,
-                        'email' => Yii::$app->user->identity->email,
-                        'invoice_number' => $list_model->inquiry_id,
-                        'item' => $item
+                                ]
+                            ]
+                        ],
+                    ];
 
-                    ])
-                        ->setTo($doctor->user->email)
-                        ->setSubject(Yii::t('app', 'Inquiry payment'))
-                        ->send();
+                    $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
+                    $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+
                 }
-
                 return ['success'];
             } else {
                 return ['errors'];
