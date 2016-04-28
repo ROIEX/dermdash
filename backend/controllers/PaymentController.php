@@ -56,15 +56,10 @@ class PaymentController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-//        $inquiry = $model->paymentItems ? $model->paymentItems[0]->doctorList->inquiry : false;
-//        if ($inquiry) {
-//            $invoice = new Invoice($inquiry, $model);
-//        }
 
         return $this->render('view', [
             'model' => $model,
-            //'inquiry' => $inquiry,
-            //'invoice' => isset($invoice) ? $invoice : false,
+
         ]);
     }
 

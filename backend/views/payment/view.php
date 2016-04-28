@@ -46,28 +46,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-
-
-<!---->
-<!--    --><?php //if ($inquiry) { ?>
-<!--        <div><h3>--><?php //echo Yii::t('app', 'Doctor: ') ?><!--</h3></div>-->
-<!--        --><?php //echo $model->paymentItems[0]->doctorList->user->email ?>
-<!--        <div><h3>--><?php //echo Yii::t('app', 'Item Description: ') ?><!--</h3></div>-->
-<!--        --><?php //echo $inquiry->getCureType($inquiry->type) . ': ' ?>
-<!--    --><?php //} ?>
-<!--    --><?php //if ($invoice) { ?>
-<!--        --><?php //echo $invoice->item_description ?>
-<!--        <div><h3>--><?php //echo Yii::t('app', 'Total Price: ') ?><!--</h3></div>-->
-<!--        --><?php //echo $invoice->total_price / 100 . ' $'?>
-<!--        <div><h3>--><?php //echo Yii::t('app', 'Fees: ') ?><!--</h3></div>-->
-<!--        --><?php //echo $invoice->fee . ' %'?>
-<!--        <div><h3>--><?php //echo Yii::t('app', 'Net Total: ') ?><!--</h3></div>-->
-<!--        --><?php //echo $invoice->net_total / 100 . ' $'?>
-<!--    --><?php //} ?>
-
-
-
-
-
-
 </div>
