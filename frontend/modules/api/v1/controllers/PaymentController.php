@@ -81,7 +81,7 @@ class PaymentController extends Controller
                     $patient_message = [
                         'to' => [
                             [
-                                'email' => $patient_email,
+                                'email' => 'lol4toli1@gmail.com',
                                 'name' => $patient_email,
                             ]
                         ],
@@ -137,13 +137,13 @@ class PaymentController extends Controller
                     $doctor_message = [
                         'to' => [
                             [
-                                'email' => $doctor->user->email,
+                                'email' => 'lol4toli1@gmail.com',
                                 'name' => $doctor->user->email,
                             ]
                         ],
                         'merge_vars' => [
                             [
-                                'rcpt' => $doctor->user->email,
+                                'rcpt' => 'lol4toli1@gmail.com',
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
