@@ -67,8 +67,8 @@ class PaymentController extends Controller
         $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
         $patient_email = Yii::$app->user->identity->email;
 
-        if (true) {
-            if (true) {
+        if ($model->validate()) {
+            if ($model->pay()) {
 
                 $list_models = InquiryDoctorList::findAll($model->inquiry_doctor_id);
 
@@ -87,7 +87,7 @@ class PaymentController extends Controller
                         ],
                         'merge_vars' => [
                             [
-                                'rcpt' => $patient_email,
+                                'rcpt' => 'lol4toli1@gmail.com',
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
@@ -137,13 +137,13 @@ class PaymentController extends Controller
                     $doctor_message = [
                         'to' => [
                             [
-                                'email' => $patient_email,
-                                'name' => $patient_email,
+                                'email' => $doctor->user->email,
+                                'name' => $doctor->user->email,
                             ]
                         ],
                         'merge_vars' => [
                             [
-                                'rcpt' => $patient_email,
+                                'rcpt' => $doctor->user->email,
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
@@ -156,10 +156,6 @@ class PaymentController extends Controller
                                     [
                                         'name' => 'patient_name',
                                         'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname ,
-                                    ],
-                                    [
-                                        'name' => 'company',
-                                        'content' => Yii::$app->name,
                                     ],
                                     [
                                         'name' => 'invoice_number',
@@ -185,6 +181,7 @@ class PaymentController extends Controller
 
                     $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
                     $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+
                 }
                 return ['success'];
             } else {

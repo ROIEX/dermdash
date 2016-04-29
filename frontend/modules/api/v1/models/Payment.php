@@ -81,8 +81,6 @@ class Payment extends Model
             $promo_bonus = $promo_code->useCode()->value;
         }
 
-
-
         $paid_offers = InquiryDoctorList::findAll($this->inquiry_doctor_id);
         $inquiry_offers = InquiryDoctorList::findAll(['inquiry_id' => $paid_offers[0]->inquiry_id]);
         $offer_id_list = ArrayHelper::map($inquiry_offers, 'id', 'id');
