@@ -18,6 +18,6 @@ class Mandrill extends \Mandrill
     public function __construct($apikey = null)
     {
         parent::__construct($apikey);
-        curl_setopt ($this->ch, CURLOPT_CAINFO, Yii::getAlias('@base') . "/cacert.pem");
+        //curl_setopt ($this->ch, CURLOPT_CAINFO, Yii::getAlias('@base') . "/cacert.pem");
     }
 }
