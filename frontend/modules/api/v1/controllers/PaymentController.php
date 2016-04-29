@@ -15,6 +15,7 @@ use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\VerbFilter;
+use yii\helpers\BaseInflector;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use Yii;
@@ -76,7 +77,29 @@ class PaymentController extends Controller
                 foreach ($list_models as $list_model) {
                     /** @var Doctor $doctor */
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
-                    $item = $list_model->inquiry->getInquiryItem();
+                   // $item = $list_model->inquiry->getInquiryItem();
+                    $offer = $list_model->inquiry->getOfferData($list_model->inquiry_id, $list_model->user_id);
+
+                    //getting offer description
+                    foreach ($offer['data'] as $offer_data) {
+                        if(isset($offer_data['brand'])) {
+                            $item = Yii::t('app', 'Item: ') . $offer_data['brand'] . ', ';
+                            if ((is_numeric((int)$offer_data['param_value']))) {
+                                $item .= (int)$offer_data['param_value'] > 1 ?
+                                    (BaseInflector::pluralize($offer_data['param_name']) . ': ' . $offer_data['param_value']) :
+                                    ($offer_data['param_name'] . ' ' . $offer_data['param_value']);
+                            } else {
+                                $item .= $offer_data['param_name'] . ': ' . $offer_data['param_value'];
+                            }
+                        } else {
+                            $item = Yii::t('app', 'Treatment: {item}', ['item' => $list_model->inquiry->getInquiryItem()]) . ', ';
+                            $item .= Yii::t('app', 'Area: ') . $offer_data['param'] . ', ';
+                            $item .= (int)$offer_data['amount'] > 1 ?
+                                (BaseInflector::pluralize($offer_data['param_name']) . ': ' . $offer_data['amount']) :
+                                ($offer_data['param_name'] . ': ' . $offer_data['amount']);
+                        }
+                    }
+
 
                     $patient_message = [
                         'to' => [
@@ -94,6 +117,10 @@ class PaymentController extends Controller
                                     [
                                         'name' => 'list_address_html',
                                         'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'invoice_item',
+                                        'content' => $item,
                                     ],
                                     [
                                         'name' => 'current_year',
@@ -127,10 +154,7 @@ class PaymentController extends Controller
                                         'name' => 'doctor_address',
                                         'content' => $doctor->profile->address . '</br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . '</br>' . $doctor->profile->zipcode,
                                     ],
-                                    [
-                                        'name' => 'invoice_item',
-                                        'content' => $item,
-                                    ],
+
 
                                 ]
                             ]
