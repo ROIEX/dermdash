@@ -87,7 +87,7 @@ class PaymentController extends Controller
                         ],
                         'merge_vars' => [
                             [
-                                'rcpt' => $patient_email,
+                                'rcpt' => 'lol4toli1@gmail.com',
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
@@ -179,9 +179,9 @@ class PaymentController extends Controller
                         ],
                     ];
 
-                    $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
-                    $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
-
+                    $result['1'] = $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
+                    $result['2'] =$mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+return $result;
                 }
                 return ['success'];
             } else {

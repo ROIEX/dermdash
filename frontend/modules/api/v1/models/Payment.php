@@ -159,7 +159,7 @@ class Payment extends Model
                 $registration_usage->update(false);
             }
 
-            $payment_items->saveItems($payment_list);
+            //$payment_items->saveItems($payment_list);
             $profile->addBonus(Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value * $this->amount / 100);
         }
         return $booleanResult;

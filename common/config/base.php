@@ -156,8 +156,8 @@ $config = [
         ],
         'defaultLanguage' => 'en-US',
         'stripe'=>[
-            'secretKey'=>'sk_test_d07aByJnwuhcnOkUagqpCq9q',
-            'publishKey'=>'pk_test_hikeutPYX58uoiwbkF8BX2Gy',
+            'secretKey'=>'sk_live_YVHz5wM95qiXXMaQo8hmKlni',
+            'publishKey'=>'pk_live_NLqUjx0aiThBn5AGNGOeJUTx',
             'currency'=>'usd'
         ],
         'company' => [
