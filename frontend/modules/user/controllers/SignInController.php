@@ -15,11 +15,12 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
-class SignInController extends \yii\web\Controller
+class SignInController extends Controller
 {
 
     public function actions()
@@ -67,22 +68,22 @@ class SignInController extends \yii\web\Controller
         ];
     }
 
-    public function actionLogin()
-    {
-        $model = new LoginForm();
-        if (Yii::$app->request->isAjax) {
-            $model->load($_POST);
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model
-            ]);
-        }
-    }
+//    public function actionLogin()
+//    {
+//        $model = new LoginForm();
+//        if (Yii::$app->request->isAjax) {
+//            $model->load($_POST);
+//            Yii::$app->response->format = Response::FORMAT_JSON;
+//            return ActiveForm::validate($model);
+//        }
+//        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+//            return $this->goBack();
+//        } else {
+//            return $this->render('login', [
+//                'model' => $model
+//            ]);
+//        }
+//    }
 
     public function actionLogout()
     {
@@ -90,20 +91,20 @@ class SignInController extends \yii\web\Controller
         return $this->goHome();
     }
 
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $user = $model->signup();
-            if ($user && Yii::$app->getUser()->login($user)) {
-                return $this->goHome();
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model
-        ]);
-    }
+//    public function actionSignup()
+//    {
+//        $model = new SignupForm();
+//        if ($model->load(Yii::$app->request->post())) {
+//            $user = $model->signup();
+//            if ($user && Yii::$app->getUser()->login($user)) {
+//                return $this->goHome();
+//            }
+//        }
+//
+//        return $this->render('signup', [
+//            'model' => $model
+//        ]);
+//    }
 
     public function actionRequestPasswordReset()
     {

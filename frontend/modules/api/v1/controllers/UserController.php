@@ -40,7 +40,7 @@ class UserController extends ActiveController
 
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::className(),
-            'except'=>['login','signup','request-password-reset'],
+            'except' => ['login', 'signup', 'request-password-reset'],
             'authMethods' => [
                 [
                     'class' => HttpBasicAuth::className(),
