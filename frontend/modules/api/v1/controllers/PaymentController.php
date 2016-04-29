@@ -81,15 +81,15 @@ class PaymentController extends Controller
                     $patient_message = [
                         'to' => [
                             [
-                                'email' => 'lol4toli1@gmail.com',
-                                'name' => 'lol4toli1@gmail.com',
+                                'email' => $patient_email,
+                                'name' => $patient_email,
                             ]
                         ],
                         "merge_language" => "mailchimp",
                         "merge" => true,
                         'merge_vars' => [
                             [
-                                'rcpt' => 'lol4toli1@gmail.com',
+                                'rcpt' => $patient_email,
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
@@ -139,19 +139,23 @@ class PaymentController extends Controller
                     $doctor_message = [
                         'to' => [
                             [
-                                'email' => 'lol4toli1@gmail.com',
-                                'name' => 'lol4toli1@gmail.com',
+                                'email' => $doctor->user->email,
+                                'name' => $doctor->user->email,
                             ]
                         ],
                         "merge_language" => "mailchimp",
                         "merge" => true,
                         'merge_vars' => [
                             [
-                                'rcpt' => 'lol4toli1@gmail.com',
+                                'rcpt' => $doctor->user->email,
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
                                         'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'company',
+                                        'content' => Yii::$app->name,
                                     ],
                                     [
                                         'name' => 'current_year',
@@ -159,7 +163,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'patient_name',
-                                        'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname ,
+                                        'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname,
                                     ],
                                     [
                                         'name' => 'invoice_number',
@@ -171,7 +175,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'patient_phone',
-                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : '123-123',
+                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : '',
                                     ],
                                     [
                                         'name' => 'invoice_item',
