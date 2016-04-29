@@ -163,7 +163,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'invoice_number',
-                                        'content' => $list_model->inquiry_id,
+                                        'content' => (string)$list_model->inquiry_id,
                                     ],
                                     [
                                         'name' => 'patient_email',
@@ -171,7 +171,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'patient_phone',
-                                        'content' => Yii::$app->user->identity->userProfile->phone,
+                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : '123-123',
                                     ],
                                     [
                                         'name' => 'invoice_item',
