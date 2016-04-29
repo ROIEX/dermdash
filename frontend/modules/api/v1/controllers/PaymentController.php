@@ -158,6 +158,10 @@ class PaymentController extends Controller
                                         'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname ,
                                     ],
                                     [
+                                        'name' => 'company',
+                                        'content' => Yii::$app->name,
+                                    ],
+                                    [
                                         'name' => 'invoice_number',
                                         'content' => $list_model->inquiry_id,
                                     ],
@@ -180,7 +184,8 @@ class PaymentController extends Controller
                     ];
 
                     $result['1'] = $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
-                    $result['2'] =$mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+                    $result['2'] = $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+                    $result['3'] = Yii::getAlias('@base') . "/cacert.pem";
 return $result;
                 }
                 return ['success'];
