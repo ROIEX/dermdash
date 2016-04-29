@@ -183,10 +183,8 @@ class PaymentController extends Controller
                         ],
                     ];
 
-                    $result['1'] = $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
-                    $result['2'] = $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
-                    $result['3'] = Yii::getAlias('@base') . "/cacert.pem";
-return $result;
+                    $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
+                    $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
                 }
                 return ['success'];
             } else {
