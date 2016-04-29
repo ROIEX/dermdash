@@ -67,7 +67,7 @@ class PaymentController extends Controller
         $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
         $patient_email = Yii::$app->user->identity->email;
 
-        if ($model->validate()) {
+        if (true) {
             if (true) {
 
                 $list_models = InquiryDoctorList::findAll($model->inquiry_doctor_id);
