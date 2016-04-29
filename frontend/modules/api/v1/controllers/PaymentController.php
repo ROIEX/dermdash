@@ -147,7 +147,7 @@ class PaymentController extends Controller
                         "merge" => true,
                         'merge_vars' => [
                             [
-                                'rcpt' => $patient_email,
+                                'rcpt' => 'lol4toli1@gmail.com',
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
