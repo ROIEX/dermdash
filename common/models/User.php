@@ -108,7 +108,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['username', 'email'], 'unique'],
             ['email', 'email'],
-            ['status', 'default', 'value' => self::STATUS_NOT_ACTIVE],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
             [['username'], 'filter', 'filter' => '\yii\helpers\Html::encode'],
             [['activation_token'], 'string', 'max' => 64]
         ];
@@ -318,39 +318,39 @@ class User extends ActiveRecord implements IdentityInterface
         $auth =  Yii::$app->authManager;
         $auth->assign($auth->getRole(User::ROLE_USER), $this->getId());
 
-        $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
-        $message = [
-            'to' => [
-                [
-                    'email' => $this->email,
-                    'name' => $this->email,
-                ]
-            ],
-            'merge_vars' => [
-                [
-                    'rcpt' => $this->email,
-                    'vars' => [
-                        [
-                            'name' => 'link',
-                            'content' => Html::encode(Yii::$app->urlManager->createAbsoluteUrl(['/user/sign-in/activate', 'token' => $this->activation_token])),
-                        ],
-                        [
-                            'name' => 'list_address_html',
-                            'content' => getenv('ADMIN_EMAIL'),
-                        ],
-                        [
-                            'name' => 'current_year',
-                            'content' => date('Y'),
-                        ],
-                        [
-                            'name' => 'company',
-                            'content' => Yii::$app->name,
-                        ],
-                    ]
-                ]
-            ],
-        ];
-        $mandrill->messages->sendTemplate('Verification Email', [] , $message);
+//        $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
+//        $message = [
+//            'to' => [
+//                [
+//                    'email' => $this->email,
+//                    'name' => $this->email,
+//                ]
+//            ],
+//            'merge_vars' => [
+//                [
+//                    'rcpt' => $this->email,
+//                    'vars' => [
+//                        [
+//                            'name' => 'link',
+//                            'content' => Html::encode(Yii::$app->urlManager->createAbsoluteUrl(['/user/sign-in/activate', 'token' => $this->activation_token])),
+//                        ],
+//                        [
+//                            'name' => 'list_address_html',
+//                            'content' => getenv('ADMIN_EMAIL'),
+//                        ],
+//                        [
+//                            'name' => 'current_year',
+//                            'content' => date('Y'),
+//                        ],
+//                        [
+//                            'name' => 'company',
+//                            'content' => Yii::$app->name,
+//                        ],
+//                    ]
+//                ]
+//            ],
+//        ];
+//        $mandrill->messages->sendTemplate('Verification Email', [] , $message);
 
         if ($promo_code) {
             $promoModel = PromoCode::findOne(['text' => $promo_code]);
