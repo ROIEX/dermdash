@@ -67,8 +67,8 @@ class PaymentController extends Controller
         $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
         $patient_email = Yii::$app->user->identity->email;
 
-        if (true) {
-            if (true) {
+        if ($model->validate()) {
+            if ($model->pay()) {
 
                 $list_models = InquiryDoctorList::findAll($model->inquiry_doctor_id);
 
@@ -105,7 +105,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'rewards',
-                                        'content' => Yii::$app->user->identity->userProfile->reward,
+                                        'content' => Yii::$app->user->identity->userProfile->reward ? Yii::$app->user->identity->userProfile->reward : '',
                                     ],
                                     [
                                         'name' => 'invoice_number',
@@ -139,15 +139,15 @@ class PaymentController extends Controller
                     $doctor_message = [
                         'to' => [
                             [
-                                'email' => $patient_email,
-                                'name' => $patient_email,
+                                'email' => $doctor->user->email,
+                                'name' => $doctor->user->email,
                             ]
                         ],
                         "merge_language" => "mailchimp",
                         "merge" => true,
                         'merge_vars' => [
                             [
-                                'rcpt' => $patient_email,
+                                'rcpt' => $doctor->user->email,
                                 'vars' => [
                                     [
                                         'name' => 'list_address_html',
