@@ -352,7 +352,12 @@ class Inquiry extends \yii\db\ActiveRecord
         } else {
             $return = self::STATUS_COMPLETED;
         }
-        return self::getAnswerStatus($return);
+
+        if ($return_string) {
+            return self::getAnswerStatus($return);
+        } else {
+            return $return;
+        }
     }
 
     /**

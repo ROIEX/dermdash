@@ -77,7 +77,6 @@ class PaymentController extends Controller
                 foreach ($list_models as $list_model) {
                     /** @var Doctor $doctor */
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
-                   // $item = $list_model->inquiry->getInquiryItem();
                     $offer = $list_model->inquiry->getOfferData($list_model->inquiry_id, $list_model->user_id);
 
                     //getting offer description
@@ -92,11 +91,14 @@ class PaymentController extends Controller
                                 $item .= $offer_data['param_name'] . ': ' . $offer_data['param_value'];
                             }
                         } else {
-                            $item = Yii::t('app', 'Treatment: {item}', ['item' => $list_model->inquiry->getInquiryItem()]) . ', ';
-                            $item .= Yii::t('app', 'Area: ') . $offer_data['param'] . ', ';
+                            $item = Yii::t('app', 'Treatment: {item}', ['item' => $list_model->inquiry->getInquiryItem()]) . '<br>';
+                            $item .= Yii::t('app', 'Area: ') . $offer_data['param'] . '<br>';
+                            if ($list_model->inquiry->getInquiryItem() != $offer_data['procedure_name']) {
+                                $item .= Yii::t('app', 'Used brand: ') . $offer_data['procedure_name'] . '<br>';
+                            }
                             $item .= (int)$offer_data['amount'] > 1 ?
-                                (BaseInflector::pluralize($offer_data['param_name']) . ': ' . $offer_data['amount']) :
-                                ($offer_data['param_name'] . ': ' . $offer_data['amount']);
+                                (BaseInflector::pluralize($offer_data['param_name']) . ': ' . $offer_data['amount'] . '<br>') :
+                                ($offer_data['param_name'] . ': ' . $offer_data['amount'] . '<br>');
                         }
                     }
 
@@ -143,6 +145,10 @@ class PaymentController extends Controller
                                         'content' => $doctor->user->email,
                                     ],
                                     [
+                                        'name' => 'doctor_clinic',
+                                        'content' => $doctor->clinic,
+                                    ],
+                                    [
                                         'name' => 'doctor_phone',
                                         'content' => $doctor->profile->phone,
                                     ],
@@ -152,7 +158,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'doctor_address',
-                                        'content' => $doctor->profile->address . '</br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . '</br>' . $doctor->profile->zipcode,
+                                        'content' => $doctor->profile->address . '<br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . ', ' . $doctor->profile->zipcode,
                                     ],
 
 

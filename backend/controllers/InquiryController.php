@@ -90,7 +90,14 @@ class InquiryController extends Controller
         if(Yii::$app->request->isAjax && Yii::$app->request->post('note_id')) {
 
             $model = $this->findModel((int)Yii::$app->request->post('note_id'));
-            $inquiry_doctor_list_doctors = $model->inquiryDoctorLists;
+            $query = InquiryDoctorList::find()
+                ->where(['inquiry_id' => (int)Yii::$app->request->post('note_id')]);
+                if ($model->getInquiryStatus($model) == Inquiry::STATUS_COMPLETED) {
+                    $query->andWhere(['status' => InquiryDoctorList::STATUS_FINALIZED ]);
+                }
+
+            $inquiry_doctor_list_doctors = $query->all();
+
             foreach ($inquiry_doctor_list_doctors as $offer) {
                 $offers[] = $model->getOfferData($model->id, $offer->user_id);
             }

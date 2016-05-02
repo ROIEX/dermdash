@@ -39,15 +39,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'doctor_id',
                 'format' => 'raw',
-                'label' => Yii::t('app', 'Doctor email'),
+                'label' => Yii::t('app', 'Clinic'),
                 'value' => function($data) {
-                    return Html::a($data->doctor->email, Url::toRoute(['doctor/view', 'id' => $data->doctor->doctor->id]));
+                    return Html::a($data->doctor->doctor->clinic, Url::toRoute(['doctor/view', 'id' => $data->doctor->doctor->id]));
                 }
             ],
             [
                 'attribute' => 'inquiry_id',
                 'format' => 'raw',
-                'label' => Yii::t('app', 'Paid offer'),
+                'label' => Yii::t('app', 'Invoice #'),
                 'value' => function($data) {
                     return Html::a($data->inquiry_id, Url::toRoute(['inquiry/view', 'note_id' => $data->inquiry_id, 'doctor_id' => $data->doctor_id]));
                 }

@@ -27,11 +27,18 @@ $this->registerJs($js);
     ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
+
         [
             'label' => Yii::t('app', 'Invoice #'),
-            'value' => function($data) {
+            'format' => 'raw',
+            'value' => function($data) use($completed_page){
+                if ($completed_page) {
+                    $doctor_id = $data->doctorAccepted->user_id;
+                    return Html::a($data->id, Url::toRoute(['inquiry/view', 'note_id' => $data->id, 'doctor_id' => $doctor_id]));
+                } else {
+                    return $data->id;
+                }
 
-                return $data->id;
             }
         ],
         [

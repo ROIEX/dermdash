@@ -89,7 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->user->email, Url::toRoute(['patient/view', 'id' => $data->user_id]));
                 }
             ],
-            'payment_id',
+            [
+                'attribute' => 'inquiry_id',
+                'format' => 'raw',
+                'label' => Yii::t('app', 'Paid offer'),
+                'value' => function($data) {
+                    return Html::a($data->inquiry_id, Url::toRoute(['inquiry/view', 'note_id' => $data->inquiry_id, 'doctor_id' => $data->doctor_id]));
+                }
+            ],
             [
                 'attribute' => 'created_at',
                 'label' => Yii::t('app', 'Date'),
@@ -106,8 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->amount / 100;
                 }
             ],
-
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{view}', 'controller' => 'payment',],
         ],
     ]); ?>
 

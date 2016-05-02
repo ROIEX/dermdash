@@ -31,7 +31,7 @@ $this->registerJs($js);
                     'label' => Yii::t('app', 'Invoice #'),
                     'format' => 'raw',
                     'value' => function($data) {
-                        return Html::a($data->id, '', ['id' => 'get_note', 'data'=>['note_id' => $data->id]]);
+                        return Html::a($data->id, '', ['id' => 'get_note', 'data' => ['note_id' => $data->id]]);
                     }
                 ],
                 [
