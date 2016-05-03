@@ -716,6 +716,7 @@ Response (treatment):
   "data": {
     "clinic": "John",
     "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png",
+    "biography": "Some text",
     "address": {
       "zip_code": "12345",
       "state_id": 5,

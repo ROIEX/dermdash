@@ -153,6 +153,7 @@ class DoctorOffer extends Model
         $data = [
             'clinic'=> $list->user->doctor->clinic,
             'photo'=> $userProfile->avatar_path ? $userProfile->avatar_base_url.'/'.$userProfile->avatar_path : false,
+            'biography' => $list->user->doctor->biography,
             'address'=>[
                 'zip_code' => $userProfile->zipcode,
                 'state_id' => $userProfile->state_id,
