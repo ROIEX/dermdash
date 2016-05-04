@@ -106,29 +106,29 @@ class SignInController extends Controller
 //        ]);
 //    }
 
-    public function actionRequestPasswordReset()
-    {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->getSession()->setFlash('alert', [
-                    'body' => Yii::t('frontend', 'Check your email for further instructions.'),
-                    'options' => ['class' => 'alert-success']
-                ]);
-
-                return $this->goHome();
-            } else {
-                Yii::$app->getSession()->setFlash('alert', [
-                    'body' => Yii::t('frontend', 'Sorry, we are unable to reset password for email provided.'),
-                    'options' => ['class' => 'alert-danger']
-                ]);
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
-    }
+//    public function actionRequestPasswordReset()
+//    {
+//        $model = new PasswordResetRequestForm();
+//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+//            if ($model->sendEmail()) {
+//                Yii::$app->getSession()->setFlash('alert', [
+//                    'body' => Yii::t('frontend', 'Check your email for further instructions.'),
+//                    'options' => ['class' => 'alert-success']
+//                ]);
+//
+//                return $this->goHome();
+//            } else {
+//                Yii::$app->getSession()->setFlash('alert', [
+//                    'body' => Yii::t('frontend', 'Sorry, we are unable to reset password for email provided.'),
+//                    'options' => ['class' => 'alert-danger']
+//                ]);
+//            }
+//        }
+//
+//        return $this->render('requestPasswordResetToken', [
+//            'model' => $model,
+//        ]);
+//    }
 
     /**
      * Activating account by token.
