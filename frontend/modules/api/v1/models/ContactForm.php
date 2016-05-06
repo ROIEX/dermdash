@@ -54,7 +54,7 @@ class ContactForm extends Model
             $this->name = Yii::$app->user->identity->getPublicIdentity();
             return Yii::$app->mailer->compose()
                 ->setTo($email)
-                ->setFrom(Yii::$app->params['robotEmail'])
+                ->setFrom(Yii::$app->params['adminEmail'])
                 ->setReplyTo([$this->email => $this->name])
                 ->setSubject($this->subject)
                 ->setTextBody($this->body)
