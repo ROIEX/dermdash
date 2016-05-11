@@ -62,7 +62,7 @@ class GetDoctorList extends Model
                 if (!isset($distace_obj->distance)) {
                     $distance = Yii::t('app', 'Sorry, unable to calculate');
                 } else {
-                    $distance = $distace_obj->distance . ' km';
+                    $distance = round($distace_obj->distance, 2) . ' miles';
                 }
 
                 $returnData[$userProfile->user_id] = [
