@@ -49,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                //'template' => '{view} {update}',
                 'buttons' => [
                     'update' => function($url,$model,$key){
                         if ($model->treatmentParams[0]->brandProvided) {
