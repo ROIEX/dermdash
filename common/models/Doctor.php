@@ -137,7 +137,6 @@ class Doctor extends \yii\db\ActiveRecord
                     foreach ($this->treatment_discounts[$treatment_params[$id]->treatment->id] as $key => $discount) {
                         if ($discount == '') {
                             $this->addError('treatment_discounts['. $treatment_params[$id]->treatment->id . '][' . $key . ']' , Yii::t('app', 'Please enter discount percentages for above treatments'));
-//                            $this->addError('treatment_discounts', Yii::t('app', 'You must add discounts to filled treatments'));
                         }
                     }
 
