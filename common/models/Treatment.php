@@ -15,6 +15,7 @@ use trntv\filekit\behaviors\UploadBehavior;
  * @property string $name
  * @property string $sub_string
  * @property string $instruction
+ * @property string $app_name
  * @property integer $created_at
  * @property integer $status
  * @property integer $param_multiselect
@@ -72,7 +73,7 @@ class Treatment extends \yii\db\ActiveRecord
     {
 
         return [
-            [['sub_string', 'reg_description', 'instruction'], 'string'],
+            [['sub_string', 'reg_description', 'instruction', 'app_name'], 'string'],
             ['name', 'required'],
             [['created_at', 'status', 'param_multiselect', 'per_item', 'per_session', 'select_both_button', 'buttons_in_row', 'session_buttons_position'], 'integer'],
             ['name', 'string', 'max' => 255],
@@ -102,6 +103,7 @@ class Treatment extends \yii\db\ActiveRecord
             'intensity' => Yii::t('app', 'Check if intensity needed'),
             'is_brand_provided' => Yii::t('app', 'If checked you will have to fill brands for every brand param'),
             'reg_description' => Yii::t('app', 'Description while doctor registration'),
+            'app_name' => Yii::t('app', 'Application Name'),
         ];
     }
 

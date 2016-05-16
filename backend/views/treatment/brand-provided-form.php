@@ -39,6 +39,8 @@ $this->registerJs($js);
 
     <?php echo $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?php echo $form->field($model, 'app_name')->textInput(['maxlength' => true]) ?>
+
     <?php echo $form->field($model, 'sub_string')->textarea(['rows' => 6]) ?>
 
     <?php echo $form->field($model, "reg_description")->textInput(['maxlength' => true]) ?>

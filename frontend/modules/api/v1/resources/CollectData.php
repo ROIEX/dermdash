@@ -135,7 +135,7 @@ class CollectData
                 ];
             }
             $returnData[] = [
-                'treatment_name'=>$treatment->name,
+                'treatment_name'=> (!is_null($treatment->app_name) && !empty($treatment->app_name)) ? $treatment->app_name : $treatment->name,
                 'treatment_id' => $treatment->id,
                 'sub_string'=>$treatment->sub_string,
                 'instruction'=>$treatment->instruction,

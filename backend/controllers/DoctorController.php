@@ -8,7 +8,6 @@ use common\models\DoctorBrand;
 use common\models\DoctorSignup;
 use common\models\Inquiry;
 use common\models\DoctorTreatment;
-use common\models\Nurse;
 use common\models\Payment;
 use common\models\Treatment;
 use common\models\User;
