@@ -36,7 +36,7 @@ class GetDoctorList extends Model
      */
     public function getDoctorList()
     {
-        //$curl = new Curl();
+        $curl = new Curl();
        // $curl->setOption(CURLOPT_CAINFO, Yii::getAlias('@base') . "../../cacert.pem");
         $inquiryDoctorList = InquiryDoctorList::findAll([
             'inquiry_id' => $this->inquiry_id
@@ -57,19 +57,19 @@ class GetDoctorList extends Model
             if (!empty($returnData[$userProfile->user_id])) {
                 $returnData[$userProfile->user_id]['price'] += $list->price;
             } else {
-//                $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
-//                $distace_obj = json_decode($result);
-//                if (!isset($distace_obj->distance)) {
-//                    $distance = Yii::t('app', 'Sorry, unable to calculate');
-//                } else {
-//                    $distance = round($distace_obj->distance, 2) . ' miles';
-//                }
+                $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
+                $distace_obj = json_decode($result);
+                if (!isset($distace_obj->distance)) {
+                    $distance = Yii::t('app', 'Sorry, unable to calculate');
+                } else {
+                    $distance = round($distace_obj->distance, 2) . ' miles';
+                }
 
                 $returnData[$userProfile->user_id] = [
                     'doctor_id'=>$userProfile->user_id,
                     'clinic'=> $list->user->doctor->clinic,
                     'city' => $list->user->userProfile->city,
-                    //distance' => $distance ,
+                    'distance' => $distance ,
                     'photo'=>$userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'price'=>$list->price,
                     'rating'=>[
