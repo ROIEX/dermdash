@@ -105,14 +105,6 @@ class TreatmentParam extends \yii\db\ActiveRecord
         return $this->hasMany(BrandProvidedTreatment::className(), ['treatment_param_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAdditionalAttribute()
-    {
-        return $this->hasOne(AdditionalAttributeItem::className(), ['treatment_id' => 'treatment_id']);
-    }
-
     public function upload()
     {
         $name = \Yii::$app->security->generateRandomString(32);

@@ -154,7 +154,8 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
                     <?php if (!in_array($brand->id, [39, 26, 16, 28, 18, 17, 20, 24, 15, 19, 21, 22, 23, 25, 27, 29, 33, 32, 31, 30])) { ?>
                         <?php echo $this->render('update/_form-brand', [
                             'model' => $model->getModel('doctor_model'),
-                            'form' => $form, 'brand' => $brand,
+                            'form' => $form, 
+                            'brand' => $brand,
                             'selected_brands_dropdown_prices' => $selected_brands_dropdown_prices,
                             'selected_brands' => $selected_brands
                             ])

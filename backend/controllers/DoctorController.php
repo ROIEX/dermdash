@@ -208,6 +208,27 @@ class DoctorController extends Controller
         }
     }
 
+    public function actionPriceDocument($user_id)
+    {
+        $selected_brands = DoctorBrand::getPricedBrands($user_id);
+        $selected_treatments = DoctorTreatment::getPricedTreatments($user_id);
+        return $this->generateDocument($selected_brands, $selected_treatments);
+    }
+
+    private function generateDocument($selected_brands, $selected_treatments)
+    {
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8,
+            'filename'=> Yii::$app->security->generateRandomString(16) . '.pdf',
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_DOWNLOAD,
+            'content' => $this->renderPartial('price-generation/view', ['brands' => $selected_brands, 'treatments' => $selected_treatments])
+        ]);
+
+        return $pdf->render();
+    }
+
     /**
      * Finds the Doctor model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

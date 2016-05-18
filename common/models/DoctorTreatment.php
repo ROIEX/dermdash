@@ -5,6 +5,7 @@ namespace common\models;
 use common\components\StatusHelper;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "doctor_treatment".
@@ -277,5 +278,25 @@ class DoctorTreatment extends \yii\db\ActiveRecord
         }
 
         return $treatment_discounts;
+    }
+    
+    public static function getPricedTreatments($user_id)
+    {
+        $selected_obj_array = self::find()->where(['user_id' => $user_id])->all();
+        if (!empty($selected_obj_array)) {
+            /** @var DoctorTreatment $selected_item */
+            foreach ($selected_obj_array as $selected_item) {
+                $treatment_param = $selected_item->treatmentParam;
+                $selected_array[$treatment_param->treatment->name][] = [
+                    'param' =>  $treatment_param->value . ', ' . ($selected_item->treatmentSession->session_count . ' ' .
+                            (($selected_item->treatmentSession->session_count > 1 ? Inflector::pluralize(Yii::t('app', 'Session')) : Yii::t('app', 'Session')))),
+                    'price' => $selected_item->price != 0 ? ($selected_item->price . ' $') : Yii::t('app', 'Brand Provided')
+                ];
+            }
+
+            return $selected_array;
+        }
+
+        return false;
     }
 }

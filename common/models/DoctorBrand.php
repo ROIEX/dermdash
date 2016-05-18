@@ -5,6 +5,7 @@ namespace common\models;
 use common\behaviors\SaveDoctorsBehavior;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "doctor_brand".
@@ -130,6 +131,48 @@ class DoctorBrand extends \yii\db\ActiveRecord
      * Returns list of doctor selected brands
      */
     public static function getSelectedList($user_id)
+    {
+        $selected_array = self::find()->where(['user_id' => $user_id])->all();
+        $selected_list = [];
+        if (!empty($selected_array)) {
+            foreach($selected_array as $selected_item) {
+                $selected_list[] = $selected_item->brandParam->brand->name;
+            }
+            return implode(', ', array_unique($selected_list));
+        }
+
+        return false;
+    }
+
+    public static function getPricedBrands($user_id)
+    {
+        $selected_array = self::find()->where(['user_id' => $user_id])->all();
+        $selected_list = [];
+        if (!empty($selected_array)) {
+            /** @var DoctorBrand $selected_item */
+            foreach($selected_array as $selected_item) {
+
+                /** @var BrandParam $brand_param */
+                $brand_param = $selected_item->brandParam;
+                if ($brand_param->brand->is_dropdown == 1) {
+                    $param = '1 ' . Brand::getPer($brand_param->brand->per);
+                } else {
+                    $param = (($brand_param->value == 1 || !is_numeric($brand_param->value)) ?
+                        ($brand_param->value . ((!is_numeric($brand_param->value) && $brand_param->brand->id != 36)? (", ") : ' ') . ($brand_param->brand->id == 36 ? '': Brand::getPer($brand_param->brand->per)) . ($brand_param->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : '')) :
+                        ($brand_param->value . " " . Inflector::pluralize(Brand::getPer($brand_param->brand->per))) . ($brand_param->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : ''));
+                }
+                $selected_list[$brand_param->brand->name][] = [
+                    'param' => $param,
+                    'price' => $selected_item->price . ' $'
+                ];
+            }
+            return $selected_list;
+        }
+
+        return false;
+    }
+
+    public static function getSelectedListWithPrices($user_id)
     {
         $selected_array = self::find()->where(['user_id' => $user_id])->all();
         $selected_list = [];

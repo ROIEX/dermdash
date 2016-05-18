@@ -51,6 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'clinic',
             'license',
+            [
+                'label'=> Yii::t('app', 'Prices generation'),
+                'format' => 'raw',
+                'value' => function($data) {
+                    return Html::a(Yii::t('app', 'Get prices'), Url::toRoute(['doctor/price-document','user_id' => $data->user_id]));
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
