@@ -8,6 +8,7 @@ use yii\helpers\BaseInflector;
 
 /** @var Inquiry $model */
 if (isset($model)) { ?>
+
     <?php if ($offers) : ?>
         <?php foreach($offers as $offer) : ?>
 

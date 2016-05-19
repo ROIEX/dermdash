@@ -36,6 +36,7 @@ class InquiryDoctorList extends \yii\db\ActiveRecord
     const VIEWED_STATUS_YES = 1;
     const VIEWED_STATUS_NO = 0;
 
+
     const SCENARIO_CREATE_OFFER = 'offer';
 
     public function behaviors()

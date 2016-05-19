@@ -37,7 +37,7 @@ class GetDoctorList extends Model
     public function getDoctorList()
     {
         $curl = new Curl();
-       // $curl->setOption(CURLOPT_CAINFO, Yii::getAlias('@base') . "../../cacert.pem");
+        $curl->setOption(CURLOPT_CAINFO, Yii::getAlias('@base') . "../../cacert.pem");
         $inquiryDoctorList = InquiryDoctorList::findAll([
             'inquiry_id' => $this->inquiry_id
         ]);

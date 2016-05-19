@@ -48,8 +48,8 @@ class FileStorageController extends Controller
             ],
             'uploadPhoto' => [
             'class' => 'budyaga\cropper\actions\UploadAction',
-            'url' => Url::to('@storageUrl/source'),
-            'path' => '@storage/web/source',
+            'url' => Yii::getAlias('@storageUrl') . '/source/',
+            'path' => Yii::getAlias('@storage') . '/web/source/',
             ]
         ];
     }

@@ -570,6 +570,9 @@ class TreatmentController extends Controller
                     $model->icon_path = str_replace(Yii::getAlias('@storageUrl') . '/source/', '', $model->uploaded_image);
                 }
             }
+            //var_dump($model->icon_base_url);
+            //var_dump(str_replace('http://localhost/dermdash/storage/web/source/', '', $model->uploaded_image));
+            //var_dump($model->uploaded_image);exit;
 
             //reset
             $severity_models = [];

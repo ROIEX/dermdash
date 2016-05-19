@@ -76,7 +76,7 @@ class InquiryController extends Controller
                 break;
         }
 
-        $query->with('user.userProfile')
+        $query->with('user')
             ->with('doctorAccepted')
             ->with('inquiryTreatments.treatmentParam.treatment')
             ->with('inquiryBrands.brandParam.brand');
@@ -96,17 +96,7 @@ class InquiryController extends Controller
         if(Yii::$app->request->isAjax && Yii::$app->request->post('note_id')) {
 
             $model = $this->findModel((int)Yii::$app->request->post('note_id'));
-            $query = InquiryDoctorList::find()
-                ->where(['inquiry_id' => (int)Yii::$app->request->post('note_id')]);
-                if ($model->getInquiryStatus($model) == Inquiry::STATUS_COMPLETED) {
-                    $query->andWhere(['status' => InquiryDoctorList::STATUS_FINALIZED ]);
-                }
-
-            $inquiry_doctor_list_doctors = $query->all();
-
-            foreach ($inquiry_doctor_list_doctors as $offer) {
-                $offers[] = $model->getOfferData($model->id, $offer->user_id);
-            }
+            $offers = $model->getOfferData((int)Yii::$app->request->post('note_id'));
 
             return $this->renderAjax('chart-note', [
                 'model' => $model,
@@ -122,7 +112,7 @@ class InquiryController extends Controller
                 $model->update(false);
 
             } elseif(Yii::$app->user->can('administrator')) {
-                $offers[] = $model->getOfferData($model->id, (int)Yii::$app->request->get('doctor_id'));
+                $offers = $model->getOfferData($model->id, (int)Yii::$app->request->get('doctor_id'));
                 $model->is_viewed_by_admin = Inquiry::IS_VIEWED;
                 $model->update(false);
 
