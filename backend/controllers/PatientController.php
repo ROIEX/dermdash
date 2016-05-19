@@ -16,14 +16,14 @@ class PatientController extends Controller
     public function actionIndex()
     {
         if (Yii::$app->user->can('administrator')) {
-            $dataProvider = new ActiveDataProvider([
-                'query' => User::find()->patientList()
-            ]);
+            $query = User::find()->patientList();
         } else {
-            $dataProvider = new ActiveDataProvider([
-                'query' => User::find()->doctorPatientList()
-            ]);
+            $query =  User::find()->doctorPatientList();
         }
+        $query->with('userProfile.state');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider

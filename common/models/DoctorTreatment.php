@@ -288,9 +288,8 @@ class DoctorTreatment extends \yii\db\ActiveRecord
     public static function getPricedTreatments($user_id)
     {
         $selected_obj_array = self::find()->where(['user_id' => $user_id])
-            ->with('treatmentParam')
-            ->with('treatmentSession')
             ->with('treatmentParam.treatment')
+            ->with('treatmentSession')
             ->all();
         if (!empty($selected_obj_array)) {
             /** @var DoctorTreatment $selected_item */

@@ -33,12 +33,10 @@ $this->registerJs($js);
             'format' => 'raw',
             'value' => function($data) use($completed_page){
                 if ($completed_page) {
-                    $doctor_id = $data->doctorAccepted->user_id;
-                    return Html::a($data->id, Url::toRoute(['inquiry/view', 'note_id' => $data->id, 'doctor_id' => $doctor_id]));
+                    return Html::a($data->id, Url::toRoute(['inquiry/view', 'note_id' => $data->id, 'doctor_id' =>  $data->doctorAccepted->user_id]));
                 } else {
                     return $data->id;
                 }
-
             }
         ],
         [
@@ -53,9 +51,7 @@ $this->registerJs($js);
             'label' => Yii::t('app', 'Clinic'),
             'format' => 'raw',
             'value' => function ($data) {
-                $doctor = $data->doctorAccepted->user->doctor;
-
-                return Html::a($doctor->clinic, Url::toRoute(['doctor/view', 'id' => $doctor->id]));
+                return Html::a($data->doctorAccepted->user->doctor->clinic, Url::toRoute(['doctor/view', 'id' => $data->doctorAccepted->user->doctor->id]));
             },
             'visible' => Yii::$app->user->can('administrator') && $completed_page,
         ],
@@ -99,25 +95,6 @@ $this->registerJs($js);
             'visible' => $completed_page ? true : false,
 
         ],
-//        [
-//            'label' => Yii::t('app', 'Doctor assigned'),
-//            'format' => 'raw',
-//            'value' => function($data) {
-//                if (!empty($data->finalizedInquiry)) {
-//                    if (Yii::$app->user->can('administrator')) {
-//                        return Html::a($data->finalizedInquiry[0]->user->getPublicIdentity(), Url::toRoute(['doctor/view', 'id' => $data->finalizedInquiry[0]->user->doctor->id]));
-//                    } else {
-//                        if($data->finalizedInquiry[0]->user_id == Yii::$app->user->id)
-//                        {
-//                            return Html::tag('div',  Yii::t('app', 'Purchased'), ['class' => 'text-success']);
-//                        } else {
-//                            return Html::tag('div', Yii::t('app', 'Not purchased'), ['class' => 'text-warning']);
-//                        }
-//                    }
-//                }
-//            },
-//            'visible' => $completed_page ? true : false,
-//        ],
     ]
 ]); ?>
 <?php Pjax::end(); ?>

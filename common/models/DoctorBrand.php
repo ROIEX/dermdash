@@ -151,7 +151,6 @@ class DoctorBrand extends \yii\db\ActiveRecord
     public static function getPricedBrands($user_id)
     {
         $selected_array = self::find()->where(['user_id' => $user_id])
-            ->with('brandParam')
             ->with('brandParam.brand')
             ->all();
         if (!empty($selected_array)) {

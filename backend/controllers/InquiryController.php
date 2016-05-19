@@ -53,8 +53,9 @@ class InquiryController extends Controller
                     Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
                 }
 
-                $query = $inquiry->find()->where(['in', 'id', $completed_id_list])->orderBy(['created_at' => SORT_DESC]);;
-
+                $query = $inquiry->find()
+                    ->where(['in', 'id', $completed_id_list])
+                    ->orderBy(['created_at' => SORT_DESC]);
                 break;
 
             case Inquiry::STATUS_ABANDONED:
@@ -74,6 +75,11 @@ class InquiryController extends Controller
                 throw new NotFoundHttpException('The requested page does not exist.');
                 break;
         }
+
+        $query->with('user.userProfile')
+            ->with('doctorAccepted')
+            ->with('inquiryTreatments.treatmentParam.treatment')
+            ->with('inquiryBrands.brandParam.brand');
 
         $dataProvider = new ActiveDataProvider([
             'query'=> $query,
