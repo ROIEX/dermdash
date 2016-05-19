@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\components\MultipleModel;
 use common\components\StatusHelper;
 use common\models\BrandParam;
+use common\models\DoctorBrand;
 use Yii;
 use common\models\Brand;
 use yii\data\ActiveDataProvider;
@@ -158,6 +159,7 @@ class BrandController extends Controller
                     if ($flag = $model->save(false)) {
                         if (!empty($deletedIDs)) {
                             BrandParam::deleteAll(['id' => $deletedIDs]);
+                            DoctorBrand::deleteAll(['brand_param_id' => $deletedIDs]);
                         }
 
                         foreach ($param_models as $param_model) {

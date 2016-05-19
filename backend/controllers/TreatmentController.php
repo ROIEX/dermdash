@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\AdditionalAttributeItem;
 use common\models\Brand;
 use common\models\BrandProvidedTreatment;
+use common\models\DoctorTreatment;
 use common\models\TreatmentIntensity;
 use common\models\TreatmentParam;
 use common\models\TreatmentParamSeverity;
@@ -530,19 +531,17 @@ class TreatmentController extends Controller
         $model = $this->findModel($id);
         $param_models = $model->treatmentParams;
         $session_models = $model->treatmentSessions;
-        $intensity_models= $model->treatmentIntensity;
+        $intensity_models = $model->treatmentIntensity;
         $model->uploaded_image = $model->icon_base_url . $model->icon_path;
         $old_img = $model->uploaded_image;
         $severity_models = [];
         $old_severity_models = [];
         $old_severeIDs = [];
-        $oldRooms = [];
         if (!empty($param_models)) {
             foreach ($param_models as $indexParam => $modelParam) {
                 $models = $modelParam->severity;
                 if (!empty($models)) {
                     $severity_models[$indexParam] = $models;
-                    $oldRooms = ArrayHelper::merge(ArrayHelper::index($models, 'id'), $oldRooms);
                     foreach ($models as $severity_model) {
                         $old_severeIDs[] = $severity_model->id;
                         $old_severity_models[$severity_model->id] = $severity_model;
@@ -631,6 +630,7 @@ class TreatmentController extends Controller
 
                         if (! empty($deletedIDs)) {
                             TreatmentParam::deleteAll(['id' => $deletedIDs]);
+                            DoctorTreatment::deleteAll(['treatment_param_id' => $deletedIDs]);
                             TreatmentParamSeverity::deleteAll(['param_id' => $deletedIDs]);
                         }
 

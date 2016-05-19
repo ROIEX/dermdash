@@ -144,27 +144,34 @@ class DoctorBrand extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * @param $user_id
+     * @return array|bool
+     */
     public static function getPricedBrands($user_id)
     {
-        $selected_array = self::find()->where(['user_id' => $user_id])->all();
-        $selected_list = [];
+        $selected_array = self::find()->where(['user_id' => $user_id])
+            ->with('brandParam')
+            ->with('brandParam.brand')
+            ->all();
         if (!empty($selected_array)) {
             /** @var DoctorBrand $selected_item */
             foreach($selected_array as $selected_item) {
 
-                /** @var BrandParam $brand_param */
-                $brand_param = $selected_item->brandParam;
-                if ($brand_param->brand->is_dropdown == 1) {
-                    $param = '1 ' . Brand::getPer($brand_param->brand->per);
-                } else {
-                    $param = (($brand_param->value == 1 || !is_numeric($brand_param->value)) ?
-                        ($brand_param->value . ((!is_numeric($brand_param->value) && $brand_param->brand->id != 36)? (", ") : ' ') . ($brand_param->brand->id == 36 ? '': Brand::getPer($brand_param->brand->per)) . ($brand_param->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : '')) :
-                        ($brand_param->value . " " . Inflector::pluralize(Brand::getPer($brand_param->brand->per))) . ($brand_param->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : ''));
+                if (isset($selected_item->brandParam->brand)) {
+                    if ($selected_item->brandParam->brand->is_dropdown == 1) {
+                        $param = '1 ' . Brand::getPer($selected_item->brandParam->brand->per);
+                    } else {
+                        $param = (($selected_item->brandParam->value == 1 || !is_numeric($selected_item->brandParam->value)) ?
+                            ($selected_item->brandParam->value . ((!is_numeric($selected_item->brandParam->value) && $selected_item->brandParam->brand->id != 36)? (", ") : ' ') . ($selected_item->brandParam->brand->id == 36 ? '': Brand::getPer($selected_item->brandParam->brand->per)) . ($selected_item->brandParam->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : '')) :
+                            ($selected_item->brandParam->value . " " . Inflector::pluralize(Brand::getPer($selected_item->brandParam->brand->per))) . ($selected_item->brandParam->brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : ''));
+                    }
+                    $selected_list[$selected_item->brandParam->brand->name][] = [
+                        'param' => $param,
+                        'price' => $selected_item->price . ' $'
+                    ];
                 }
-                $selected_list[$brand_param->brand->name][] = [
-                    'param' => $param,
-                    'price' => $selected_item->price . ' $'
-                ];
+
             }
             return $selected_list;
         }
@@ -172,6 +179,10 @@ class DoctorBrand extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * @param $user_id
+     * @return bool
+     */
     public static function getSelectedListWithPrices($user_id)
     {
         $selected_array = self::find()->where(['user_id' => $user_id])->all();

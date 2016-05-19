@@ -81,6 +81,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
     }
 
 
+
     /**
      * @param $user_id
      * @param $treatment_array
@@ -280,18 +281,27 @@ class DoctorTreatment extends \yii\db\ActiveRecord
         return $treatment_discounts;
     }
     
+    /**
+     * @param $user_id
+     * @return bool
+     */
     public static function getPricedTreatments($user_id)
     {
-        $selected_obj_array = self::find()->where(['user_id' => $user_id])->all();
+        $selected_obj_array = self::find()->where(['user_id' => $user_id])
+            ->with('treatmentParam')
+            ->with('treatmentSession')
+            ->with('treatmentParam.treatment')
+            ->all();
         if (!empty($selected_obj_array)) {
             /** @var DoctorTreatment $selected_item */
             foreach ($selected_obj_array as $selected_item) {
-                $treatment_param = $selected_item->treatmentParam;
-                $selected_array[$treatment_param->treatment->name][] = [
-                    'param' =>  $treatment_param->value . ', ' . ($selected_item->treatmentSession->session_count . ' ' .
-                            (($selected_item->treatmentSession->session_count > 1 ? Inflector::pluralize(Yii::t('app', 'Session')) : Yii::t('app', 'Session')))),
-                    'price' => $selected_item->price != 0 ? ($selected_item->price . ' $') : Yii::t('app', 'Brand Provided')
-                ];
+                if (isset($selected_item->treatmentParam->treatment)) {
+                    $selected_array[$selected_item->treatmentParam->treatment->name][] = [
+                        'param' => $selected_item->treatmentParam->value . ', ' . ($selected_item->treatmentSession->session_count . ' ' .
+                                (($selected_item->treatmentSession->session_count > 1 ? Inflector::pluralize(Yii::t('app', 'Session')) : Yii::t('app', 'Session')))),
+                        'price' => $selected_item->price != 0 ? ($selected_item->price . ' $') : Yii::t('app', 'Brand Provided')
+                    ];
+                }
             }
 
             return $selected_array;
