@@ -479,7 +479,7 @@ class Inquiry extends \yii\db\ActiveRecord
                 unset($returnData);
                 $price = $doctor_offer->price;
 
-                $returnData[$doctor_offer->id] = [
+                $returnData[$doctor_offer->user_id] = [
                     'id' => $doctor_offer->id,
                     'brand' => $doctor_offer->brandParam->brand->name,
                     'price' => $price,
@@ -489,35 +489,27 @@ class Inquiry extends \yii\db\ActiveRecord
 
 
                     if (is_numeric($doctor_offer->brandParam->value)) {
-                        $returnData[$doctor_offer->id]['param_value'] = $doctor_offer->brandParam->value;
+                        $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
                     } else {
-                        $returnData[$doctor_offer->id]['sessions'] = 1;
-                        $returnData[$doctor_offer->id]['param_value'] = $doctor_offer->brandParam->value;
+                        $returnData[$doctor_offer->user_id]['sessions'] = 1;
+                        $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
                     }
-                    $returnData[$doctor_offer->id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
+                    $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
 
                 } else {
-                    $returnData[$doctor_offer->id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
-                    $returnData[$doctor_offer->id]['param_value'] = $doctor_offer->brandParam->value;
+                    $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
+                    $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
 
                 }
-
 
                 if (!isset($data[$doctor_offer->user_id])) {
                     $data[$doctor_offer->user_id] = [
                         'clinic'=> $doctor_offer->user->doctor->clinic,
                         'doctor' => $doctor_offer->user->userProfile->getFullName(),
-                        'photo'=> $doctor_offer->user->userProfile->avatar_path ? $doctor_offer->user->userProfile->avatar_base_url .'/'. $doctor_offer->user->userProfile->avatar_path : false,
-                        'address' =>[
-                            'zip_code' => $doctor_offer->user->userProfile->zipcode,
-                            'state_id' => $doctor_offer->user->userProfile->state_id,
-                            'city' => $doctor_offer->user->userProfile->city,
-                            'address'=> $doctor_offer->user->userProfile->address
-                        ],
                         'data' => $returnData
                     ];
                 } else {
-                    $data[$doctor_offer->user_id]['data'][] =  $returnData;
+                    $data[$doctor_offer->user_id]['data'][] =  $returnData[$doctor_offer->user_id];
                 }
 
             }
@@ -577,10 +569,6 @@ class Inquiry extends \yii\db\ActiveRecord
                     $count = !empty($doctor_offer->inquiryTreatment->session) ? $doctor_offer->inquiryTreatment->session->session_count : 0;
                 }
 
-                if (!isset( $doctor_offer->treatmentParam->value)) {
-                    var_dump($doctor_offer);exit;
-                }
-
                 $returnData = [
                     'id' => $doctor_offer->id,
                     'procedure_name' => $procedure_name,
@@ -594,21 +582,11 @@ class Inquiry extends \yii\db\ActiveRecord
                     $data[$doctor_offer->user_id] = [
                         'clinic'=> $doctor_offer->user->doctor->clinic,
                         'doctor' => $doctor_offer->user->userProfile->getFullName(),
-                        'photo'=> $doctor_offer->user->userProfile->avatar_path ? $doctor_offer->user->userProfile->avatar_base_url .'/'. $doctor_offer->user->userProfile->avatar_path : false,
-                        'address' =>[
-                            'zip_code' => $doctor_offer->user->userProfile->zipcode,
-                            'state_id' => $doctor_offer->user->userProfile->state_id,
-                            'city' => $doctor_offer->user->userProfile->city,
-                            'address'=> $doctor_offer->user->userProfile->address
-                        ],
                         'data' => []
-
                     ];
                 }
 
                 array_push($data[$doctor_offer->user_id]['data'], $returnData);
-
-
             }
         } else {
             return false;
