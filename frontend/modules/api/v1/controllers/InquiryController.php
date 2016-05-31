@@ -90,7 +90,7 @@ class InquiryController extends Controller
         if ($model->load(Yii::$app->request->post(), '') && $model->validate()) {
             $model->setNeededScenario();
             if (Yii::$app->user->isGuest) {
-                Yii::$app->user->login(User::findOne(7));
+                Yii::$app->user->login(User::findOne(User::GUEST_ACCOUNT_ID));
             }
             if ($model->validate()) {
                 if ($model->save()) {
