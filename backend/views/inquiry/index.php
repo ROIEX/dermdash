@@ -43,7 +43,12 @@ $this->registerJs($js);
             'label' => Yii::t('app', 'Patient'),
             'format' => 'raw',
             'value' => function ($data) {
-                return Html::a($data->user->getPublicIdentity(), Url::toRoute(['patient/view', 'id' => $data->user->id]));
+                if (Yii::$app->user->identity == \common\models\User::GUEST_ACCOUNT_ID) {
+                    return $data->user->getPublicIdentity();
+                } else {
+                    return Html::a($data->user->getPublicIdentity(), Url::toRoute(['patient/view', 'id' => $data->user->id]));
+                }
+
             },
             'visible' => Yii::$app->user->can('administrator'),
         ],
