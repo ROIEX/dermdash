@@ -43,6 +43,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const STATUS_NOT_ACTIVE = 0;
 
+    const GUEST_ACCOUNT_ID = 3;
+
     const ROLE_USER = 'user';
     const ROLE_MANAGER = 'manager';
     const ROLE_ADMINISTRATOR = 'administrator';

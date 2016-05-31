@@ -7,19 +7,16 @@ use common\components\StatusHelper;
 use common\models\Doctor;
 use common\models\DoctorBrand;
 use common\models\DoctorTreatment;
-use common\models\Inquiry;
 use common\models\InquiryBrand;
 use common\models\InquiryDoctorList;
 use common\models\InquiryTreatment;
 use common\models\Settings;
-use common\models\TreatmentIntensity;
 use common\models\TreatmentIntensityDiscounts;
 use common\models\TreatmentParamSeverity;
 use common\models\User;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\base\InvalidParamException;
-use yii\captcha\Captcha;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -54,6 +51,12 @@ class SaveDoctorsBehavior extends Behavior
      */
     private function treatment(InquiryTreatment $model)
     {
+        if (\Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
+            $limit = Settings::getInquiryDoctorQuantityGuest();
+        } else {
+            $limit = Settings::getInquiryDoctorQuantity();
+        }
+
         if ($model->treatmentParam->provided) {
             $query = new Query();
             $query->select('`doctor`.`user_id`,`doctor_brand`.`price`')
@@ -64,7 +67,7 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
                 ->orderBy(new Expression('rand()'))
-                ->limit(Settings::getInquiryDoctorQuantity());
+                ->limit($limit);
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
@@ -102,7 +105,7 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
                 ->orderBy(new Expression('rand()'))
-                ->limit(Settings::getInquiryDoctorQuantity());
+                ->limit($limit);
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
@@ -146,7 +149,7 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['in', 'doctor.user_id', $doctor_id_list])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
                 ->orderBy(new Expression('rand()'))
-                ->limit(Settings::getInquiryDoctorQuantity());
+                ->limit($limit);
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
@@ -205,7 +208,7 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
                 ->andWhere(['in', 'doctor.user_id', $doctor_id_list])
                 ->orderBy(new Expression('rand()'))
-                ->limit(Settings::getInquiryDoctorQuantity());
+                ->limit($limit);
 
 
             $command = $query->createCommand();
@@ -260,7 +263,11 @@ class SaveDoctorsBehavior extends Behavior
         } else {
            $where = $model->brand_param_id;
         }
-
+        if (Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
+            $limit = Settings::getInquiryDoctorQuantityGuest();
+        } else {
+            $limit = Settings::getInquiryDoctorQuantity();
+        }
         $query->select('`doctor`.`user_id`,`doctor_brand`.`price`')
             ->from(Doctor::tableName())
             ->innerJoin(DoctorBrand::tableName(),'`doctor`.`user_id` = `doctor_brand`.`user_id`')
@@ -269,7 +276,7 @@ class SaveDoctorsBehavior extends Behavior
             ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
             ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
             ->orderBy(new Expression('rand()'))
-            ->limit(Settings::getInquiryDoctorQuantity());
+            ->limit($limit);
 
         $command = $query->createCommand();
         $doctors = $command->queryAll();

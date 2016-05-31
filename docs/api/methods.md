@@ -548,6 +548,7 @@ Response: (This is only example!!!)
 
 
 ## Inquiry (with treatment) create [/inquiry/create] [post]
+if you want to process search without logging in you should pass same parameters to method /inquiry/offer-search
 
 Fields: 
 
@@ -572,7 +573,7 @@ Response:
 
 
 ## Inquiry (with brand) create [/inquiry/create] [post]
-
+if you want to process search without logging in you should pass same parameters to method /inquiry/offer-search
 Fields: 
 
 ```

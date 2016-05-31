@@ -35,6 +35,8 @@ class InquiryController extends Controller
 
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::className(),
+
+            'except' => ['offer-search'],
             'authMethods' => [
                 [
                     'class' => HttpBasicAuth::className(),
@@ -52,6 +54,9 @@ class InquiryController extends Controller
 
         return $behaviors;
     }
+
+    
+
 
     public function actionCreate()
     {
@@ -79,11 +84,35 @@ class InquiryController extends Controller
         return $model->errors;
     }
 
+    public function actionOfferSearch()
+    {
+        $model = new Inquiry();
+        if ($model->load(Yii::$app->request->post(), '') && $model->validate()) {
+            $model->setNeededScenario();
+            if (Yii::$app->user->isGuest) {
+                Yii::$app->user->login(User::findOne(7));
+            }
+            if ($model->validate()) {
+                if ($model->save()) {
+                    $list_model = new GetDoctorList();
+                    $list_model->inquiry_id = $model->id;
+                    $result = $list_model->getDoctorList();
+                    if (Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                        Yii::$app->user->logout();
+                    }
+                    return $result;
+                }
+            }
+            return $model->errors;
+        }
+        return $model->errors;
+    }
+
 
     public function actionGetDoctorList()
     {
         $model = new GetDoctorList();
-        $model->load(Yii::$app->request->post(),'');
+        $model->load(Yii::$app->request->post(), '');
         if ($model->validate()) {
             return $model->getDoctorList();
         }
@@ -93,7 +122,7 @@ class InquiryController extends Controller
     public function actionGetDoctorOffers()
     {
         $model = new DoctorOffer();
-        if ($model->load(Yii::$app->request->post(),'') && $model->validate()) {
+        if ($model->load(Yii::$app->request->post(), '') && $model->validate()) {
             return $model->data();
         }
         return $model->errors;

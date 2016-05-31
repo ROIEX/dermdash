@@ -4,20 +4,17 @@
 namespace frontend\modules\api\v1\models;
 
 
-use common\models\AdditionalAttributeItem;
-use common\models\Brand;
+
 use common\models\BrandParam;
 use common\models\Inquiry as InquiryParent;
 use common\models\InquiryBrand;
 use common\models\InquiryTreatment;
 use common\models\Severity;
 use common\models\TreatmentParam;
-use common\models\TreatmentParamSeverity;
 use common\models\TreatmentSession;
 use yii\base\InvalidParamException;
 use yii\base\Model;
 use yii\db\ActiveRecord;
-use yii\validators\ExistValidator;
 
 class Inquiry extends Model
 {
@@ -70,9 +67,6 @@ class Inquiry extends Model
             ['severity_id', 'getExists', 'params'=>[
                 'class'=>Severity::className()
             ]],
-//            ['additional_attribute_id', 'getExists', 'params'=>[
-//                'class'=>AdditionalAttributeItem::className()
-//            ]],
         ];
     }
 
@@ -168,15 +162,13 @@ class Inquiry extends Model
             }
         }
 
-
-        if ($this->getAttributes()['type'] !=2) {
+        if ($this->getAttributes()['type'] != 2) {
             if (!isset($this->getAttributes()['session_id'])) {
                 \Yii::$app->response->setStatusCode(409);
                 $this->addError('session_id', \Yii::t('app', 'You must add session value') );
                 return false;
             }
         }
-
 
         if (is_array($this->getAttributes()['treatment_param_id'])) {
             if (count($this->getAttributes()['treatment_param_id']) > 1) {

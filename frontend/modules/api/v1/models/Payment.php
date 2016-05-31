@@ -127,7 +127,6 @@ class Payment extends Model
         $profile->save(false);
         $booleanResult = $pay['status'] == $payment::SUCCEEDED_STATUS;
         if ($booleanResult) {
-            $payment_items = new PaymentItems();
             $payment_list = [];
             foreach ($paid_offers as $model) {
                 /* @var $model InquiryDoctorList */
@@ -156,8 +155,6 @@ class Payment extends Model
                 $registration_usage->counted = PromoUsed::COUNTED;
                 $registration_usage->update(false);
             }
-
-            //$payment_items->saveItems($payment_list);
             $profile->addBonus(Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value * $this->amount / 100);
         }
         return $booleanResult;

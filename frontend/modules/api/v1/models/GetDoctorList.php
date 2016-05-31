@@ -3,11 +3,11 @@
 namespace frontend\modules\api\v1\models;
 
 
-use common\models\Inquiry;
+use common\models\Inquiry as CommonInquiry;
 use common\models\InquiryBrand;
 use common\models\InquiryDoctorList;
 use common\models\InquiryTreatment;
-use common\models\Settings;
+use common\models\User;
 use frontend\modules\api\v1\resources\UserProfile;
 use linslin\yii2\curl\Curl;
 use Yii;
@@ -43,7 +43,7 @@ class GetDoctorList extends Model
         ]);
 
         if (empty($inquiryDoctorList)) {
-            Inquiry::deleteAll(['id' => $this->inquiry_id]);
+            CommonInquiry::deleteAll(['id' => $this->inquiry_id]);
             InquiryBrand::deleteAll(['inquiry_id' => $this->inquiry_id]);
             InquiryTreatment::deleteAll(['inquiry_id' => $this->inquiry_id]);
             \Yii::$app->response->setStatusCode(409);
@@ -57,8 +57,11 @@ class GetDoctorList extends Model
             if (!empty($returnData[$userProfile->user_id])) {
                 $returnData[$userProfile->user_id]['price'] += $list->price;
             } else {
-                $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
-                $distace_obj = json_decode($result);
+                if (Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                    $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
+                    $distace_obj = json_decode($result);
+                } 
+              
                 if (!isset($distace_obj->distance)) {
                     $distance = Yii::t('app', 'Sorry, unable to calculate');
                 } else {

@@ -20,6 +20,7 @@ class Settings extends \yii\db\ActiveRecord
     const REWARD_AFTER_PAYMENT = 4;
     const MAX_REWARD_COUNT_ON_PAYMENT = 5;
     const PAYMENT_FEE = 6;
+    const GUEST_INQUIRY_DOCTOR_QUANTITY_ID = 7;
 
     /**
      * @inheritdoc
@@ -61,5 +62,10 @@ class Settings extends \yii\db\ActiveRecord
     public static function getInquiryDoctorQuantity()
     {
         return self::findOne(self::INQUIRY_DOCTOR_QUANTITY_ID)->value;
+    }
+
+    public static function getInquiryDoctorQuantityGuest()
+    {
+        return self::findOne(self::GUEST_INQUIRY_DOCTOR_QUANTITY_ID)->value;
     }
 }

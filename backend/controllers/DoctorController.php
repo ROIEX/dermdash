@@ -151,7 +151,6 @@ class DoctorController extends Controller
             if ($model->save()) {
                 $brand->updateSelected($model->getModel('doctor_model'));
                 $treatment->updateSelected($model->getModel('doctor_model'));
-
             };
 
             Yii::$app->session->setFlash('alert', [

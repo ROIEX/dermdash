@@ -42,7 +42,7 @@ class Yelp extends Component
     public function searchByPhone($phone)
     {
         try{
-            $searchByPhone = $this->yelp->searchByPhone(array('phone' => $phone));
+            $searchByPhone = $this->yelp->searchByPhone(array('phone' => $phone, 'cc' => 'US'));
         }catch(Exception $e){
             return [
                 'rating'=>null,
