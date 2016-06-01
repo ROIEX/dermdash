@@ -15,6 +15,7 @@ use common\models\SubItem;
 use common\models\Treatment;
 use common\models\TreatmentParam;
 use common\models\TreatmentParamSeverity;
+use Guzzle\Inflection\Inflector;
 use Yii;
 use yii\base\InvalidParamException;
 
@@ -90,7 +91,10 @@ class CollectData
     private function getTreatmentsData()
     {
         $returnData = [];
-        $allTreatments = Treatment::find()->where(['status'=>StatusHelper::STATUS_ACTIVE])->all();
+        $allTreatments = Treatment::find()
+            ->with('treatmentParams.filledSeverity')
+            ->with('treatmentSessions')
+            ->where(['status' => StatusHelper::STATUS_ACTIVE])->all();
 
         foreach ($allTreatments as $treatment) {
             /* @var $treatment Treatment */
@@ -103,7 +107,8 @@ class CollectData
                     /* @var $severity TreatmentParamSeverity */
                     $severities[$severity->severity_id] = [
                         'id'=>$severity->severity_id,
-                        'name'=>$severity->severity->name,
+                        'name'=>$severity->severity->name . '('. $severity->brandParam->brand->name . ' ' .$severity->count . ' ' .
+                            (($severity->count > 1) ? \yii\helpers\Inflector::pluralize(Brand::getPer($severity->brandParam->brand->per)) :  $severity->brandParam->brand->per) . ')',
                         'icon_url'=>$icon_url
                     ];
                 }
