@@ -263,7 +263,7 @@ class SaveDoctorsBehavior extends Behavior
         } else {
            $where = $model->brand_param_id;
         }
-        if (Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
+        if (\Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
             $limit = Settings::getInquiryDoctorQuantityGuest();
         } else {
             $limit = Settings::getInquiryDoctorQuantity();
