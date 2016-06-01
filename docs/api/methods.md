@@ -728,6 +728,7 @@ Response (treatment):
     "rating": {
       "stars": null,
       "reviews": null
+      "mobile_url": null
     },
     "data": [
       {

@@ -35,8 +35,9 @@ class UserProfile extends \common\models\UserProfile
         $this->email = $this->user->email;
         $yelp = new Yelp();
         $dataYelp = $yelp->searchByPhone($this->phone);
-        $this->rating = $dataYelp['rating'] ? $dataYelp['rating'] : null;
-        $this->reviews = $dataYelp['reviews'] ? $dataYelp['reviews'] : null;
+        $this->rating = $dataYelp['rating'];
+        $this->reviews = $dataYelp['reviews'];
+        $this->mobile_url = $dataYelp['mobile_url'];
         if ($this->date_of_birth) {
             $this->date_of_birth = date('m/d/Y',strtotime($this->date_of_birth));
         }

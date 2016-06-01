@@ -45,23 +45,30 @@ class Yelp extends Component
             $searchByPhone = $this->yelp->searchByPhone(array('phone' => $phone, 'cc' => 'US'));
         }catch(Exception $e){
             return [
-                'rating'=>null,
-                'reviews'=>null
+                'rating' => null,
+                'reviews' => null
             ];
         }
         if (!empty($searchByPhone)) {
             $businesses = $searchByPhone->businesses;
         }
-        $rating = null;
-        $reviews = null;
+
         if (!empty($businesses)) {
-            $rating = $businesses[0]->rating;
-            $reviews = $businesses[0]->review_count;
+            $rating =  isset($businesses[0]->rating) ? $businesses[0]->rating : null;
+            $reviews =  isset($businesses[0]->review_count) ? $businesses[0]->review_count : null;
+            $mobile_url = isset($businesses[0]->mobile_url) ? $businesses[0]->mobile_url : null;
+            return [
+                'rating' => $rating,
+                'reviews' => $reviews,
+                'mobile_url' => $mobile_url
+            ];
+        } else {
+            return [
+                'rating' => null,
+                'reviews' => null,
+                'mobile_url' => null
+            ];
         }
-        return [
-            'rating'=>$rating,
-            'reviews'=>$reviews
-        ];
     }
 
 

@@ -43,6 +43,7 @@ class UserProfile extends \yii\db\ActiveRecord
     public $email;
     public $rating;
     public $reviews;
+    public $mobile_url;
     public $address_info;
 
     public function behaviors()

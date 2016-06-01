@@ -161,7 +161,8 @@ class DoctorOffer extends Model
             ],
             'rating'=>[
                 'stars'=>$userProfile->rating,
-                'reviews'=>$userProfile->reviews
+                'reviews'=>$userProfile->reviews,
+                'mobile_url' => $userProfile->mobile_url
             ],
             'data'=>$returnData
         ];
