@@ -46,7 +46,8 @@ class Yelp extends Component
         }catch(Exception $e){
             return [
                 'rating' => null,
-                'reviews' => null
+                'reviews' => null,
+                'mobile_url' => null
             ];
         }
         if (!empty($searchByPhone)) {
