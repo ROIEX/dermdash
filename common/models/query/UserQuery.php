@@ -19,7 +19,7 @@ class UserQuery extends \yii\db\ActiveQuery
     public function patientList()
     {
         $this->join('LEFT JOIN', 'rbac_auth_assignment', 'rbac_auth_assignment.user_id = id')
-            ->where(['rbac_auth_assignment.item_name' => User::ROLE_USER]);
+            ->where(['rbac_auth_assignment.item_name' => User::ROLE_USER])->orderBy('created_at DESC');
         return $this;
     }
 
