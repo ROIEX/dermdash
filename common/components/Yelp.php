@@ -41,13 +41,13 @@ class Yelp extends Component
      */
     public function searchByPhone($phone)
     {
-        $business_search = $this->yelp->getBusiness('dermatology-and-hair-restoration-specialists-santa-monica-2');
-        var_dump($business_search);exit;
+        //$business_search = $this->yelp->getBusiness('dermatology-and-hair-restoration-specialists-santa-monica-2');
+
 
         try{
             $searchByPhone = $this->yelp->searchByPhone(array('phone' => $phone, 'cc' => 'US'));
 
-            var_dump($searchByPhone->businesses);exit;
+            //var_dump($searchByPhone->businesses);exit;
         }catch(Exception $e){
             return [
                 'rating' => null,
