@@ -18,6 +18,8 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
+        var_dump(time());exit;
+
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
         $dataProvider->sort = [
