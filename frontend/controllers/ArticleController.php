@@ -18,7 +18,9 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
-        var_dump(time());exit;
+
+        var_dump(date_default_timezone_get());
+        var_dump(date('d.M.y H:m:s'));exit;
 
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
