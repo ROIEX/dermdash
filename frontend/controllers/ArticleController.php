@@ -18,8 +18,9 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
-
+           // date_default_timezone_set('America/Los_Angeles');
         var_dump(date_default_timezone_get());
+
         var_dump(date('d.M.y H:m:s'));exit;
 
         $searchModel = new ArticleSearch();

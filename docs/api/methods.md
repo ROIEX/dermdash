@@ -351,7 +351,7 @@ Response:
 Fields: 
 
 ```
-inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-doctor-offers
+inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-doctor-offers, can be array if some offers are being paid (inquiry_doctor_id[] = 123)
 stripeToken = Column(String, nullable=False)
 promo_code = Coulmn(String, nullable=True)
 ```

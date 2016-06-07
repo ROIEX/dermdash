@@ -47,14 +47,14 @@ class Payment extends Model
             foreach ($models as $model) {
                 /* @var $model InquiryDoctorList */
                 if ($model->inquiry->user_id != Yii::$app->user->id) {
-                    $this->addError('inquiry_doctor_id',Yii::t('app','This is not your inquiry doctor.'));
+                    $this->addError('inquiry_doctor_id', Yii::t('app', 'This is not your inquiry doctor.'));
                     // Than check min price with bonuses.
                 } elseif ($model->status == $model::STATUS_FINALIZED) {
-                    $this->addError('inquiry_doctor_id',Yii::t('app','Already paid.'));
+                    $this->addError('inquiry_doctor_id', Yii::t('app', 'Already paid.'));
                 }
             }
         } else {
-            $this->addError('inquiry_doctor_id',Yii::t('app','Inquiry doctor not found.'));
+            $this->addError('inquiry_doctor_id', Yii::t('app', 'Inquiry doctor not found.'));
         }
     }
 
@@ -73,7 +73,6 @@ class Payment extends Model
             $promo_code->promo_code = $this->promo_code;
 
             if (!$promo_code->validate()) {
-
                 \Yii::$app->response->setStatusCode(422);
                 return $promo_code->errors;
             }
@@ -82,6 +81,7 @@ class Payment extends Model
         }
 
         $paid_offers = InquiryDoctorList::findAll($this->inquiry_doctor_id);
+
         $inquiry_offers = InquiryDoctorList::findAll(['inquiry_id' => $paid_offers[0]->inquiry_id]);
         $offer_id_list = ArrayHelper::map($inquiry_offers, 'id', 'id');
         InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['id' => $offer_id_list]);

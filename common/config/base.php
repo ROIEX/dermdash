@@ -4,6 +4,7 @@ $config = [
     'vendorPath'=>dirname(dirname(__DIR__)).'/vendor',
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
     'sourceLanguage'=>'en-US',
+    //'timezone' => 'Europe/Berlin',
     'language'=>'en-US',
     'bootstrap' => ['log'],
     'components' => [
