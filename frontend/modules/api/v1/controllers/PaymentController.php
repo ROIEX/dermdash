@@ -79,8 +79,8 @@ class PaymentController extends Controller
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
                     $offer = $list_model->inquiry->getOfferData($list_model->inquiry_id, $list_model->user_id);
 
-                    //getting offer description
-                    foreach ($offer['data'] as $offer_data) {
+               
+                    foreach ($offer[$list_model->user_id]['data'] as $offer_data) {
                         if(isset($offer_data['brand'])) {
                             $item = Yii::t('app', 'Item: ') . $offer_data['brand'] . ', ';
                             if ((is_numeric((int)$offer_data['param_value']))) {
@@ -134,7 +134,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'rewards',
-                                        'content' => Yii::$app->user->identity->userProfile->reward ? Yii::$app->user->identity->userProfile->reward : '',
+                                        'content' => Yii::$app->user->identity->userProfile->reward ? Yii::$app->user->identity->userProfile->reward : 'no rewards',
                                     ],
                                     [
                                         'name' => 'invoice_number',
@@ -205,7 +205,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'patient_phone',
-                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : '',
+                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : 'No phone provided',
                                     ],
                                     [
                                         'name' => 'invoice_item',

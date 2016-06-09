@@ -367,10 +367,6 @@ class DoctorSignup extends Model
 
             if($this->afterSignup($user, $doctor)) {
                 Yii::$app->getUser()->login($user);
-                //$brands = new DoctorBrand();
-                //$brands->saveBrands(Yii::$app->user->id, $this->brands, $this->dropdown_price);
-                //$treatments = new DoctorTreatment();
-                //$treatments->saveTreatments(Yii::$app->user->id, $this->treatments, $this->treatment_discounts, $this->brand_provided_treatments);
                 return true;
             }
 
