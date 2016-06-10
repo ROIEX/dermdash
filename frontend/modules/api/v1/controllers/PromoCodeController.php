@@ -57,8 +57,7 @@ class PromoCodeController extends Controller
         ];
         return $behaviors;
     }
-
-
+    
     public function actionInvite()
     {
         $model = new PromoCode();

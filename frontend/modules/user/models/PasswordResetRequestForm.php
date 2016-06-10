@@ -53,7 +53,7 @@ class PasswordResetRequestForm extends Model
                     'to' => [
                         [
                             'email' => $user->email,
-                            'name' => 'Recipient Name'
+                            'name' => $user->email
                         ]
                     ],
                     'merge_vars' => [

@@ -40,7 +40,8 @@ class SignUp extends Model
     {
         return [
             ['username', 'filter', 'filter' => 'trim'],
-            [['firstname','lastname','gender','date_of_birth','rules_accept','telemedicine_accept', 'username', 'zipcode', 'email', 'password'],'required'],
+            [['gender','date_of_birth','rules_accept','telemedicine_accept', 'username', 'zipcode', 'email', 'password'],'required'],
+            [['firstname','lastname'], 'default', 'value' => ''],
             ['username', 'unique',
                 'targetClass'=>'\common\models\User',
                 'message' => Yii::t('frontend', 'This username has already been taken.')

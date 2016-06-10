@@ -18,22 +18,20 @@ use yii\helpers\ArrayHelper;
 class Payment extends Model
 {
     public $inquiry_doctor_id;
-
     public $stripeToken;
-
     public $amount;
-
     public $description;
-
     public $promo_code;
+    public $first_name;
+    public $last_name;
 
     public function rules()
     {
         return [
-            [['inquiry_doctor_id','stripeToken'],'required'],
-            ['amount','integer'],
-            [['inquiry_doctor_id'],'checkInquiry'],
-            [['description', 'promo_code'], 'string'],
+            [['inquiry_doctor_id','stripeToken', 'first_name', 'last_name'],'required'],
+            ['amount', 'integer'],
+            [['inquiry_doctor_id'], 'checkInquiry'],
+            [['description', 'promo_code', 'first_name', 'last_name'], 'string'],
         ];
     }
 
@@ -81,7 +79,6 @@ class Payment extends Model
         }
 
         $paid_offers = InquiryDoctorList::findAll($this->inquiry_doctor_id);
-
         $inquiry_offers = InquiryDoctorList::findAll(['inquiry_id' => $paid_offers[0]->inquiry_id]);
         $offer_id_list = ArrayHelper::map($inquiry_offers, 'id', 'id');
         InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['id' => $offer_id_list]);
@@ -116,7 +113,7 @@ class Payment extends Model
             $this->description
         );
 
-        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id);
+        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id, $this->first_name, $this->last_name);
         $profile = Yii::$app->user->identity->userProfile;
         $profile->reward = $profile->reward - $bonuses;
 

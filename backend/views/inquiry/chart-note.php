@@ -49,7 +49,7 @@ if (isset($model)) { ?>
 
                     <?php endif ?>
 
-                    <p><?php echo Yii::t('app', 'Status: {status}', ['status' => $model->getInquiryStatus($model, true)]) ?></p>
+                    <p><?php echo $offer_item['status'] ?></p>
                     </div>
                 <?php endforeach ?></h3>
 

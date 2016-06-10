@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Patient',
                 'value' => function($data){
-                    return $data->user->getPublicIdentity();
+                    return $data->user->email;
                 }
             ],
             [

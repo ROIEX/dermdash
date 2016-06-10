@@ -16,8 +16,6 @@ class UserProfile extends \common\models\UserProfile
     public function fields()
     {
         return [
-            'firstname',
-            'lastname',
             'gender',
             'date_of_birth',
             'phone',

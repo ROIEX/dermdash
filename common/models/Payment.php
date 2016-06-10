@@ -15,6 +15,8 @@ use Yii;
  * @property string $status
  * @property integer $amount
  * @property integer $inquiry_id
+ * @property string $first_name
+ * @property string $last_name
  * @property integer $doctor_id
  * @property integer $offer_status
  * @property integer $invoice_status
@@ -50,7 +52,7 @@ class Payment extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'doctor_id', 'inquiry_id', 'created_at', 'paid', 'amount', 'invoice_status', 'offer_status'], 'integer'],
-            [['payment_id', 'status'], 'string', 'max' => 255],
+            [['payment_id', 'status', 'first_name', 'last_name'], 'string', 'max' => 255],
             ['invoice_status', 'default', 'value' => self::INVOICE_NOT_SENT],
             ['offer_status', 'default', 'value' => self::OFFER_PENDING],
         ];
@@ -71,6 +73,8 @@ class Payment extends \yii\db\ActiveRecord
             'amount' => Yii::t('app', 'Amount'),
             'invoice_status' => Yii::t('app', 'Invoice status'),
             'offer_status' => Yii::t('app', 'Offer status'),
+            'first_name' => Yii::t('app', 'First Name'),
+            'last_name' => Yii::t('app', 'Last Name'),
         ];
     }
 

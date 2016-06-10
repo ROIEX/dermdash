@@ -79,6 +79,7 @@ class GetDoctorList extends Model
                         'stars'=>$userProfile->rating,
                         'reviews'=>$userProfile->reviews
                     ],
+                    'add_info'=> $list->user->doctor->add_info,
                     'time_after_create'=> time() - $inquiryDoctorList[0]->inquiry->created_at
 
                 ];

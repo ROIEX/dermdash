@@ -383,8 +383,8 @@ class User extends ActiveRecord implements IdentityInterface
             'email_address' => $this->email,
             'status'        => 'subscribed',
             "merge_fields"=> [
-                "FNAME"=> $profile->firstname,
-                "LNAME"=> $profile->lastname,
+                "FNAME"=> '',
+                "LNAME"=> '',
             ]
         ]);
     }
@@ -394,13 +394,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getPublicIdentity()
     {
-        if ($this->userProfile && $this->userProfile->getFullname()) {
-            return $this->userProfile->getFullname();
-        }
-        if ($this->username) {
-            return $this->username;
-        }
-        return $this->email;
+        return '';
     }
 
     public function isDoctor()

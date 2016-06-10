@@ -113,30 +113,6 @@ Response:
 }
 ```
 
-
-
-## Inquiry photo upload [/inquiry-photo/create] [post]
-
-Multipart-formdata
-
-```
-file = Column(File, nullable=False)
-inquiry_id = Column(Integer, nullable=False)
-```
-
-Response:
-
-```
-{
-  "success": true,
-  "data": {
-    "inquiry_id": "37",
-    "url": "http://storage.botox.dev/cache/4/9PiAwjPVIpLhaTr4HJ4EKmUmFtFNBRiF.png?w=100&s=ed61e83f6bef2acd58347058375f12ac",
-    "id": 4
-  }
-}
-```
-
 ## Update Profile [/user-profile/update] [post]
 
 Update current user profile.
@@ -353,6 +329,8 @@ Fields:
 ```
 inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-doctor-offers, can be array if some offers are being paid (inquiry_doctor_id[] = 123)
 stripeToken = Column(String, nullable=False)
+first_name = Column(String, nullable=False)
+last_name = Column(String, nullable=False)
 promo_code = Coulmn(String, nullable=True)
 ```
 
@@ -396,6 +374,7 @@ Response:
         "stars": null,
         "reviews": null
       },
+      "add_info"=> "Some information",
       "time_after_create": 942 -- in seconds.
     }
   ]

@@ -82,6 +82,16 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
             </div >
         </div>
 
+        <?php if(Yii::$app->user->can('administrator')) : ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <?php echo $form->field($model->getModel('doctor_model'), 'add_info')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'Additional info for application')]) ?>
+            </div >
+        </div>
+        <?php endif ?>
+
+
+
         <h3><span><?php echo Yii::t('app', 'Clinic information') ?></span></h3>
 
         <div class="row">

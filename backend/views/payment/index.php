@@ -37,6 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'label' => Yii::t('app', 'Identity'),
+                'value' => function($data) {
+                    return $data->first_name . ' ' . $data->last_name;
+                }
+            ],
+            [
                 'attribute' => 'doctor_id',
                 'format' => 'raw',
                 'label' => Yii::t('app', 'Clinic'),

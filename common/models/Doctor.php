@@ -16,6 +16,7 @@ use yii\validators\NumberValidator;
  * @property string $license
  * @property string $doctor_type
  * @property string $fax
+ * @property string $add_info
  * @property integer $status
  * @property integer $signature
  * @property integer $website
@@ -60,6 +61,7 @@ class Doctor extends \yii\db\ActiveRecord
             [['signature', 'website'], 'string', 'max' => 128],
             ['clinic', 'string', 'max' => 128],
             ['biography', 'string', 'max' => 1000],
+            ['add_info', 'string', 'max' => 256],
             ['status', 'default', 'value' => StatusHelper::STATUS_ACTIVE],
             [['treatments', 'brands', 'treatment_discounts', 'brand_provided_treatments', 'dropdown_price'], 'safe'],
             [['brands', 'dropdown_price', 'treatments'], 'checkPrices', 'skipOnEmpty' => true],

@@ -10,7 +10,7 @@ use yii\helpers\Url;
 <div class="col-xs-6">
     <h3 ><?php echo Yii::t('app', 'Patients Basic Information:') ?></h3>
 
-    <?php echo $model->getPublicIdentity() . ", " . $model->email ?>
+    <?php echo $model->email ?>
     </br>
 
     <?php if (!empty($model->userProfile)) { ?>

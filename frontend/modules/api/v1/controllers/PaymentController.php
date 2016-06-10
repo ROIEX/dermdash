@@ -78,8 +78,7 @@ class PaymentController extends Controller
                     /** @var Doctor $doctor */
                     $doctor = Doctor::findOne(['user_id' => $list_model->user_id]);
                     $offer = $list_model->inquiry->getOfferData($list_model->inquiry_id, $list_model->user_id);
-
-               
+                    
                     foreach ($offer[$list_model->user_id]['data'] as $offer_data) {
                         if(isset($offer_data['brand'])) {
                             $item = Yii::t('app', 'Item: ') . $offer_data['brand'] . ', ';
@@ -193,7 +192,7 @@ class PaymentController extends Controller
                                     ],
                                     [
                                         'name' => 'patient_name',
-                                        'content' => Yii::$app->user->identity->userProfile->firstname . ' ' . Yii::$app->user->identity->userProfile->lastname,
+                                        'content' => $model->first_name . ' ' . $model->last_name,
                                     ],
                                     [
                                         'name' => 'invoice_number',

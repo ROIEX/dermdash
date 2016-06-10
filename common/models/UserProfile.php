@@ -66,7 +66,7 @@ class UserProfile extends \yii\db\ActiveRecord
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_NOTIFICATION] = ['state_notification'];
-        $scenarios[self::PATIENT_PROFILE] = ['user_id', 'firstname', 'lastname', 'city', 'state_id', 'zipcode', 'gender', 'date_of_birth', 'reward'];
+        $scenarios[self::PATIENT_PROFILE] = ['user_id', 'city', 'state_id', 'zipcode', 'gender', 'date_of_birth', 'reward'];
         return $scenarios;
     }
 
@@ -100,6 +100,7 @@ class UserProfile extends \yii\db\ActiveRecord
         return [
             [['user_id', 'phone', 'address', 'firstname', 'lastname', 'city', 'zipcode', 'state_id'], 'required'],
             [['user_id',  'firstname', 'lastname', 'city', 'zipcode', 'state_id'], 'required', 'on' => 'patient_profile'],
+            [['firstname', 'lastname'], 'default', 'value' => ''],
             [['user_id', 'gender', 'state_id', 'state_notification'], 'integer'],
             ['state_notification','in','range'=>[true,false]],
             [['gender'], 'in', 'range'=>[NULL, self::GENDER_FEMALE, self::GENDER_MALE]],

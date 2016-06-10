@@ -62,7 +62,7 @@ class StripePayment
      * @return string|Charge
      * @throws BadRequestHttpException
      */
-    public function pay($inquiry_id, $doctor_id)
+    public function pay($inquiry_id, $doctor_id, $first_name, $last_name)
     {
         try {
             Stripe::setApiKey(Yii::$app->params['stripe']['secretKey']);
@@ -78,6 +78,8 @@ class StripePayment
 
             $saveLogs = new Payment();
             $saveLogs->created_at = $result['created'];
+            $saveLogs->first_name = $first_name;
+            $saveLogs->last_name = $last_name;
             $saveLogs->amount = $amountWithBonuses;
             $saveLogs->payment_id = $result['id'];
             $saveLogs->status = $result['status'];
