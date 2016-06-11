@@ -61,7 +61,7 @@ class Doctor extends \yii\db\ActiveRecord
             [['signature', 'website'], 'string', 'max' => 128],
             ['clinic', 'string', 'max' => 128],
             ['biography', 'string', 'max' => 1000],
-            ['add_info', 'string', 'max' => 256],
+            ['add_info', 'string', 'max' => 30],
             ['status', 'default', 'value' => StatusHelper::STATUS_ACTIVE],
             [['treatments', 'brands', 'treatment_discounts', 'brand_provided_treatments', 'dropdown_price'], 'safe'],
             [['brands', 'dropdown_price', 'treatments'], 'checkPrices', 'skipOnEmpty' => true],

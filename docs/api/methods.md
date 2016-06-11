@@ -366,6 +366,7 @@ Response:
       "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
       "clinic": "John",
       "distance": "10 mile"
+
       "city": "Los Angeles",
       "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png"
       "price": "123",
