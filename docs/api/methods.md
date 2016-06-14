@@ -38,8 +38,6 @@ password = Column(String, nullable=False)
 email = Column(String, nullable=False)
 gender = Column(Integer, nullable=False) # Male = 0, Female = 1
 date_of_birth = Column(Date, nullable=False) # example 2015-05-1
-firstname = Column(String, nullable=False)
-lastname = Column(String, nullable=False)
 zipcode = Column(String, nullable=False)
 rules_accept = Column(Boolean, nullable=False)
 telemedicine_accept = Column(Boolean, nullable=False)
