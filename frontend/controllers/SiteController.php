@@ -1,23 +1,11 @@
 <?php
 namespace frontend\controllers;
 
-use cebe\markdown\Markdown;
-use common\components\CryptHelper;
-use common\components\StatusHelper;
-use common\components\StripePayment;
-use common\components\Yelp;
-use common\models\Doctor;
-use common\models\DoctorTreatment;
-use common\models\Settings;
 use Yii;
 use frontend\models\ContactForm;
 use yii\apidoc\helpers\ApiMarkdown;
-use yii\db\Expression;
-use yii\db\Query;
-use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\widgets\ActiveForm;
 
 /**
  * Site controller

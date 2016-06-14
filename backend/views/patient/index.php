@@ -24,14 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
-                'attribute' =>  'firstname',
-                'label'=> Yii::t('app', 'Patient name'),
-                'format' => 'raw',
-                'value' => function($data) {
-                    return Html::a($data->getPublicIdentity(), Url::toRoute(['patient/view', 'id' => $data->id]));
-                }
-            ],
-            [
                 'label'=> Yii::t('app', 'Email'),
                 'value' => function($data) {
                     return $data->email;
