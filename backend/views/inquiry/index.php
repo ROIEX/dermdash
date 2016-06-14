@@ -44,9 +44,9 @@ $this->registerJs($js);
             'format' => 'raw',
             'value' => function ($data) {
                 if ($data->user->id == \common\models\User::GUEST_ACCOUNT_ID) {
-                    return $data->user->getPublicIdentity();
+                    return 'guest';
                 } else {
-                    return Html::a($data->user->getPublicIdentity(), Url::toRoute(['patient/view', 'id' => $data->user->id]));
+                    return Html::a($data->user->email, Url::toRoute(['patient/view', 'id' => $data->user->id]));
                 }
 
             },
