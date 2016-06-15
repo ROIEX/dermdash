@@ -87,7 +87,7 @@ class DoctorSignup extends Model
             [['firstname', 'lastname', 'address', 'signature'], 'string', 'max' => 128],
             ['city', 'string', 'max' => 16],
             ['clinic', 'string', 'max' => 128],
-            ['biography', 'string', 'max' => 1000],
+            ['biography', 'string'],
             [['phone', 'fax', 'website'], 'string'],
             ['date_of_birth', 'date', 'format' => 'm/d/Y', 'message' => Yii::t('app', 'Wrong date format')],
             ['uploaded_image', 'safe'],

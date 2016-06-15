@@ -60,7 +60,7 @@ class Doctor extends \yii\db\ActiveRecord
             [['license', 'fax', 'license'], 'string', 'max' => 64],
             [['signature', 'website'], 'string', 'max' => 128],
             ['clinic', 'string', 'max' => 128],
-            ['biography', 'string', 'max' => 1000],
+            ['biography', 'string'],
             ['add_info', 'string', 'max' => 30],
             ['status', 'default', 'value' => StatusHelper::STATUS_ACTIVE],
             [['treatments', 'brands', 'treatment_discounts', 'brand_provided_treatments', 'dropdown_price'], 'safe'],
