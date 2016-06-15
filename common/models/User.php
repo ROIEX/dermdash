@@ -394,7 +394,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getPublicIdentity()
     {
-        return '';
+        return $this->email;
     }
 
     public function isDoctor()
