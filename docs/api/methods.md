@@ -36,7 +36,7 @@ This method signs user up!
 username = Column(String, nullable=False)
 password = Column(String, nullable=False)
 email = Column(String, nullable=False)
-gender = Column(Integer, nullable=False) # Male = 0, Female = 1
+gender = Column(Integer, nullable=True) # Male = 0, Female = 1
 date_of_birth = Column(Date, nullable=False) # example 2015-05-1
 zipcode = Column(String, nullable=False)
 rules_accept = Column(Boolean, nullable=False)

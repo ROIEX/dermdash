@@ -40,7 +40,7 @@ class SignUp extends Model
     {
         return [
             ['username', 'filter', 'filter' => 'trim'],
-            [['gender','date_of_birth','rules_accept','telemedicine_accept', 'username', 'zipcode', 'email', 'password'],'required'],
+            [['date_of_birth','rules_accept','telemedicine_accept', 'username', 'zipcode', 'email', 'password'],'required'],
             [['firstname','lastname'], 'default', 'value' => ''],
             ['username', 'unique',
                 'targetClass'=>'\common\models\User',
@@ -58,7 +58,7 @@ class SignUp extends Model
                 'message' => Yii::t('frontend', 'This email address has already been taken.')
             ],
             ['password', 'string', 'min' => 6],
-            ['gender','in','range'=>[User::MALE,User::FEMALE]],
+            ['gender','in','range' => [User::MALE, User::FEMALE]],
             ['date_of_birth', 'date', 'format' => 'm/d/Y'],
 
         ];
