@@ -64,9 +64,7 @@ class InquiryController extends Controller
                 if (!Yii::$app->user->can('administrator')) {
                     $query->andWhere(['list.user_id' => Yii::$app->user->id]);
                 } else {
-                    $abandoned_inquiries = $query->all();
-                    $abandoned_id_list = ArrayHelper::map($abandoned_inquiries, 'id', 'id');
-                    Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['id' => $abandoned_id_list]);
+                    Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['is_viewed_by_admin' => InquiryDoctorList::VIEWED_STATUS_NO]);
                 }
 
                 break;
@@ -76,13 +74,19 @@ class InquiryController extends Controller
                 break;
         }
 
-        $query->with('user')
-            ->with('doctorAccepted')
-            ->with('inquiryTreatments.treatmentParam.treatment')
-            ->with('inquiryBrands.brandParam.brand');
+        $query->with('user');
+        if ($status != Inquiry::STATUS_ABANDONED) {
+            $query
+                ->with('doctorAccepted')
+                ->with('inquiryTreatments.treatmentParam.treatment')
+                ->with('inquiryBrands.brandParam.brand');
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query'=> $query,
+//            'pagination' => [
+//                'pageSize' => 20,
+//            ],
         ]);
 
         return $this->render('index', [

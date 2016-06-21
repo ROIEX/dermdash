@@ -292,11 +292,15 @@ class Inquiry extends \yii\db\ActiveRecord
     public function getAbandonedInquiryList()
     {
         return $this->find()
+            //->joinWith('inquiryDoctorList', false)
             ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
             ->where(
                 ['and',
+                   // ['<', 'inquiry.created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE],
+                    //['not in', 'list.status', [1,2,3]]
                     ['not in', 'list.inquiry_id', $this->getFinalizedInquiryListId()],
                     ['not in', 'list.inquiry_id', $this->getPendingInquiryListId()],
+                   // $inquiry_list_array = InquiryDoctorList::find()->where(['=', 'status', InquiryDoctorList::STATUS_FINALIZED])->all();
                 ]
             )
             ->orderBy(['inquiry.created_at' => SORT_DESC]);
