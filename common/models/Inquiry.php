@@ -274,16 +274,15 @@ class Inquiry extends \yii\db\ActiveRecord
      */
     public function getPendingInquiryList()
     {
-        $days_ago_date = time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE;
-        return $this->find()
-           ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
-            ->where(['and',
+        $inquiry_doctor_list = InquiryDoctorList::find()
+            ->select('inquiry_id')
+            ->where(['>=', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
+            ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
+            ->groupBy('inquiry_id')
+            ->all();
 
-                ['>=', 'inquiry.created_at', $days_ago_date],
-                ['not in', 'list.inquiry_id',$this->getFinalizedInquiryListId()],
-
-            ])
-            ->orderBy(['inquiry.created_at' => SORT_DESC]);
+        $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
+        return $this->find()->where(['in', 'id', $ids])->orderBy(['created_at' => SORT_DESC]);
     }
 
 
@@ -292,12 +291,12 @@ class Inquiry extends \yii\db\ActiveRecord
         $inquiry_doctor_list = InquiryDoctorList::find()
             ->select('inquiry_id')
             ->where(['<', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
-            ->andWhere(['!=', 'status', 3])
+            ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
             ->groupBy('inquiry_id')
             ->all();
         
         $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
-        return $this->find()->where(['in', 'id', $ids]);
+        return $this->find()->where(['in', 'id', $ids])->orderBy(['created_at' => SORT_DESC]);
     }
 
     /**

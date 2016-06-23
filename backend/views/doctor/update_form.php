@@ -78,7 +78,7 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
         <br/>
         <div class="row">
             <div class="col-sm-12">
-                <?php echo $form->field($model->getModel('doctor_model'), 'biography')->textarea(['maxlength' => true, 'placeholder' => Yii::t('app', 'Enter some informatio about yourself (max 1000 characters)')]) ?>
+                <?php echo $form->field($model->getModel('doctor_model'), 'biography')->textarea(['placeholder' => Yii::t('app', 'Enter some informatio about yourself (max 1000 characters)')]) ?>
             </div >
         </div>
 
