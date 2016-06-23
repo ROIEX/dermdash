@@ -51,12 +51,7 @@ class SaveDoctorsBehavior extends Behavior
      */
     private function treatment(InquiryTreatment $model)
     {
-        if (\Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
-            $limit = Settings::getInquiryDoctorQuantityGuest();
-        } else {
-            $limit = Settings::getInquiryDoctorQuantity();
-        }
-
+        $limit = Settings::getInquiryDoctorQuantity();
         if ($model->treatmentParam->provided) {
             $query = new Query();
             $query->select('`doctor`.`user_id`,`doctor_brand`.`price`')
@@ -66,9 +61,11 @@ class SaveDoctorsBehavior extends Behavior
                 ->where(['doctor_brand.brand_param_id' => $model->treatmentParam->provided->brandParam->id])
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
-                ->orderBy(new Expression('rand()'))
-                ->limit($limit);
+                ->orderBy(new Expression('rand()'));
 
+            if (\Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                $query->limit($limit);
+            }
             $command = $query->createCommand();
             $doctors = $command->queryAll();
             \Yii::$app->db->beginTransaction();
@@ -104,8 +101,11 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['doctor_treatment.treatment_session_id' => $model->session_id])
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
-                ->orderBy(new Expression('rand()'))
-                ->limit($limit);
+                ->orderBy(new Expression('rand()'));
+
+                if (\Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                    $query->limit($limit);
+                }
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
@@ -148,8 +148,11 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['in', 'doctor.user_id', $doctor_id_list])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
-                ->orderBy(new Expression('rand()'))
-                ->limit($limit);
+                ->orderBy(new Expression('rand()'));
+
+            if (\Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                $query->limit($limit);
+            }
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
@@ -207,8 +210,11 @@ class SaveDoctorsBehavior extends Behavior
                 ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
                 ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
                 ->andWhere(['in', 'doctor.user_id', $doctor_id_list])
-                ->orderBy(new Expression('rand()'))
-                ->limit($limit);
+                ->orderBy(new Expression('rand()'));
+
+            if (\Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+                $query->limit($limit);
+            }
 
 
             $command = $query->createCommand();
@@ -275,8 +281,11 @@ class SaveDoctorsBehavior extends Behavior
             ->where(['doctor_brand.brand_param_id' => $where])
             ->andWhere(['doctor.status' => StatusHelper::STATUS_ACTIVE])
             ->andWhere(['!=', 'user.status', User::STATUS_DELETED])
-            ->orderBy(new Expression('rand()'))
-            ->limit($limit);
+            ->orderBy(new Expression('rand()'));
+
+        if (\Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
+            $query->limit($limit);
+        }
 
         $command = $query->createCommand();
         $doctors = $command->queryAll();

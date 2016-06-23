@@ -106,6 +106,7 @@ class InquiryController extends Controller
 
                 $offers[] = $model->getOfferData($model->id, Yii::$app->user->id);
 
+
                 $model->is_viewed = Inquiry::IS_VIEWED;
                 $model->update(false);
 
