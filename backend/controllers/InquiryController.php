@@ -20,7 +20,6 @@ class InquiryController extends Controller
     {
         $inquiry = new Inquiry();
 
-
         switch ($status) {
 
             case Inquiry::STATUS_PENDING:
@@ -74,19 +73,15 @@ class InquiryController extends Controller
                 break;
         }
 
-        $query->with('user');
+        $query->with('user')
+            ->with('inquiryTreatments.treatmentParam.treatment')
+            ->with('inquiryBrands.brandParam.brand');
         if ($status != Inquiry::STATUS_ABANDONED) {
-            $query
-                ->with('doctorAccepted')
-                ->with('inquiryTreatments.treatmentParam.treatment')
-                ->with('inquiryBrands.brandParam.brand');
+            $query->with('doctorAccepted');
         }
 
         $dataProvider = new ActiveDataProvider([
             'query'=> $query,
-//            'pagination' => [
-//                'pageSize' => 20,
-//            ],
         ]);
 
         return $this->render('index', [
@@ -98,10 +93,9 @@ class InquiryController extends Controller
     public function actionView()
     {
         if(Yii::$app->request->isAjax && Yii::$app->request->post('note_id')) {
-
             $model = $this->findModel((int)Yii::$app->request->post('note_id'));
-            $offers = $model->getOfferData((int)Yii::$app->request->post('note_id'));
 
+            $offers = $model->getOfferData((int)Yii::$app->request->post('note_id'));
             return $this->renderAjax('chart-note', [
                 'model' => $model,
                 'offers' => $offers

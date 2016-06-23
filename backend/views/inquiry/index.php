@@ -18,13 +18,8 @@ SCRP;
 $this->registerJs($js);
 ?>
 <?php Pjax::begin(['id' => 'inquiry_list']); ?>
-    <?php echo DataTables::widget([
+    <?php echo \yii\grid\GridView::widget([
     'dataProvider' => $dataProvider,
-    'clientOptions' => [
-        "lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
-        "info" => false,
-        "responsive" => true,
-    ],
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 

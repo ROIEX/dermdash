@@ -286,24 +286,18 @@ class Inquiry extends \yii\db\ActiveRecord
             ->orderBy(['inquiry.created_at' => SORT_DESC]);
     }
 
-    /**
-     * @return $this
-     */
+
     public function getAbandonedInquiryList()
     {
-        return $this->find()
-            //->joinWith('inquiryDoctorList', false)
-            ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
-            ->where(
-                ['and',
-                   // ['<', 'inquiry.created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE],
-                    //['not in', 'list.status', [1,2,3]]
-                    ['not in', 'list.inquiry_id', $this->getFinalizedInquiryListId()],
-                    ['not in', 'list.inquiry_id', $this->getPendingInquiryListId()],
-                   // $inquiry_list_array = InquiryDoctorList::find()->where(['=', 'status', InquiryDoctorList::STATUS_FINALIZED])->all();
-                ]
-            )
-            ->orderBy(['inquiry.created_at' => SORT_DESC]);
+        $inquiry_doctor_list = InquiryDoctorList::find()
+            ->select('inquiry_id')
+            ->where(['<', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
+            ->andWhere(['!=', 'status', 3])
+            ->groupBy('inquiry_id')
+            ->all();
+        
+        $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
+        return $this->find()->where(['in', 'id', $ids]);
     }
 
     /**
@@ -581,6 +575,7 @@ class Inquiry extends \yii\db\ActiveRecord
                     'price' => $price,
                     'param_name' => $type,
                     'amount' => $count,
+                    'status' => $doctor_offer->status == InquiryDoctorList::STATUS_FINALIZED ? Yii::t('backend', 'Purchased') : Yii::t('backend', 'Not Purchased')
                 ];
 
                 if (!isset($data[$doctor_offer->user_id])) {
