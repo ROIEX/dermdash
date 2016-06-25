@@ -149,9 +149,19 @@ class DoctorOffer extends Model
         }
         /** @var UserProfile $userProfile */
         $userProfile = UserProfile::findOne($list->user->id);
+
+        $photos = $list->user->doctor->doctorPhotos;
+        $photo_array = [];
+        if (!empty($photos)) {
+            foreach ($photos as $photo) {
+                $photo_array[] =  $photo->base_url . '/' . $photo->path;
+            }
+        }
+        
         $data = [
             'clinic'=> $list->user->doctor->clinic,
             'photo'=> $userProfile->avatar_path ? $userProfile->avatar_base_url.'/'.$userProfile->avatar_path : false,
+            'photos' =>  $photo_array,
             'biography' => $list->user->doctor->biography,
             'address'=>[
                 'zip_code' => $userProfile->zipcode,

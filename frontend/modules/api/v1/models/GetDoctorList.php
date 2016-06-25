@@ -68,19 +68,28 @@ class GetDoctorList extends Model
                     $distance = round($distace_obj->distance, 2) . ' miles';
                 }
 
+                $photos = $list->user->doctor->doctorPhotos;
+                $photo_array = [];
+                if (!empty($photos)) {
+                    foreach ($photos as $photo) {
+                        $photo_array[] =  $photo->base_url . '/' . $photo->path;
+                    }
+                }
+
                 $returnData[$userProfile->user_id] = [
-                    'doctor_id'=>$userProfile->user_id,
+                    'doctor_id' => $userProfile->user_id,
                     'clinic'=> $list->user->doctor->clinic,
                     'city' => $list->user->userProfile->city,
-                    'distance' => $distance ,
-                    'photo'=>$userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
-                    'price'=>$list->price,
-                    'rating'=>[
-                        'stars'=>$userProfile->rating,
-                        'reviews'=>$userProfile->reviews
+                    'distance' => $distance,
+                    'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
+                    'photos' =>  $photo_array,
+                    'price' => $list->price,
+                    'rating'=> [
+                        'stars' => $userProfile->rating,
+                        'reviews' => $userProfile->reviews
                     ],
                     'add_info'=> $list->user->doctor->add_info,
-                    'time_after_create'=> time() - $inquiryDoctorList[0]->inquiry->created_at
+                    'time_after_create' => time() - $inquiryDoctorList[0]->inquiry->created_at
 
                 ];
             }

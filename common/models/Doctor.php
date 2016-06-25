@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use trntv\filekit\behaviors\UploadBehavior;
 use Yii;
 use common\components\StatusHelper;
 use yii\helpers\ArrayHelper;
@@ -34,6 +35,7 @@ class Doctor extends \yii\db\ActiveRecord
     public $treatment_discounts;
     public $brand_provided_treatments;
     public $dropdown_price;
+    public $uploaded_images;
 
     const DOCTOR_TYPE_MD = 0;
     const DOCTOR_TYPE_DO = 1;
@@ -49,6 +51,21 @@ class Doctor extends \yii\db\ActiveRecord
         return '{{%doctor}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => UploadBehavior::className(),
+                'attribute' => 'uploaded_images',
+                'multiple' => true,
+                'pathAttribute' => 'path',
+                'baseUrlAttribute' => 'base_url',
+                'orderAttribute' => 'document_order',
+                'uploadRelation' => 'doctorPhotos',
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -61,6 +78,7 @@ class Doctor extends \yii\db\ActiveRecord
             [['signature', 'website'], 'string', 'max' => 128],
             ['clinic', 'string', 'max' => 128],
             ['biography', 'string'],
+            ['uploaded_images', 'safe'],
             ['add_info', 'string', 'max' => 30],
             ['status', 'default', 'value' => StatusHelper::STATUS_ACTIVE],
             [['treatments', 'brands', 'treatment_discounts', 'brand_provided_treatments', 'dropdown_price'], 'safe'],
@@ -330,6 +348,14 @@ class Doctor extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDoctorPhotos()
+    {
+        return $this->hasMany(DoctorPhoto::className(), ['doctor_id' => 'id']);
     }
 
     /**

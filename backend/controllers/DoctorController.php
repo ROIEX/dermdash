@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\components\StatusHelper;
 use common\models\Brand;
 use common\models\DoctorBrand;
+use common\models\DoctorPhoto;
 use common\models\DoctorSignup;
 use common\models\Inquiry;
 use common\models\DoctorTreatment;
@@ -117,6 +118,7 @@ class DoctorController extends Controller
     public function actionUpdate($id)
     {
         if (Yii::$app->user->can('administrator')) {
+
             $doctor_id = (int)$id;
         } else {
             $doctor_id = Yii::$app->user->identity->doctor->id;

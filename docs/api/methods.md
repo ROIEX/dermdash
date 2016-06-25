@@ -364,9 +364,13 @@ Response:
       "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
       "clinic": "John",
       "distance": "10 mile"
-
       "city": "Los Angeles",
-      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png"
+      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png",
+      "photos": {
+         "http://path/image.jpg",
+         "http://path/image.jpg1"
+      }
+
       "price": "123",
       "photo": false,
       "rating": {
@@ -696,6 +700,10 @@ Response (treatment):
   "data": {
     "clinic": "John",
     "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png",
+    "photos": {
+        "http://path/image.jpg",
+        "http://path/image.jpg1"
+    },
     "biography": "Some text",
     "address": {
       "zip_code": "12345",

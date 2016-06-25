@@ -135,6 +135,23 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
             </div>
         </div>
 
+        <?php if(Yii::$app->user->can('administrator')) :?>
+            <div class="row">
+            <h3><span><?php echo Yii::t('app', 'Photo Section') ?></span></h3>
+            <div class="col-sm-6">
+                <?php echo $form->field($model->getModel('doctor_model'), 'uploaded_images')->widget('\trntv\filekit\widget\Upload', [
+                    'url' => ['/file-storage/upload'],
+                    'sortable' => true,
+                    'multiple' => true,
+                    'maxFileSize' => 20000000,
+                    'maxNumberOfFiles' => 10
+                ])->label(Yii::t('app', 'Photos')); ?>
+
+                <?php echo \yii\helpers\Html::activeHint($model, 'uploaded_image', [ 'hint' => Yii::t('app', 'Image size must be less than 20 Mb')])?>
+            </div>
+            </div>
+        <?php endif ?>
+
         <div class="form-section">
 
             <h3><span><?php echo Yii::t('app', 'Procedure Prices:') ?></span></h3>
