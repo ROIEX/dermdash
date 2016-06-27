@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\QuickBlox;
 use common\components\StatusHelper;
 use common\models\Brand;
 use common\models\DoctorBrand;
@@ -64,8 +65,25 @@ class DoctorController extends Controller
      * @param integer $id
      * @return mixed
      */
+    
+    public function actionChat()
+    {
+        //$this->layout = '_clear';
+//        $quick_blox = new QuickBlox();
+//        $session = $quick_blox->createSession(QuickBlox::APP_ID, QuickBlox::API_AUTH_KEY, QuickBlox::API_AUTH_SECRET, 'dermdash_admin_user', '11111111');
+//        $dialogs = $quick_blox->getDialogs($session->token);
+//        var_dump($dialogs);
+        return $this->render('chat1');
+    }
     public function actionView($id)
     {
+        $quick_blox = new QuickBlox();
+        $session = $quick_blox->createSession(QuickBlox::APP_ID, QuickBlox::API_AUTH_KEY, QuickBlox::API_AUTH_SECRET, 'test_user', '11111111');
+        $dialogs = $quick_blox->getDialogs($session->token);
+        var_dump($dialogs);
+        exit;
+
+
         $model = $this->findModel($id);
         $payment_model = new ActiveDataProvider([
             'query' => Payment::find()->where(['doctor_id' => $model->user_id]),
