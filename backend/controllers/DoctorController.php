@@ -68,22 +68,10 @@ class DoctorController extends Controller
     
     public function actionChat()
     {
-        //$this->layout = '_clear';
-//        $quick_blox = new QuickBlox();
-//        $session = $quick_blox->createSession(QuickBlox::APP_ID, QuickBlox::API_AUTH_KEY, QuickBlox::API_AUTH_SECRET, 'dermdash_admin_user', '11111111');
-//        $dialogs = $quick_blox->getDialogs($session->token);
-//        var_dump($dialogs);
-        return $this->render('chat1');
+        return $this->render('chat');
     }
     public function actionView($id)
     {
-        $quick_blox = new QuickBlox();
-        $session = $quick_blox->createSession(QuickBlox::APP_ID, QuickBlox::API_AUTH_KEY, QuickBlox::API_AUTH_SECRET, 'test_user', '11111111');
-        $dialogs = $quick_blox->getDialogs($session->token);
-        var_dump($dialogs);
-        exit;
-
-
         $model = $this->findModel($id);
         $payment_model = new ActiveDataProvider([
             'query' => Payment::find()->where(['doctor_id' => $model->user_id]),
