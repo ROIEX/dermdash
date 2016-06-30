@@ -25,15 +25,6 @@ class InquiryController extends Controller
             case Inquiry::STATUS_PENDING:
 
                 $query = $inquiry->getPendingInquiryList();
-                $pending_offers = $query->all();
-                $pending_id_list = ArrayHelper::map($pending_offers, 'id', 'id');
-                if (Yii::$app->user->can('administrator')) {
-                    Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['id' => $pending_id_list]);
-                }
-                if (!Yii::$app->user->can('administrator')) {
-                    $query->andWhere(['list.user_id' => Yii::$app->user->id]);
-                    Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $pending_id_list]);
-                }
                 break;
 
             case Inquiry::STATUS_COMPLETED:
@@ -42,15 +33,9 @@ class InquiryController extends Controller
                 if (!Yii::$app->user->can('administrator')) {
                     $completed_query->andWhere(['doctor_id' => Yii::$app->user->id]);
                 }
-
+                
                 $completed_offers = $completed_query->orderBy(['created_at' => SORT_DESC])->all();
                 $completed_id_list = ArrayHelper::map($completed_offers, 'inquiry_id', 'inquiry_id');
-
-                if (Yii::$app->user->can('administrator')) {
-                    Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
-                } else {
-                    Inquiry::updateAll(['is_viewed' => Inquiry::IS_VIEWED], ['id' => $completed_id_list]);
-                }
 
                 $query = $inquiry->find()
                     ->where(['in', 'id', $completed_id_list])
@@ -59,15 +44,7 @@ class InquiryController extends Controller
 
             case Inquiry::STATUS_ABANDONED:
                 $query = $inquiry->getAbandonedInquiryList();
-
-                if (!Yii::$app->user->can('administrator')) {
-                    $query->andWhere(['list.user_id' => Yii::$app->user->id]);
-                } else {
-                    Inquiry::updateAll(['is_viewed_by_admin' => Inquiry::IS_VIEWED], ['is_viewed_by_admin' => InquiryDoctorList::VIEWED_STATUS_NO]);
-                }
-
                 break;
-
             default:
                 throw new NotFoundHttpException('The requested page does not exist.');
                 break;
@@ -93,6 +70,7 @@ class InquiryController extends Controller
     public function actionView()
     {
         if(Yii::$app->request->isAjax && Yii::$app->request->post('note_id')) {
+
             $model = $this->findModel((int)Yii::$app->request->post('note_id'));
 
             $offers = $model->getOfferData((int)Yii::$app->request->post('note_id'));
@@ -101,12 +79,10 @@ class InquiryController extends Controller
                 'offers' => $offers
             ]);
         } else {
+
             $model = $this->findModel((int)Yii::$app->request->get('note_id'));
             if ($model->doctorIsParticipant) {
-
-                $offers[] = $model->getOfferData($model->id, Yii::$app->user->id);
-
-
+                $offers = $model->getOfferData($model->id, Yii::$app->user->id);
                 $model->is_viewed = Inquiry::IS_VIEWED;
                 $model->update(false);
 
@@ -118,7 +94,6 @@ class InquiryController extends Controller
             } else {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
-
             return $this->render('chart-note', [
                 'model' => $model,
                 'offers' => $offers

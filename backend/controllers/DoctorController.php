@@ -59,17 +59,17 @@ class DoctorController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionChat()
+    {
+        return $this->render('chat');
+    }
 
     /**
      * Displays a single Doctor model.
      * @param integer $id
      * @return mixed
      */
-    
-    public function actionChat()
-    {
-        return $this->render('chat');
-    }
     public function actionView($id)
     {
         $model = $this->findModel($id);

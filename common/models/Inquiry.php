@@ -97,6 +97,18 @@ class Inquiry extends \yii\db\ActiveRecord
         ];
     }
 
+    public function afterFind()
+    {
+        if (Yii::$app->user->can('administrator') && $this->is_viewed_by_admin == self::IS_NOT_VIEWED) {
+            $this->is_viewed_by_admin = self::IS_VIEWED;
+            $this->update(false);
+        } elseif (Yii::$app->user->can('manager') && !Yii::$app->user->can('administrator') && $this->is_viewed == self::IS_NOT_VIEWED) {
+            $this->is_viewed = self::IS_VIEWED;
+            $this->update(false);
+        }
+        parent::afterFind();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -278,8 +290,11 @@ class Inquiry extends \yii\db\ActiveRecord
             ->select('inquiry_id')
             ->where(['>=', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
             ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
-            ->groupBy('inquiry_id')
-            ->all();
+            ->groupBy('inquiry_id');
+
+        if (!Yii::$app->user->can('administrator')) {
+            $inquiry_doctor_list->andWhere(['user_id' => Yii::$app->user->id])->all();
+        }
 
         $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
         return $this->find()->where(['in', 'id', $ids])->orderBy(['created_at' => SORT_DESC]);
@@ -292,8 +307,11 @@ class Inquiry extends \yii\db\ActiveRecord
             ->select('inquiry_id')
             ->where(['<', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
             ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
-            ->groupBy('inquiry_id')
-            ->all();
+            ->groupBy('inquiry_id');
+
+        if (!Yii::$app->user->can('administrator')) {
+            $inquiry_doctor_list->andWhere(['user_id' => Yii::$app->user->id])->all();
+        }
         
         $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
         return $this->find()->where(['in', 'id', $ids])->orderBy(['created_at' => SORT_DESC]);

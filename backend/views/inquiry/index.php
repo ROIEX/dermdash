@@ -34,6 +34,7 @@ $this->registerJs($js);
                 }
             }
         ],
+        'user_id',
         [
             'label' => Yii::t('app', 'Patient'),
             'format' => 'raw',
