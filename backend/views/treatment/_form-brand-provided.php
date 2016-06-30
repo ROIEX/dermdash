@@ -64,9 +64,6 @@ DynamicFormWidget::begin([
 
                 </td>
 
-                <td class="text-center vcenter" style="width: 90px;">
-                    <button type="button" class="remove-bp btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
-                </td>
             </tr>
 
         <?php endforeach; ?>

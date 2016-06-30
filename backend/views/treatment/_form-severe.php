@@ -71,10 +71,6 @@ DynamicFormWidget::begin([
                     <?php echo $form->field($modelSeverity, "[{$indexParam}][{$indexSeverity}]uploaded_image")->fileInput()->label(false)?>
 
                 </td>
-
-                <td class="text-center vcenter" style="width: 90px;">
-                    <button type="button" class="remove-severe btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
-                </td>
             </tr>
 
         <?php endforeach; ?>
