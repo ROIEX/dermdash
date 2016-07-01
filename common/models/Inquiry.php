@@ -309,10 +309,11 @@ class Inquiry extends \yii\db\ActiveRecord
             ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
             ->groupBy('inquiry_id');
 
+
         if (!Yii::$app->user->can('administrator')) {
-            $inquiry_doctor_list->andWhere(['user_id' => Yii::$app->user->id])->all();
+            $inquiry_doctor_list->andWhere(['user_id' => Yii::$app->user->id]);
         }
-        
+        $inquiry_doctor_list = $inquiry_doctor_list->all();
         $ids = ArrayHelper::getColumn($inquiry_doctor_list, 'inquiry_id');
         return $this->find()->where(['in', 'id', $ids])->orderBy(['created_at' => SORT_DESC]);
     }
