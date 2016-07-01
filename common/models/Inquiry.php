@@ -290,7 +290,7 @@ class Inquiry extends \yii\db\ActiveRecord
             ->select('inquiry_id')
             ->where(['>=', 'created_at', time() - 3600 * 24 * self::INQUIRY_DAYS_ACTIVE])
             ->andWhere(['!=', 'status', InquiryDoctorList::STATUS_FINALIZED])
-            ->groupBy('inquiry_id')->all();
+            ->groupBy('inquiry_id');
 
         if (!Yii::$app->user->can('administrator')) {
             $inquiry_doctor_list->andWhere(['user_id' => Yii::$app->user->id]);
@@ -324,7 +324,7 @@ class Inquiry extends \yii\db\ActiveRecord
     public static function getPendingInquiryCount()
     {
         $inquiry = new Inquiry();
-        return count($inquiry->getPendingInquiryList()->all());
+        return $inquiry->getPendingInquiryList()->count();
     }
 
     /**
