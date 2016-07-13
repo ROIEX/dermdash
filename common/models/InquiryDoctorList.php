@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property integer $inquiry_id
  * @property integer $user_id
  * @property string  $price
+ * @property double  $special_price
  * @property integer  $status
  * @property integer  $created_at
  * @property integer  $paid_at
@@ -68,6 +69,7 @@ class InquiryDoctorList extends \yii\db\ActiveRecord
         return [
             [['inquiry_id', 'user_id', 'status','paid_at','created_at', 'param_id'], 'integer'],
             [['price'], 'string', 'max' => 16],
+            ['special_price', 'double'],
             [['price'], 'required', 'on' => self::SCENARIO_CREATE_OFFER],
             [['is_viewed', 'is_viewed_by_patient'], 'default', 'value' => self::VIEWED_STATUS_NO]
         ];
@@ -91,6 +93,7 @@ class InquiryDoctorList extends \yii\db\ActiveRecord
             'inquiry_id' => Yii::t('app', 'Inquiry ID'),
             'user_id' => Yii::t('app', 'User ID'),
             'price' => Yii::t('app', 'Price'),
+            'special_price' => Yii::t('app', 'Special Price'),
             'status' => Yii::t('app', 'Status')
         ];
     }

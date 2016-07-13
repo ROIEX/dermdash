@@ -54,7 +54,7 @@ class SaveDoctorsBehavior extends Behavior
         $limit = Settings::getInquiryDoctorQuantity();
         if ($model->treatmentParam->provided) {
             $query = new Query();
-            $query->select('`doctor`.`user_id`,`doctor_brand`.`price`')
+            $query->select('`doctor`.`user_id`,`doctor_brand`.`price`, `doctor_brand`.`special_price`')
                 ->from(Doctor::tableName())
                 ->innerJoin(DoctorBrand::tableName(),'`doctor`.`user_id` = `doctor_brand`.`user_id`')
                 ->innerJoin(User::tableName(), 'user.id = doctor.user_id')
@@ -74,6 +74,7 @@ class SaveDoctorsBehavior extends Behavior
                 $modelList = new InquiryDoctorList();
                 $modelList->setAttributes($doctor);
                 $modelList->price = ($doctor['price'] * $model->treatmentParam->provided->count);
+                $modelList->special_price = ($doctor['special_price'] * $model->treatmentParam->provided->count);
                 $modelList->inquiry_id = $model->inquiry_id;
                 $modelList->param_id = $model->treatment_param_id;
                 $modelList->is_viewed_by_patient = InquiryDoctorList::VIEWED_STATUS_NO;
@@ -93,7 +94,7 @@ class SaveDoctorsBehavior extends Behavior
         if (!$model->severity && !$model->treatmentIntensity) {
 
             $query = new Query();
-            $query->select('`doctor`.`user_id`,`doctor_treatment`.`price`')
+            $query->select('`doctor`.`user_id`,`doctor_treatment`.`price`,`doctor_treatment`.`special_price`')
                 ->from(Doctor::tableName())
                 ->innerJoin(DoctorTreatment::tableName(),'`doctor`.`user_id` = `doctor_treatment`.`user_id`')
                 ->innerJoin(User::tableName(), 'user.id = doctor.user_id')
@@ -130,7 +131,6 @@ class SaveDoctorsBehavior extends Behavior
                 return $e->getMessage();
             }
         } elseif($model->treatmentIntensity && !$model->severity){
-
 
             $brand_query = DoctorBrand::find()
                 ->where(['brand_param_id' =>  $model->treatmentIntensity->brand_param_id])
