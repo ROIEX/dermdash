@@ -16,13 +16,16 @@ if (Yii::$app->user->can('administrator')) {
 
 ?>
 <div class="doctor-update">
-
+   
     <?php echo $this->render('update_form', [
         'model' => $model,
         'brands' => $brands,
         'treatments' => $treatments,
         'selected_treatments' => $selected_treatments,
         'selected_brands' => $selected_brands,
+        'treatment_special' => $treatment_special,
+        'brand_special' => $brand_special,
+        'dropdown_special' => $dropdown_special,
         'selected_brands_dropdown_prices' => $selected_brands_dropdown_prices,
     ]) ?>
 

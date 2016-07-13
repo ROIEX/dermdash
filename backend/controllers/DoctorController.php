@@ -134,11 +134,14 @@ class DoctorController extends Controller
         $brand = new DoctorBrand();
         $user_model = User::findOne(['id' => $doctor_model->user_id]);
         $user_profile = UserProfile::findOne(['user_id' => $doctor_model->user_id]);
-        $brands = Brand::find()->all();
-        $treatments = Treatment::find()->all();
+        $brands = Brand::find()->where(['status' => StatusHelper::STATUS_ACTIVE])->all();
+        $treatments = Treatment::find()->where(['status' => StatusHelper::STATUS_ACTIVE])->all();
         $selected_treatments = DoctorTreatment::getSelectedIdList($doctor_model->user_id);
+        $treatment_special = DoctorTreatment::getSpecialPrices($doctor_model->user_id);
+        $brand_special = DoctorBrand::getSpecialPrices($doctor_model->user_id);
         $selected_brands = DoctorBrand::getSelectedIdList($doctor_model->user_id);
         $selected_brands_dropdown_prices = $brand->getDropdownPrices($doctor_model->user_id);
+        $dropdown_special = $brand->getDropdownSpecial($doctor_model->user_id);
         $doctor_model->treatment_discounts = $treatment->getSelectedDiscountsArray($doctor_model->user_id);
         $model = new MultiModel([
             'models' => [
@@ -176,6 +179,9 @@ class DoctorController extends Controller
                 'brands' => $brands,
                 'treatments' => $treatments,
                 'selected_treatments' => $selected_treatments,
+                'treatment_special' => $treatment_special,
+                'brand_special' => $brand_special,
+                'dropdown_special' => $dropdown_special,
                 'selected_brands' => $selected_brands,
                 'selected_brands_dropdown_prices' => $selected_brands_dropdown_prices,
             ]);

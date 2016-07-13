@@ -87,13 +87,13 @@ class DoctorBrand extends \yii\db\ActiveRecord
             $dropdown_price_array = [];
         }
 
-
         if (!empty($brand_array)) {
             foreach (array_filter($brand_array) as $brand_param => $price) {
                 $doctor_brand_list[] = [
                     'user_id' => $user_id,
                     'brand_param_id' => $brand_param,
                     'price' => $price,
+                    'special_price' => null
                 ];
             }
         }
@@ -106,6 +106,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
                             'user_id' => $user_id,
                             'brand_param_id' => $brand->brandParams[0]->id,
                             'price' => $dropdown_price_array[$brand->id],
+                            'special_price' => null
                         ];
                     }
                 }
@@ -218,6 +219,22 @@ class DoctorBrand extends \yii\db\ActiveRecord
         return false;
     }
 
+    public static function getSpecialPrices($user_id)
+    {
+        $doctor_param_list = DoctorBrand::findAll(['user_id' => $user_id]);
+        if (!empty($doctor_param_list)) {
+            foreach ($doctor_param_list as $doctor_param) {
+                $brand_param_id_list[$doctor_param->brand_param_id] = $doctor_param->special_price;
+            }
+            if (!empty($brand_param_id_list)) {
+                return $brand_param_id_list;
+            }
+            return false;
+        }
+
+        return false;
+    }
+    
     public function getDropdownPrices($user_id)
     {
         $doctor_dropdown_params_prices = [];
@@ -229,6 +246,24 @@ class DoctorBrand extends \yii\db\ActiveRecord
         $doctor_dropdown_prices_array = DoctorBrand::find()->where(['in', 'brand_param_id', $default_brand_param_list])->andWhere(['user_id' => $user_id])->all();
         foreach ($doctor_dropdown_prices_array as $doctor_price) {
             $doctor_dropdown_params_prices[$doctor_price->brand_param_id] = $doctor_price->price;
+        }
+        if (!empty($doctor_dropdown_params_prices)) {
+            return $doctor_dropdown_params_prices;
+        }
+        return false;
+    }
+
+    public function getDropdownSpecial($user_id)
+    {
+        $doctor_dropdown_params_prices = [];
+        $default_brand_param_list = [];
+        $dropdown_brands = Brand::find()->where(['is_dropdown' => 1])->all();
+        foreach ($dropdown_brands as $brand) {
+            $default_brand_param_list[] = $brand->defaultBrandParam->id;
+        }
+        $doctor_dropdown_prices_array = DoctorBrand::find()->where(['in', 'brand_param_id', $default_brand_param_list])->andWhere(['user_id' => $user_id])->all();
+        foreach ($doctor_dropdown_prices_array as $doctor_price) {
+            $doctor_dropdown_params_prices[$doctor_price->brand_param_id] = $doctor_price->special_price;
         }
         if (!empty($doctor_dropdown_params_prices)) {
             return $doctor_dropdown_params_prices;

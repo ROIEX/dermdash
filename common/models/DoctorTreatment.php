@@ -117,6 +117,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                     'treatment_param_id' => $treatment_param_id,
                     'treatment_session_id' => $treatment_param->treatment->defaultSession->id,
                     'price' => $treatment_param_value,
+                    'special_price' => null
                 ];
 
                 if (array_key_exists($treatment_param->treatment->id, $treatment_discounts)) {
@@ -127,6 +128,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                             'treatment_param_id' => $treatment_param_id,
                             'treatment_session_id' => $session_id,
                             'price' => (double)($treatment_param_value * (1 - $discount_value / 100)) * $session->session_count,
+                            'special_price' => null
                         ];
                     }
                 }
@@ -155,6 +157,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                                 'treatment_param_id' => $param->id,
                                 'treatment_session_id' => $treatment->defaultSession->id,
                                 'price' => '',
+                                'special_price' => null
                             ];
                         }
                         if (!empty($intensity_discounts)) {
@@ -168,6 +171,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                             'treatment_param_id' => $param->id,
                             'treatment_session_id' => $treatment->defaultSession->id,
                             'price' => '',
+                            'special_price' => null
                         ];
                     }
                 }
@@ -236,11 +240,30 @@ class DoctorTreatment extends \yii\db\ActiveRecord
             ->andWhere(['session.session_count' => self::MIN_SESSION_VALUE])
             ->all();
 
-
-        //todo smth with static min session value
         if (!empty($doctor_param_list)) {
             foreach ($doctor_param_list as $doctor_param) {
+                $treatment_param_id_list['special_price'][$doctor_param->treatment_param_id] = $doctor_param->special_price;
                 $treatment_param_id_list[$doctor_param->treatment_param_id] = $doctor_param->price;
+
+            }
+            return $treatment_param_id_list;
+        }
+
+        return false;
+    }
+
+
+    public static function getSpecialPrices($user_id)
+    {
+        $doctor_param_list = DoctorTreatment::find()->where(['user_id' => $user_id])
+            ->join('LEFT JOIN', 'treatment_session as session', 'session.id = doctor_treatment.treatment_session_id')
+            ->andWhere(['session.session_count' => self::MIN_SESSION_VALUE])
+            ->all();
+
+        if (!empty($doctor_param_list)) {
+            foreach ($doctor_param_list as $doctor_param) {
+                $treatment_param_id_list[$doctor_param->treatment_param_id] = $doctor_param->special_price;
+
             }
             return $treatment_param_id_list;
         }

@@ -25,6 +25,12 @@ use common\models\Brand;
                                     $value = $selected_brands_dropdown_prices[$brand->defaultBrandParam->id];
                                 }
                             }
+
+                            if ($dropdown_special) {
+                                if (in_array($brand->defaultBrandParam->id, array_keys($dropdown_special))) {
+                                    $special_value = $dropdown_special[$brand->defaultBrandParam->id];
+                                }
+                            }
                          ?>
                         <div class="col-xs-6">
                             <?php echo Html::activeLabel($model, "dropdown_price[$brand->id]") ?>
@@ -64,7 +70,15 @@ use common\models\Brand;
                                         if (in_array($param->id, array_keys($selected_brands))) {
                                             $value = $selected_brands[$param->id];
                                         }
-                                    }?>
+                                    }
+
+                                    if ($brand_special) {
+                                        if (in_array($param->id, array_keys($brand_special))) {
+                                            $special_value = $brand_special[$param->id];
+                                        }
+                                    }
+
+                                    ?>
 
                                     <?php if (strpos($param->value, $label) !== false) {
                                         $custom_inner_label = explode(', ', $param->value);
@@ -92,7 +106,14 @@ use common\models\Brand;
                                     if (in_array($param->id, array_keys($selected_brands))) {
                                         $value = $selected_brands[$param->id];
                                     }
-                                }?>
+                                }
+
+                                if ($brand_special) {
+                                    if (in_array($param->id, array_keys($brand_special))) {
+                                        $special_value = $brand_special[$param->id];
+                                    }
+                                }
+                                ?>
                                 <div class="col-xs-6">
                                     <?php $label =  $param->reg_description ? $param->reg_description : (($param->value == 1 || !is_numeric($param->value)) ?
                                         ($param->value . (!is_numeric($param->value) ? (", ") : ' ') . Brand::getPer($brand->per) . ($brand->id == 38 ? ", " . Yii::t('app', '2 syringes per session') : '')) :

@@ -160,12 +160,15 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
             <?php if (!empty($treatments)) { ?>
 
                 <div id="accordion">
-
+                  
                     <?php echo $this->render('update/_form-treatment', [
                         'model' => $model->getModel('doctor_model'),
                         'form' => $form, 'treatments' => $treatments,
                         'selected_treatments' => $selected_treatments,
+                        'brand_special' => $brand_special,
+                        'treatment_special' => $treatment_special,
                         'selected_brands_dropdown_prices' => $selected_brands_dropdown_prices,
+                        'dropdown_special' => $dropdown_special,
                         'selected_brands' => $selected_brands
                     ]) ?>
 
@@ -183,6 +186,8 @@ $this->registerCssFile(Yii::getAlias('https://fonts.googleapis.com/css?family=Mu
                             'model' => $model->getModel('doctor_model'),
                             'form' => $form, 
                             'brand' => $brand,
+                            'dropdown_special' => $dropdown_special,
+                            'brand_special' => $brand_special,
                             'selected_brands_dropdown_prices' => $selected_brands_dropdown_prices,
                             'selected_brands' => $selected_brands
                             ])

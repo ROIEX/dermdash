@@ -59,7 +59,15 @@ use common\models\Brand;
                                                             if (in_array($param->id, array_keys($selected_brands))) {
                                                                 $value = $selected_brands[$param->id];
                                                             }
-                                                        } ?>
+                                                        }
+
+                                                        if($brand_special) {
+                                                            if (in_array($param->id, array_keys($brand_special))) {
+                                                                $special_value = $brand_special[$param->id];
+                                                            }
+                                                        }
+
+                                                    ?>
                                                     <?php $label =  $param->reg_description ? $param->reg_description : (($param->value == 1 || !is_numeric($param->value)) ?
                                                             ($param->value) :
                                                             ($param->value) . ' ' . Yii::t('app', '(total price of {quantity} {per})',
@@ -71,7 +79,7 @@ use common\models\Brand;
                                                         <?php echo $form->field($model, "brands[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price'), 'value' => $value])->label(false) ?>
                                                     </div>
                                                     <div class="units-dollar">
-                                                        <?php echo $form->field($model, "brands_special[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
+                                                        <?php echo $form->field($model, "brand_special[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
                                                     </div>
 
 
@@ -81,6 +89,7 @@ use common\models\Brand;
                                     <?php } if ($treatment->id == 8) {
                                         $fine_lines_list = Brand::find()->where(['in', 'id', [16, 28, 18]])->all(); ?>
                                         <?php foreach ($fine_lines_list as $brand) : ?>
+
                                             <?php
                                             $value = '';
                                             $special_value = '';
@@ -89,6 +98,12 @@ use common\models\Brand;
                                                         $value = $selected_brands_dropdown_prices[$brand->defaultBrandParam->id];
                                                     }
                                                 }
+//
+                                            if ($dropdown_special) {
+                                                if (in_array($brand->defaultBrandParam->id, array_keys($dropdown_special))) {
+                                                    $special_value = $dropdown_special[$brand->defaultBrandParam->id];
+                                                }
+                                            }
                                             ?>
                                             <div class="col-xs-6">
                                                 <h4>
@@ -116,11 +131,18 @@ use common\models\Brand;
                                                     <?php
                                                         $value = '';
                                                         $special_value = '';
+
                                                         if ($selected_brands) {
                                                             if (in_array($param->id, array_keys($selected_brands))) {
                                                                 $value = $selected_brands[$param->id];
                                                             }
+                                                        }
+                                                        if ($brand_special) {
+                                                            if (in_array($param->id, array_keys($brand_special))) {
+                                                                $special_value = $brand_special[$param->id];
+                                                            }
                                                         } ?>
+
                                                     <?php $label =  $param->reg_description ? $param->reg_description : (($param->value == 1) ?
                                                             ($param->value . " " . Brand::getPer($fillers_brand->per)) :
                                                             ($param->value . " " . Inflector::pluralize(Brand::getPer($fillers_brand->per))) . ' ' . Yii::t('app', '(total price of {quantity} {per})',
@@ -133,7 +155,7 @@ use common\models\Brand;
                                                         <?php echo $form->field($model, "brands[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price'), 'value' => $value])->label(false) ?>
                                                     </div>
                                                     <div class="units-dollar">
-                                                        <?php echo $form->field($model, "brand_special[$brand->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
+                                                        <?php echo $form->field($model, "brand_special[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
                                                     </div>
                                                 <?php endforeach ?>
                                             </div>
@@ -155,7 +177,15 @@ use common\models\Brand;
                                                             if (in_array($param->id, array_keys($selected_brands))) {
                                                                 $value = $selected_brands[$param->id];
                                                             }
-                                                    } ?>
+                                                         }
+
+                                                    if ($brand_special) {
+                                                        if (in_array($param->id, array_keys($brand_special))) {
+                                                            $special_value = $brand_special[$param->id];
+                                                        }
+                                                    }
+
+                                                    ?>
                                                     <?php $label =  $param->reg_description ? $param->reg_description : (($param->value == 1) ?
                                                             ($param->value . " " . Brand::getPer($peel_brand->per)) :
                                                             ($param->value . " " . Inflector::pluralize(Brand::getPer($peel_brand->per))) . ' ' . Yii::t('app', '(total price of {quantity} {per})',
@@ -186,7 +216,15 @@ use common\models\Brand;
                                         if (in_array($param->id, array_keys($selected_treatments))) {
                                             $value = $selected_treatments[$param->id];
                                         }
-                                } ?>
+                                }
+
+                                if($treatment_special) {
+                                    if (in_array($param->id, array_keys($treatment_special))) {
+                                        $special_value = $treatment_special[$param->id];
+                                    }
+                                }
+
+                                ?>
                                 <?php $label = $param->reg_description ? $param->reg_description : $param->value ?>
                                 <?php echo Html::activeLabel($model, "treatments[$param->id]", ['label' => $label]) ?>
                                 <div class="units-dollar">
@@ -228,7 +266,15 @@ use common\models\Brand;
                                             if (in_array($param->id, array_keys($selected_brands))) {
                                                 $value = $selected_brands[$param->id];
                                             }
-                                        } ?>
+                                        }
+
+                                    if ($brand_special) {
+                                        if (in_array($param->id, array_keys($brand_special))) {
+                                            $special_value = $brand_special[$param->id];
+                                        }
+                                    }
+
+                                    ?>
                                     <?php $label =  $param->reg_description ? $param->reg_description : (($param->value == 1) ?
                                         ($param->value . " " . Brand::getPer($peel_brand->per)) :
                                         ($param->value . " " . Inflector::pluralize(Brand::getPer($peel_brand->per))) . ' ' . Yii::t('app', '(total price of {quantity} {per})',
