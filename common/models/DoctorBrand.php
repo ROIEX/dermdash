@@ -77,7 +77,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
      * @throws \yii\db\Exception
      * Save doctor selected brands with prices
      */
-    public function saveBrands($user_id, $brand_array, $dropdown_price_array)
+    public function saveBrands($user_id, $brand_array, $dropdown_price_array, $brand_special, $dropdown_special)
     {
         $doctor_brand_list = [];
         $brand_array = array_filter($brand_array);
@@ -93,7 +93,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
                     'user_id' => $user_id,
                     'brand_param_id' => $brand_param,
                     'price' => $price,
-                    'special_price' => null
+                    'special_price' => isset($brand_special[$brand_param]) ? $brand_special[$brand_param] : null
                 ];
             }
         }
@@ -106,7 +106,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
                             'user_id' => $user_id,
                             'brand_param_id' => $brand->brandParams[0]->id,
                             'price' => $dropdown_price_array[$brand->id],
-                            'special_price' => null
+                            'special_price' => isset($dropdown_special[$brand->id]) ? $dropdown_special[$brand->id] : null
                         ];
                     }
                 }
@@ -119,8 +119,9 @@ class DoctorBrand extends \yii\db\ActiveRecord
 
     public function updateSelected($model)
     {
+        /** @var Doctor $model */
         $this->deleteSelected($model->user_id);
-        return $this->saveBrands($model->user_id, $model->brands, $model->dropdown_price);
+        return $this->saveBrands($model->user_id, $model->brands, $model->dropdown_price, $model->brand_special, $model->dropdown_special_price);
     }
 
     private function deleteSelected($user_id)

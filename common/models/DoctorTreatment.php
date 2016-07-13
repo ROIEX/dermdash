@@ -89,7 +89,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
      * @throws \yii\db\Exception
      * Saving doctor selected treatment params
      */
-    public function saveTreatments($user_id, $treatment_param_array, $treatment_discounts, $brand_provided_treatment_array)
+    public function saveTreatments($user_id, $treatment_param_array, $treatment_discounts, $brand_provided_treatment_array, $treatment_special)
     {
         $doctor_treatment_param_list = [];
         if (is_null($brand_provided_treatment_array)) {
@@ -110,25 +110,26 @@ class DoctorTreatment extends \yii\db\ActiveRecord
         $treatment_discounts = $trimmed_discounts;
 
         if (!empty($treatment_param_array)) {
+            $treatment_params = ArrayHelper::index(TreatmentParam::find()->all(), 'id');
             foreach ($treatment_param_array as $treatment_param_id => $treatment_param_value) {
-                $treatment_param = TreatmentParam::findOne(['id' => $treatment_param_id]);
+               // $treatment_param = TreatmentParam::findOne(['id' => $treatment_param_id]);
                 $doctor_treatment_param_list[] = [
                     'user_id' => $user_id,
                     'treatment_param_id' => $treatment_param_id,
-                    'treatment_session_id' => $treatment_param->treatment->defaultSession->id,
+                    'treatment_session_id' => $treatment_params[$treatment_param_id]->treatment->defaultSession->id,
                     'price' => $treatment_param_value,
-                    'special_price' => null
+                    'special_price' => isset($treatment_special[$treatment_param_id]) ? $treatment_special[$treatment_param_id] : null
                 ];
 
-                if (array_key_exists($treatment_param->treatment->id, $treatment_discounts)) {
-                    foreach ($treatment_discounts[$treatment_param->treatment->id] as $session_id => $discount_value) {
+                if (array_key_exists($treatment_params[$treatment_param_id]->treatment->id, $treatment_discounts)) {
+                    foreach ($treatment_discounts[$treatment_params[$treatment_param_id]->treatment->id] as $session_id => $discount_value) {
                         $session = TreatmentSession::findOne(['id' => $session_id]);
                         $doctor_treatment_param_list[] = [
                             'user_id' => $user_id,
                             'treatment_param_id' => $treatment_param_id,
                             'treatment_session_id' => $session_id,
                             'price' => (double)($treatment_param_value * (1 - $discount_value / 100)) * $session->session_count,
-                            'special_price' => null
+                            'special_price' => isset($treatment_special[$treatment_param_id]) ? $treatment_special[$treatment_param_id] : null
                         ];
                     }
                 }
@@ -157,7 +158,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                                 'treatment_param_id' => $param->id,
                                 'treatment_session_id' => $treatment->defaultSession->id,
                                 'price' => '',
-                                'special_price' => null
+                                'special_price' => ''
                             ];
                         }
                         if (!empty($intensity_discounts)) {
@@ -171,7 +172,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                             'treatment_param_id' => $param->id,
                             'treatment_session_id' => $treatment->defaultSession->id,
                             'price' => '',
-                            'special_price' => null
+                            'special_price' => ''
                         ];
                     }
                 }
@@ -190,8 +191,9 @@ class DoctorTreatment extends \yii\db\ActiveRecord
      */
     public function updateSelected($model)
     {
+        /** @var Doctor $model */
         $this->deleteSelected($model->user_id);
-        return $this->saveTreatments($model->user_id, $model->treatments, $model->treatment_discounts, $model->brand_provided_treatments);
+        return $this->saveTreatments($model->user_id, $model->treatments, $model->treatment_discounts, $model->brand_provided_treatments, $model->treatments_special);
     }
 
     /**

@@ -91,7 +91,8 @@ class Doctor extends \yii\db\ActiveRecord
            //['brands', 'checkFillers', 'skipOnEmpty' => true],
             ['treatment_discounts', 'checkDiscounts', 'skipOnEmpty' => true],
             ['treatments', 'checkTreatments', 'skipOnEmpty' => true],
-            [['brand_provided_treatments'], 'checkBrandProvidedTreatments']
+            [['brand_provided_treatments'], 'checkBrandProvidedTreatments'],
+            [['treatments_special', 'brand_special', 'dropdown_special_price'], 'safe']
         ];
     }
 
