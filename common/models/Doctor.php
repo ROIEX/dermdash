@@ -32,9 +32,14 @@ class Doctor extends \yii\db\ActiveRecord
 {
     public $treatments;
     public $brands;
+    public $dropdown_price;
+    public $treatments_special;
+    public $brand_special;
+    public $dropdown_special_price;
+
     public $treatment_discounts;
     public $brand_provided_treatments;
-    public $dropdown_price;
+
     public $uploaded_images;
 
     const DOCTOR_TYPE_MD = 0;
@@ -92,7 +97,6 @@ class Doctor extends \yii\db\ActiveRecord
 
     public function checkFillers($attribute, $params)
     {
-
         if(!empty($this->$attribute)) {
             $trimmed_array = array_filter($this->$attribute, function($item) {
                 if (trim($item) != '') {
@@ -179,7 +183,7 @@ class Doctor extends \yii\db\ActiveRecord
                 $validator->min = 0;
                 $validator->max = 9999999;
                 foreach ($trimmed_array as $key => $item) {
-                    if (!$validator->validate($item)) {
+                    if (!$validator->validate($item)) { 
                         if ($attribute == 'treatments') {
                             $this->addError('treatments[' . $key . ']', Yii::t('app', 'Treatment price must be numeric, more than 0 and less than 9999999'));
                         } else {

@@ -124,7 +124,6 @@ class DoctorController extends Controller
     public function actionUpdate($id)
     {
         if (Yii::$app->user->can('administrator')) {
-
             $doctor_id = (int)$id;
         } else {
             $doctor_id = Yii::$app->user->identity->doctor->id;

@@ -14,6 +14,7 @@ use yii\helpers\Inflector;
  * @property integer $user_id
  * @property integer $treatment_param_id
  * @property integer $price
+ * @property integer $special_price
  * @property integer $treatment_session_id
  *
  * @property User $user
@@ -39,7 +40,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'treatment_param_id', 'treatment_session_id'], 'integer'],
-            ['price', 'double'],
+            [['price', 'special_price'], 'double']
         ];
     }
 
@@ -52,6 +53,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'user_id' => Yii::t('app', 'User ID'),
             'price' => Yii::t('app', 'Price'),
+            'special_price' => Yii::t('app', 'Special Price'),
             'treatment_param_id' => Yii::t('app', 'Treatment Param ID'),
         ];
     }
@@ -79,9 +81,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TreatmentSession::className(), ['id' => 'treatment_session_id']);
     }
-
-
-
+    
     /**
      * @param $user_id
      * @param $treatment_array

@@ -17,7 +17,9 @@ use common\models\Brand;
             <div class="panel-body">
                 <?php if (!empty($brand->brandParams)) : ?>
                     <?php if ($brand->is_dropdown == 1) : ?>
-                        <?php $value = '';
+                        <?php
+                            $value = '';
+                            $special_value = '';
                             if ($selected_brands_dropdown_prices) {
                                 if (in_array($brand->defaultBrandParam->id, array_keys($selected_brands_dropdown_prices))) {
                                     $value = $selected_brands_dropdown_prices[$brand->defaultBrandParam->id];
@@ -28,6 +30,9 @@ use common\models\Brand;
                             <?php echo Html::activeLabel($model, "dropdown_price[$brand->id]") ?>
                             <div class="units-dollar">
                                 <?php echo $form->field($model, "dropdown_price[$brand->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price'), 'value' => $value])->label(false) ?>
+                            </div>
+                            <div class="units-dollar">
+                                <?php echo $form->field($model, "dropdown_special_price[$brand->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
                             </div>
                         </div>
                     <?php else : ?>
@@ -52,7 +57,9 @@ use common\models\Brand;
                                 </h4>
 
                                 <?php foreach ($brand->brandParams as $param) : ?>
-                                    <?php   $value = '';
+                                    <?php
+                                    $value = '';
+                                    $special_value = '';
                                     if ($selected_brands) {
                                         if (in_array($param->id, array_keys($selected_brands))) {
                                             $value = $selected_brands[$param->id];
@@ -68,6 +75,9 @@ use common\models\Brand;
                                             <div class="units-dollar">
                                                 <?php echo $form->field($model, "brands[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price'), 'value' => $value])->label(false) ?>
                                             </div>
+                                        <div class="units-dollar">
+                                            <?php echo $form->field($model, "brand_special[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
+                                        </div>
                                    <?php } ?>
 
                                 <?php endforeach ?>
@@ -75,7 +85,9 @@ use common\models\Brand;
                             <?php endforeach ?>
                         <?php else : ?>
                             <?php foreach ($brand->brandParams as $param) : ?>
-                                <?php   $value = '';
+                                <?php
+                                $value = '';
+                                $special_value = '';
                                 if ($selected_brands) {
                                     if (in_array($param->id, array_keys($selected_brands))) {
                                         $value = $selected_brands[$param->id];
@@ -88,6 +100,9 @@ use common\models\Brand;
                                     <?php echo Html::activeLabel($model, "brands[$param->id]", ['label' => $label]) ?>
                                     <div class="units-dollar">
                                         <?php echo $form->field($model, "brands[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Price'), 'value' => $value])->label(false) ?>
+                                    </div>
+                                    <div class="units-dollar">
+                                        <?php echo $form->field($model, "brand_special[$param->id]")->textInput(['placeholder' => Yii::t('app', 'Enter Special Price'), 'value' => $special_value])->label(false) ?>
                                     </div>
                                 </div>
                             <?php endforeach ?>

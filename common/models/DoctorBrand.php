@@ -14,6 +14,7 @@ use yii\helpers\Inflector;
  * @property integer $user_id
  * @property integer $brand_param_id
  * @property integer $price
+ * @property integer $special_price
  *
  * @property User $user
  */
@@ -34,7 +35,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'brand_param_id'], 'integer'],
-            ['price', 'double']
+            [['price', 'special_price'], 'double']
         ];
     }
 
@@ -48,6 +49,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'brand_param_id' => Yii::t('app', 'Brand Param ID'),
             'price' => Yii::t('app', 'Price'),
+            'special_price' => Yii::t('app', 'Special Price'),
         ];
     }
 
