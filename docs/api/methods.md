@@ -330,7 +330,7 @@ stripeToken = Column(String, nullable=False)
 first_name = Column(String, nullable=False)
 last_name = Column(String, nullable=False)
 email = Column(String, nullable=True)
-date = Column(String, nullable=True) format 'MM/dd/yyyy HH:mm'
+date = Column(String, nullable=True) format 'MM/dd/yyyy HH:mm' (11/13/2013 13:07)
 phone_number = Column(String, nullable=True)
 promo_code = Column(String, nullable=True)
 payment_type = Column(Integer, nullable=False) 1 - for regular payment / 2 - for appointment
