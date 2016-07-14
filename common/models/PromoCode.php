@@ -247,7 +247,7 @@ class PromoCode extends \yii\db\ActiveRecord
              $summary_discount = $rewards_used + $discount_size;
 
              foreach ($model_list as $model) {
-                 $order_price += $model->price;
+                 $order_price += (!is_null($model->special_price) && !empty($model->special_price)) ? $model->special_price : $model->price;
              }
 
              if ($order_price > 0.5) {

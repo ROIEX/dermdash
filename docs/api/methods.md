@@ -372,6 +372,7 @@ Response:
       }
 
       "price": "123",
+      "special_price": 321,
       "photo": false,
       "rating": {
         "stars": null,
@@ -721,6 +722,7 @@ Response (treatment):
         "procedure_name": "Chemical Peel",
         "param": "1 session",
         "price": "222",
+        "special_price": "222",
         "param_name": "sessions",
         "amount": 3,
         "reward": 55.5
@@ -729,7 +731,7 @@ Response (treatment):
         "id": 25,
         "procedure_name": "Chemical Peel",
         "param": "3 sessions",
-        "price": "123",
+        "special_price": "123",
         "sessions": 0,
         "reward": 30.75
       }
@@ -761,6 +763,7 @@ Response (brands) :
       "0": {
         "brand": "Belotero",
         "price": 144,
+        "special_price": 144,
         "reward": 36,
         "param_name": "Vial",
         "param_value": "1"
@@ -793,6 +796,7 @@ And if need sessions, response like this:
       "0": {
         "brand": "Belotero",
         "price": 144,
+        "special_price": 144,
         "reward": 36,
         "sessions": 1,
         "param_name": "Session",
