@@ -138,7 +138,6 @@ class SaveDoctorsBehavior extends Behavior
 
             $doctor_id_list = ArrayHelper::map($brand_query, 'user_id', 'user_id');
 
-
             $query = new Query();
             $query->select('`doctor`.`user_id`')
                 ->from(Doctor::tableName())
@@ -156,6 +155,7 @@ class SaveDoctorsBehavior extends Behavior
 
             $command = $query->createCommand();
             $doctors = $command->queryAll();
+
             $doctors = Doctor::find()->where(['in', 'user_id', $doctors])->all();
 
             \Yii::$app->db->beginTransaction();
@@ -163,7 +163,9 @@ class SaveDoctorsBehavior extends Behavior
             foreach ($doctors as $doctor) {
 
                 $modelList = new InquiryDoctorList();
-                $price = $doctor->getDoctorBrandPrice($model->treatmentIntensity->brand_param_id)->price * $model->treatmentIntensity->count;
+                $doctor_brand = $doctor->getDoctorBrandPrice($model->treatmentIntensity->brand_param_id);
+                $price = $doctor_brand->price * $model->treatmentIntensity->count;
+                $special_price = !is_null($doctor_brand->special_price) ? $doctor_brand->special_price * $model->treatmentIntensity->count : null;
 
                 if ($model->session->session_count > 1) {
                     $discount = TreatmentIntensityDiscounts::find()
@@ -171,10 +173,14 @@ class SaveDoctorsBehavior extends Behavior
                         ->andWhere(['session_id' => $model->session->id])
                         ->andWhere(['user_id' => $doctor->user_id])
                         ->one();
-                $price = $price * $model->session->session_count * (1 - ($discount->discount_value / 100));
+                    $price = $price * $model->session->session_count * (1 - ($discount->discount_value / 100));
+                    if (!is_null($special_price)) {
+                        $special_price = $special_price * $model->session->session_count * (1 - ($discount->discount_value / 100));
+                    }
                 }
                 $modelList->user_id = $doctor->user_id;
                 $modelList->price = $price;
+                $modelList->special_price = $special_price;
                 $modelList->inquiry_id = $model->inquiry_id;
                 $modelList->param_id = $model->treatment_param_id;
                 $modelList->is_viewed = InquiryDoctorList::VIEWED_STATUS_NO;
@@ -216,7 +222,6 @@ class SaveDoctorsBehavior extends Behavior
                 $query->limit($limit);
             }
 
-
             $command = $query->createCommand();
             $doctors = $command->queryAll();
             $doctors = Doctor::find()->where(['in', 'user_id', $doctors])->all();
@@ -224,13 +229,23 @@ class SaveDoctorsBehavior extends Behavior
             \Yii::$app->db->beginTransaction();
             /** @var TreatmentParamSeverity $treatmentParamSeverity */
             $prices = [];
+            $special_prices = [];
 
             foreach ($model->getTreatmentSeveritiesByParam() as $treatmentParamSeverity) {
                 foreach ($doctors as $doctor) {
+                    $doctor_brand = $doctor->getDoctorBrandPrice($treatmentParamSeverity->brandParam->brand->brandParams[0]->id);
                     if (!empty($prices[$doctor->user_id])) {
-                        $prices[$doctor->user_id] += $doctor->getDoctorBrandPrice($treatmentParamSeverity->brandParam->brand->brandParams[0]->id)->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
+                        $prices[$doctor->user_id] +=  $doctor_brand->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
+                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     } else {
-                        $prices[$doctor->user_id] = $doctor->getDoctorBrandPrice($treatmentParamSeverity->brandParam->brand->brandParams[0]->id)->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
+                        $prices[$doctor->user_id] =  $doctor_brand->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
+                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                    }
+
+                    if (!empty($special_prices[$doctor->user_id])) {
+                        $special_prices[$doctor->user] += !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                    } else {
+                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     }
                 }
             }
@@ -238,6 +253,7 @@ class SaveDoctorsBehavior extends Behavior
                 $modelList = new InquiryDoctorList();
                 $modelList->user_id = $doctor_id;
                 $modelList->price = $price;
+                $modelList->special_price = isset($special_prices[$doctor_id]) ? $special_prices[$doctor_id] : null;
                 $modelList->inquiry_id = $model->inquiry_id;
                 $modelList->param_id = $model->treatment_param_id;
                 $modelList->is_viewed = InquiryDoctorList::VIEWED_STATUS_NO;
@@ -274,7 +290,7 @@ class SaveDoctorsBehavior extends Behavior
         } else {
             $limit = Settings::getInquiryDoctorQuantity();
         }
-        $query->select('`doctor`.`user_id`,`doctor_brand`.`price`')
+        $query->select('`doctor`.`user_id`,`doctor_brand`.`price`,`doctor_brand`.`special_price`')
             ->from(Doctor::tableName())
             ->innerJoin(DoctorBrand::tableName(),'`doctor`.`user_id` = `doctor_brand`.`user_id`')
             ->innerJoin(User::tableName(), 'user.id = doctor.user_id')
@@ -297,8 +313,10 @@ class SaveDoctorsBehavior extends Behavior
             $modelList->inquiry_id = $model->inquiry_id;
             if ($model->brandParam->brand->is_dropdown == 1) {
                 $modelList->price = $doctor['price'] * $model->brandParam->value;
+                $modelList->special_price = $doctor['special_price'] * $model->brandParam->value;
             } else {
                 $modelList->price = $doctor['price'];
+                $modelList->special_price = $doctor['special_price'];
             }
 
             $modelList->param_id = $model->brand_param_id;

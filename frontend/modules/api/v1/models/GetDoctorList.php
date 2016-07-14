@@ -84,6 +84,7 @@ class GetDoctorList extends Model
                     'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'photos' =>  $photo_array,
                     'price' => $list->price,
+                    'special_price' => $list->special_price,
                     'rating'=> [
                         'stars' => $userProfile->rating,
                         'reviews' => $userProfile->reviews

@@ -37,7 +37,7 @@ class DoctorOffer extends Model
     {
         $inquiryDoctorList = InquiryDoctorList::findAll([
             'inquiry_id' => $this->inquiry_id,
-            'user_id'=>$this->doctor_id
+            'user_id' => $this->doctor_id
         ]);
 
         $id_list = ArrayHelper::map($inquiryDoctorList, 'id', 'id');
