@@ -64,11 +64,19 @@ class PaymentController extends Controller
     {
         $model = new Payment();
         $model->load(\Yii::$app->request->post(),'');
+        if ($model->payment_type == Payment::REGULAR_PAYMENT) {
+            $model->scenario = Payment::SCENARIO_REGULAR;
+        } elseif($model->payment_type == Payment::APPOINTMENT_PAYMENT) {
+            $model->scenario = Payment::SCENARIO_APPOINTMENT;
+        } else {
+            throw new BadRequestHttpException;
+        }
 
         $mandrill = new Mandrill(Yii::$app->params['mandrillApiKey']);
         $patient_email = Yii::$app->user->identity->email;
 
         if ($model->validate()) {
+            var_dump($model);exit;
             if ($model->pay()) {
 
                 $list_models = InquiryDoctorList::findAll($model->inquiry_doctor_id);

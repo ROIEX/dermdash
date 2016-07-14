@@ -21,7 +21,7 @@ class Payment extends Model
     const APPOINTMENT_PAYMENT = 2;
 
     const SCENARIO_REGULAR = 'regular';
-    const PATIENT_APPOINTMENT = 'appointment';
+    const SCENARIO_APPOINTMENT = 'appointment';
 
     public $inquiry_doctor_id;
     public $stripeToken;
@@ -39,8 +39,9 @@ class Payment extends Model
     {
         return [
             [['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date'],'required'],
+            ['email', 'email'],
             ['amount', 'integer'],
-            ['date', 'date'],
+            ['date', 'date', 'format' => 'MM/dd/yyyy HH:mm'],
             ['payment_type', 'in', 'range' => [self::REGULAR_PAYMENT, self::APPOINTMENT_PAYMENT]],
             [['inquiry_doctor_id'], 'checkInquiry'],
             [['description', 'promo_code', 'first_name', 'last_name'], 'string'],
@@ -51,7 +52,7 @@ class Payment extends Model
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_REGULAR] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'amount', 'promo_code'];
-        $scenarios[self::PATIENT_APPOINTMENT] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date', 'amount', 'date', 'promo_code'];
+        $scenarios[self::SCENARIO_APPOINTMENT] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date', 'amount', 'date', 'promo_code'];
         return $scenarios;
     }
 
