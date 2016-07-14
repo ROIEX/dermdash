@@ -106,123 +106,123 @@ class PaymentController extends Controller
                         }
                     }
 
-//
-//                    $patient_message = [
-//                        'to' => [
-//                            [
-//                                'email' => $patient_email,
-//                                'name' => $patient_email,
-//                            ]
-//                        ],
-//                        "merge_language" => "mailchimp",
-//                        "merge" => true,
-//                        'merge_vars' => [
-//                            [
-//                                'rcpt' => $patient_email,
-//                                'vars' => [
-//                                    [
-//                                        'name' => 'list_address_html',
-//                                        'content' => getenv('ADMIN_EMAIL'),
-//                                    ],
-//                                    [
-//                                        'name' => 'invoice_item',
-//                                        'content' => $item,
-//                                    ],
-//                                    [
-//                                        'name' => 'current_year',
-//                                        'content' => date('Y'),
-//                                    ],
-//                                    [
-//                                        'name' => 'company',
-//                                        'content' => Yii::$app->name,
-//                                    ],
-//                                    [
-//                                        'name' => 'rewards',
-//                                        'content' => Yii::$app->user->identity->userProfile->reward ? Yii::$app->user->identity->userProfile->reward : 'no rewards',
-//                                    ],
-//                                    [
-//                                        'name' => 'invoice_number',
-//                                        'content' => $list_model->inquiry_id,
-//                                    ],
-//                                    [
-//                                        'name' => 'doctor_email',
-//                                        'content' => $doctor->user->email,
-//                                    ],
-//                                    [
-//                                        'name' => 'doctor_clinic',
-//                                        'content' => $doctor->clinic,
-//                                    ],
-//                                    [
-//                                        'name' => 'doctor_phone',
-//                                        'content' => $doctor->profile->phone,
-//                                    ],
-//                                    [
-//                                        'name' => 'doctor_website',
-//                                        'content' => $doctor->website,
-//                                    ],
-//                                    [
-//                                        'name' => 'doctor_address',
-//                                        'content' => $doctor->profile->address . '<br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . ', ' . $doctor->profile->zipcode,
-//                                    ],
-//
-//
-//                                ]
-//                            ]
-//                        ],
-//                    ];
-//                    $doctor_message = [
-//                        'to' => [
-//                            [
-//                                'email' => $doctor->user->email,
-//                                'name' => $doctor->user->email,
-//                            ]
-//                        ],
-//                        "merge_language" => "mailchimp",
-//                        "merge" => true,
-//                        'merge_vars' => [
-//                            [
-//                                'rcpt' => $doctor->user->email,
-//                                'vars' => [
-//                                    [
-//                                        'name' => 'list_address_html',
-//                                        'content' => getenv('ADMIN_EMAIL'),
-//                                    ],
-//                                    [
-//                                        'name' => 'company',
-//                                        'content' => Yii::$app->name,
-//                                    ],
-//                                    [
-//                                        'name' => 'current_year',
-//                                        'content' => date('Y'),
-//                                    ],
-//                                    [
-//                                        'name' => 'patient_name',
-//                                        'content' => $model->first_name . ' ' . $model->last_name,
-//                                    ],
-//                                    [
-//                                        'name' => 'invoice_number',
-//                                        'content' => (string)$list_model->inquiry_id,
-//                                    ],
-//                                    [
-//                                        'name' => 'patient_email',
-//                                        'content' => Yii::$app->user->identity->email,
-//                                    ],
-//                                    [
-//                                        'name' => 'patient_phone',
-//                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : 'No phone provided',
-//                                    ],
-//                                    [
-//                                        'name' => 'invoice_item',
-//                                        'content' => $item,
-//                                    ],
-//
-//                                ]
-//                            ]
-//                        ],
-//                    ];
-//
-//                    $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
-//                    $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
+
+                    $patient_message = [
+                        'to' => [
+                            [
+                                'email' => $patient_email,
+                                'name' => $patient_email,
+                            ]
+                        ],
+                        "merge_language" => "mailchimp",
+                        "merge" => true,
+                        'merge_vars' => [
+                            [
+                                'rcpt' => $patient_email,
+                                'vars' => [
+                                    [
+                                        'name' => 'list_address_html',
+                                        'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'invoice_item',
+                                        'content' => $item,
+                                    ],
+                                    [
+                                        'name' => 'current_year',
+                                        'content' => date('Y'),
+                                    ],
+                                    [
+                                        'name' => 'company',
+                                        'content' => Yii::$app->name,
+                                    ],
+                                    [
+                                        'name' => 'rewards',
+                                        'content' => Yii::$app->user->identity->userProfile->reward ? Yii::$app->user->identity->userProfile->reward : 'no rewards',
+                                    ],
+                                    [
+                                        'name' => 'invoice_number',
+                                        'content' => $list_model->inquiry_id,
+                                    ],
+                                    [
+                                        'name' => 'doctor_email',
+                                        'content' => $doctor->user->email,
+                                    ],
+                                    [
+                                        'name' => 'doctor_clinic',
+                                        'content' => $doctor->clinic,
+                                    ],
+                                    [
+                                        'name' => 'doctor_phone',
+                                        'content' => $doctor->profile->phone,
+                                    ],
+                                    [
+                                        'name' => 'doctor_website',
+                                        'content' => $doctor->website,
+                                    ],
+                                    [
+                                        'name' => 'doctor_address',
+                                        'content' => $doctor->profile->address . '<br>' . $doctor->profile->city . ', ' . $doctor->profile->state->short_name . ', ' . $doctor->profile->zipcode,
+                                    ],
+
+
+                                ]
+                            ]
+                        ],
+                    ];
+                    $doctor_message = [
+                        'to' => [
+                            [
+                                'email' => $doctor->user->email,
+                                'name' => $doctor->user->email,
+                            ]
+                        ],
+                        "merge_language" => "mailchimp",
+                        "merge" => true,
+                        'merge_vars' => [
+                            [
+                                'rcpt' => $doctor->user->email,
+                                'vars' => [
+                                    [
+                                        'name' => 'list_address_html',
+                                        'content' => getenv('ADMIN_EMAIL'),
+                                    ],
+                                    [
+                                        'name' => 'company',
+                                        'content' => Yii::$app->name,
+                                    ],
+                                    [
+                                        'name' => 'current_year',
+                                        'content' => date('Y'),
+                                    ],
+                                    [
+                                        'name' => 'patient_name',
+                                        'content' => $model->first_name . ' ' . $model->last_name,
+                                    ],
+                                    [
+                                        'name' => 'invoice_number',
+                                        'content' => (string)$list_model->inquiry_id,
+                                    ],
+                                    [
+                                        'name' => 'patient_email',
+                                        'content' => Yii::$app->user->identity->email,
+                                    ],
+                                    [
+                                        'name' => 'patient_phone',
+                                        'content' => Yii::$app->user->identity->userProfile->phone ? Yii::$app->user->identity->userProfile->phone : 'No phone provided',
+                                    ],
+                                    [
+                                        'name' => 'invoice_item',
+                                        'content' => $item,
+                                    ],
+
+                                ]
+                            ]
+                        ],
+                    ];
+
+                    $mandrill->messages->sendTemplate('Patient Receipt', [] , $patient_message);
+                    $mandrill->messages->sendTemplate('Doctor Receipt', [] , $doctor_message);
 
                 }
                 return ['success'];
