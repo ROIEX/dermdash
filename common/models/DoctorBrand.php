@@ -93,7 +93,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
                     'user_id' => $user_id,
                     'brand_param_id' => $brand_param,
                     'price' => $price,
-                    'special_price' => isset($brand_special[$brand_param]) ? $brand_special[$brand_param] : null
+                    'special_price' => isset($brand_special[$brand_param]) ? abs($brand_special[$brand_param]) : null
                 ];
             }
         }
@@ -106,7 +106,7 @@ class DoctorBrand extends \yii\db\ActiveRecord
                             'user_id' => $user_id,
                             'brand_param_id' => $brand->brandParams[0]->id,
                             'price' => $dropdown_price_array[$brand->id],
-                            'special_price' => isset($dropdown_special[$brand->id]) ? $dropdown_special[$brand->id] : null
+                            'special_price' => isset($dropdown_special[$brand->id]) ? abs($dropdown_special[$brand->id]) : null
                         ];
                     }
                 }

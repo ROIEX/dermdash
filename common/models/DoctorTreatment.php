@@ -118,7 +118,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                     'treatment_param_id' => $treatment_param_id,
                     'treatment_session_id' => $treatment_params[$treatment_param_id]->treatment->defaultSession->id,
                     'price' => $treatment_param_value,
-                    'special_price' => isset($treatment_special[$treatment_param_id]) ? $treatment_special[$treatment_param_id] : null
+                    'special_price' => isset($treatment_special[$treatment_param_id]) ? abs($treatment_special[$treatment_param_id]) : null
                 ];
 
                 if (array_key_exists($treatment_params[$treatment_param_id]->treatment->id, $treatment_discounts)) {
@@ -129,7 +129,7 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                             'treatment_param_id' => $treatment_param_id,
                             'treatment_session_id' => $session_id,
                             'price' => (double)($treatment_param_value * (1 - $discount_value / 100)) * $session->session_count,
-                            'special_price' => isset($treatment_special[$treatment_param_id]) ? $treatment_special[$treatment_param_id] : null
+                            'special_price' => isset($treatment_special[$treatment_param_id]) ? abs($treatment_special[$treatment_param_id]) : null
                         ];
                     }
                 }
