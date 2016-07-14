@@ -51,17 +51,22 @@ class DoctorOffer extends Model
                 $doctor_offer = InquiryDoctorList::findOne(['user_id' => $this->doctor_id, 'inquiry_id' => $list->inquiry_id, 'param_id'=> $brand->brand_param_id]);
                 if ($doctor_offer) {
                     if ($brand->brandParam->brand->is_dropdown == 1) {
-                        $price = DoctorBrand::findOne(['user_id' => $this->doctor_id, 'brand_param_id' => $brand->brandParam->brand->brandParams[0]->id])->price;
+                        $doctor_brand = DoctorBrand::findOne(['user_id' => $this->doctor_id, 'brand_param_id' => $brand->brandParam->brand->brandParams[0]->id]);
+                        $price = $doctor_brand->price;
                         $price = $price * $brand->brandParam->value;
+                        $special_price = $doctor_brand->special_price;
+                        $special_price = !is_null($special_price) ? $special_price * $brand->brandParam->value : null;
                     } else {
                         $price = $doctor_offer->price;
+                        $special_price = $doctor_offer->special_price;
                     }
-
+                    $reward = !is_null($special_price) ? $special_price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100 : $price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100;
                     $returnData[$brand->id] = [
-                        'id'=>$doctor_offer->id,
-                        'brand'=>$brand->brandParam->brand->name,
-                        'price'=> $price,
-                        'reward'=>($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
+                        'id' => $doctor_offer->id,
+                        'brand' => $brand->brandParam->brand->name,
+                        'price' => $price,
+                        'special_price' => $special_price,
+                        'reward' => $reward
                     ];
                     if ($brand->brandParam->brand->per == Brand::PER_SESSION) {
                         if (is_numeric($brand->brandParam->value)) {
@@ -88,6 +93,7 @@ class DoctorOffer extends Model
 
                 if ($doctor_offer) {
                     $price = $doctor_offer->price;
+                    $special_price = $doctor_offer->special_price;
                     $inquiry_treatment = InquiryTreatment::find()->where(['inquiry_id' => $list->inquiry_id])->andWhere(['treatment_param_id' => $treatment->treatmentParam->id])->one();
                     $is_brand_provided = BrandProvidedTreatment::find()->where(['treatment_param_id' => $treatment->treatmentParam->id])->all();
                     $brands_array = [];
@@ -133,19 +139,19 @@ class DoctorOffer extends Model
                     if ($count == 0) {
                         $count = !empty($treatment->session) ? $treatment->session->session_count : 0;
                     }
-
+                    $reward = !is_null($special_price) ? $special_price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100 : $price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100;
                     $returnData[] = [
                         'id' => InquiryDoctorList::findOne(['inquiry_id' => $list->inquiry_id, 'param_id' => $treatment->treatment_param_id, 'user_id' => $this->doctor_id])->id,
                         'procedure_name' => $procedure_name,
                         'param' => $treatment->treatmentParam->value,
                         'price' => $price,
+                        'special_price' => $special_price,
                         'param_name' => $type,
                         'amount' => $count,
-                        'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
+                        'reward' => $reward
                     ];
                 }
             }
-
         }
         /** @var UserProfile $userProfile */
         $userProfile = UserProfile::findOne($list->user->id);
