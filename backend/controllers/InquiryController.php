@@ -36,7 +36,7 @@ class InquiryController extends Controller
                 
                 $completed_offers = $completed_query->orderBy(['created_at' => SORT_DESC])->all();
                 $completed_id_list = ArrayHelper::map($completed_offers, 'inquiry_id', 'inquiry_id');
-
+                
                 $query = $inquiry->find()
                     ->where(['in', 'id', $completed_id_list])
                     ->orderBy(['created_at' => SORT_DESC]);

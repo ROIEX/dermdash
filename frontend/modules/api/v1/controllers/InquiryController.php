@@ -141,7 +141,6 @@ class InquiryController extends Controller
             InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['in', 'inquiry_id', $inquiry_id_list]);
         }
 
-
         $unviewed_count = InquiryDoctorList::find()
             ->join('LEFT JOIN', 'inquiry as inquiry', 'inquiry.id = inquiry_doctor_list.inquiry_id')
             ->where(['inquiry.user_id' => Yii::$app->user->id])

@@ -190,6 +190,14 @@ $bundle = BackendAsset::register($this);
                             'visible'=>Yii::$app->user->can('administrator')
                         ],
                         [
+                            'label' => Yii::t('backend', 'Appointments'),
+                            'icon' => '<i class="fa fa-calendar-check-o"></i>',
+                            'url' => ['/booking/index'],
+                            'badge'=> Inquiry::countUserActivities(),
+                            'badgeBgClass' => 'label-success',
+                            'visible' => Yii::$app->user->can('manager')
+                        ],
+                        [
                             'label' => Yii::t('backend', 'User Activity'),
                             'icon' => '<i class="fa fa-calendar-o"></i>',
                             'url' => ['/inquiry/index', 'status' => Inquiry::STATUS_PENDING],
