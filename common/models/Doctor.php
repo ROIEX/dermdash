@@ -87,7 +87,7 @@ class Doctor extends \yii\db\ActiveRecord
             ['add_info', 'string', 'max' => 30],
             ['status', 'default', 'value' => StatusHelper::STATUS_ACTIVE],
             [['treatments', 'brands', 'treatment_discounts', 'brand_provided_treatments', 'dropdown_price'], 'safe'],
-            [['brands', 'dropdown_price', 'treatments'], 'checkPrices', 'skipOnEmpty' => true],
+            [['brands', 'dropdown_price', 'treatments', 'treatments_special', 'brand_special', 'dropdown_special_price'], 'checkPrices', 'skipOnEmpty' => true],
            //['brands', 'checkFillers', 'skipOnEmpty' => true],
             ['treatment_discounts', 'checkDiscounts', 'skipOnEmpty' => true],
             ['treatments', 'checkTreatments', 'skipOnEmpty' => true],
@@ -187,8 +187,14 @@ class Doctor extends \yii\db\ActiveRecord
                     if (!$validator->validate($item)) { 
                         if ($attribute == 'treatments') {
                             $this->addError('treatments[' . $key . ']', Yii::t('app', 'Treatment price must be numeric, more than 0 and less than 9999999'));
-                        } else {
+                        } elseif($attribute == 'brands') {
                             $this->addError('brands[' . $key . ']', Yii::t('app', 'Brand price must be numeric, more than 0 and less than 9999999'));
+                        } elseif($attribute == 'treatments_special') {
+                            $this->addError('treatments_special[' . $key . ']', Yii::t('app', 'Special Price must be numeric, more than 0 and less than 9999999'));
+                        } elseif($attribute == 'brand_special') {
+                            $this->addError('brand_special[' . $key . ']', Yii::t('app', 'Special Price must be numeric, more than 0 and less than 9999999'));
+                        } elseif($attribute == 'dropdown_special_price') {
+                            $this->addError('dropdown_special_price[' . $key . ']', Yii::t('app', 'Special Price must be numeric, more than 0 and less than 9999999'));
                         }
                     }
                 }
