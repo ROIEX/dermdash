@@ -329,7 +329,11 @@ inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-do
 stripeToken = Column(String, nullable=False)
 first_name = Column(String, nullable=False)
 last_name = Column(String, nullable=False)
-promo_code = Coulmn(String, nullable=True)
+email = Column(String, nullable=True)
+date = Column(String, nullable=True)
+phone_number = Column(String, nullable=True)
+promo_code = Column(String, nullable=True)
+payment_type = Column(Integer, nullable=False) 1 - for regular payment / 2 - for appointment
 ```
 
 Response:

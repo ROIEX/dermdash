@@ -17,6 +17,12 @@ use yii\helpers\ArrayHelper;
 
 class Payment extends Model
 {
+    const REGULAR_PAYMENT = 1;
+    const APPOINTMENT_PAYMENT = 2;
+
+    const SCENARIO_REGULAR = 'regular';
+    const PATIENT_APPOINTMENT = 'appointment';
+
     public $inquiry_doctor_id;
     public $stripeToken;
     public $amount;
@@ -24,15 +30,29 @@ class Payment extends Model
     public $promo_code;
     public $first_name;
     public $last_name;
+    public $phone_number;
+    public $date;
+    public $email;
+    public $payment_type;
 
     public function rules()
     {
         return [
-            [['inquiry_doctor_id','stripeToken', 'first_name', 'last_name'],'required'],
+            [['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date'],'required'],
             ['amount', 'integer'],
+            ['date', 'date'],
+            ['payment_type', 'in', 'range' => [self::REGULAR_PAYMENT, self::APPOINTMENT_PAYMENT]],
             [['inquiry_doctor_id'], 'checkInquiry'],
             [['description', 'promo_code', 'first_name', 'last_name'], 'string'],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_REGULAR] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'amount', 'promo_code'];
+        $scenarios[self::PATIENT_APPOINTMENT] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date', 'amount', 'date', 'promo_code'];
+        return $scenarios;
     }
 
     /**
