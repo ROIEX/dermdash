@@ -20,10 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' =>  'inquiry_id',
             ],
-            'date',
+            [
+                'attribute' => 'date',
+                'value' => function($model) {
+                    return \common\components\dateformatter\FormatDate::AmericanFormat($model->date);
+                }
+            ],
             'email:email',
             'first_name',
-            'lst_name',
+            'last_name',
             'phone_number',
             [
                 'label' => Yii::t('backend', 'Reason'),
@@ -31,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->inquiry->getInquiryItem();
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}'],
         ],
     ]); ?>
 

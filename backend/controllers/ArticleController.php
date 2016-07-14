@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Booking;
 use Yii;
 use common\models\Article;
 use backend\models\search\ArticleSearch;

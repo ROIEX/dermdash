@@ -4,6 +4,7 @@ namespace frontend\modules\api\v1\models;
 
 use common\components\CardValidator;
 use common\components\StripePayment;
+use common\models\Booking;
 use common\models\Inquiry;
 use common\models\InquiryDoctorList;
 use common\models\PaymentItems;
@@ -134,7 +135,7 @@ class Payment extends Model
             $this->description
         );
 
-        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id, $this->first_name, $this->last_name);
+        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id, $this->first_name, $this->last_name, $this->payment_type);
         $profile = Yii::$app->user->identity->userProfile;
         $profile->reward = $profile->reward - $bonuses;
 
@@ -145,6 +146,7 @@ class Payment extends Model
         $profile->save(false);
         $booleanResult = $pay['status'] == $payment::SUCCEEDED_STATUS;
         if ($booleanResult) {
+
             $payment_list = [];
             foreach ($paid_offers as $model) {
                 /* @var $model InquiryDoctorList */
@@ -155,6 +157,19 @@ class Payment extends Model
                     $pay['payment_history_id'],
                     $model->id,
                 ];
+            }
+            //var_dump('loh');
+            if ($this->payment_type == self::APPOINTMENT_PAYMENT) {
+               // var_dump('pidr');
+                $appointment = new Booking();
+                $appointment->inquiry_id = $paid_offers[0]->inquiry_id;
+                $appointment->first_name = $this->first_name;
+                $appointment->last_name = $this->last_name;
+                $appointment->last_name = $this->last_name;
+                $appointment->email = $this->email;
+                $appointment->phone_number = $this->phone_number;
+                $appointment->date = $this->date;
+                $appointment->save();
             }
 
             $registration_usage = PromoUsed::find()

@@ -6,9 +6,13 @@ use Yii;
 
 class FormatDate
 {
-    public static function AmericanFormat($date)
+    public static function AmericanFormat($date, $no_time = false)
     {
-        return date('m/d/Y',strtotime($date));
+        if ($no_time) {
+            return date('l jS \of F',strtotime($date));
+        } else {
+            return date('m/d/Y H:i:s',strtotime($date));
+        }
     }
 
     public static function AmericanFormatFromTimestamp($date, $no_time = false)

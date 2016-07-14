@@ -10,7 +10,7 @@ use Yii;
  * @property integer $id
  * @property integer $inquiry_id
  * @property string $first_name
- * @property string $lst_name
+ * @property string $last_name
  * @property string $email
  * @property string $phone_number
  * @property string $date
@@ -27,6 +27,12 @@ class Booking extends \yii\db\ActiveRecord
         return 'booking';
     }
 
+    public function beforeSave($insert)
+    {
+        $this->date = date("Y-m-d H:i:s",  strtotime($this->date));
+        return parent::beforeSave($insert);
+    }
+
     /**
      * @inheritdoc
      */
@@ -35,7 +41,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['inquiry_id'], 'integer'],
             [['date'], 'safe'],
-            [['first_name', 'lst_name', 'email', 'phone_number'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'email', 'phone_number'], 'string', 'max' => 255],
             [['inquiry_id'], 'exist', 'skipOnError' => true, 'targetClass' => Inquiry::className(), 'targetAttribute' => ['inquiry_id' => 'id']],
         ];
     }
@@ -49,7 +55,7 @@ class Booking extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'inquiry_id' => Yii::t('app', 'Invoice #'),
             'first_name' => Yii::t('app', 'First Name'),
-            'lst_name' => Yii::t('app', 'Lst Name'),
+            'last_name' => Yii::t('app', 'Last Name'),
             'email' => Yii::t('app', 'Email'),
             'phone_number' => Yii::t('app', 'Phone Number'),
             'date' => Yii::t('app', 'Date'),

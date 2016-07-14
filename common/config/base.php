@@ -157,8 +157,10 @@ $config = [
         ],
         'defaultLanguage' => 'en-US',
         'stripe'=>[
-            'secretKey'=>'sk_test_7Iu1mcjlYqBKdqwxnjDxh6gC',
-            'publishKey'=>'pk_test_g82bMSmbGGgyMzeciRNkHCuc',
+//            'secretKey'=>'sk_test_7Iu1mcjlYqBKdqwxnjDxh6gC',
+//            'publishKey'=>'pk_test_g82bMSmbGGgyMzeciRNkHCuc',
+            'secretKey' => 'sk_live_YVHz5wM95qiXXMaQo8hmKlni',
+            'publishKey' => 'pk_live_NLqUjx0aiThBn5AGNGOeJUTx',
             'currency'=>'usd'
         ],
         'company' => [
