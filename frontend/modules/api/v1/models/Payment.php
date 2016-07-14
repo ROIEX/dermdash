@@ -88,7 +88,7 @@ class Payment extends Model
         if (!empty($paid_offers)) {
             $this->amount = 0;
             foreach ($paid_offers as $offer) {
-                $this->amount += $offer->price;
+                $this->amount += (!is_null($offer->special_price) && !empty($offer->special_price)) ? $offer->special_price : $offer->price;
             }
         }
 
