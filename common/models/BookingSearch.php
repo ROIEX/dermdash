@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Booking;
+use yii\helpers\ArrayHelper;
 
 /**
  * BookingSearch represents the model behind the search form about `common\models\Booking`.
@@ -42,6 +42,13 @@ class BookingSearch extends Booking
     public function search($params)
     {
         $query = Booking::find();
+        $id_list = ArrayHelper::getColumn($query->all(), 'id');
+        
+        if (Yii::$app->user->can('administrator')) {
+            Booking::updateAll(['is_viewed_admin' => true], ['id' => $id_list]);
+        } else {
+            Booking::updateAll(['is_viewed' => true], ['id' => $id_list]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

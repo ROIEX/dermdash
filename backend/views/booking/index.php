@@ -47,7 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
 
                 },
-               // 'visible' => Yii::$app->user->can('administrator'),
             ],
             'first_name',
             'last_name',

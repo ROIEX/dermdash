@@ -3,12 +3,15 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "booking".
  *
  * @property integer $id
  * @property integer $inquiry_id
+ * @property integer $is_viewed
+ * @property integer $is_viewed_admin
  * @property string $first_name
  * @property string $last_name
  * @property string $email
@@ -41,6 +44,7 @@ class Booking extends \yii\db\ActiveRecord
         return [
             [['inquiry_id'], 'integer'],
             [['date'], 'safe'],
+            [['is_viewed', 'is_viewed_admin'], 'default', 'value' => 0],
             [['first_name', 'last_name', 'email', 'phone_number'], 'string', 'max' => 255],
             [['inquiry_id'], 'exist', 'skipOnError' => true, 'targetClass' => Inquiry::className(), 'targetAttribute' => ['inquiry_id' => 'id']],
         ];
@@ -76,21 +80,15 @@ class Booking extends \yii\db\ActiveRecord
     {
         if (Yii::$app->user->can('administrator')) {
             $new_appointments = self::find()->where(['is_viewed_admin' => false])->count();
+            
         } else {
+            $booked_inquiriry_ids = ArrayHelper::getColumn(InquiryDoctorList::find()->where(['user_id' => Yii::$app->user->id])->all(), 'inquiry_id');
             $new_appointments = self::find()
                 ->where(['is_viewed' => false])
-               // ->andWhere([])
+                ->andWhere(['in', 'inquiry_id', $booked_inquiriry_ids])
                 ->count();
         }
-
-//            $new_inquiries = Inquiry::find()
-//                ->where(['inquiry.is_viewed' => Inquiry::IS_NOT_VIEWED])
-//                ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
-//                ->andWhere(['list.user_id' => Yii::$app->user->id])
-//                ->andWhere(['!=', 'list.status', InquiryDoctorList::STATUS_FINALIZED])
-//                ->count();
-//        }
-
+        
         return $new_appointments;
     }
 }
