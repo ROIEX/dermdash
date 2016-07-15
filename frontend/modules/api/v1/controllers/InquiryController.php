@@ -211,8 +211,11 @@ class InquiryController extends Controller
         $model = new Booking();
         $model->load(\Yii::$app->request->post(),'');
         if ($model->validate()) {
-            $model->book();
-            return ['success'];
+            if ($model->book()) {
+                
+                return ['success'];
+            };
+            return ['error'];
         }
         return ModelError::get($model);
     }
