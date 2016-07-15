@@ -20,7 +20,6 @@ use Yii;
  * @property integer $doctor_id
  * @property integer $offer_status
  * @property integer $invoice_status
- * @property integer $purchase_type
  *
  * @property User $user
  * @property User $doctor
@@ -30,10 +29,7 @@ class Payment extends \yii\db\ActiveRecord
 {
     const INVOICE_NOT_SENT = 0;
     const INVOICE_SENT = 1;
-
-    const REGULAR_PAYMENT = 1;
-    const APPOINTMENT_PAYMENT = 2;
-
+    
     const OFFER_PENDING = 0;
     const OFFER_COMPLETED = 1;
     const OFFER_REFUND_REQUESTED = 2;
@@ -55,7 +51,7 @@ class Payment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'doctor_id', 'inquiry_id', 'created_at', 'paid', 'amount', 'invoice_status', 'offer_status', 'purchase_type'], 'integer'],
+            [['user_id', 'doctor_id', 'inquiry_id', 'created_at', 'paid', 'amount', 'invoice_status', 'offer_status'], 'integer'],
             [['payment_id', 'status', 'first_name', 'last_name'], 'string', 'max' => 255],
             ['invoice_status', 'default', 'value' => self::INVOICE_NOT_SENT],
             ['offer_status', 'default', 'value' => self::OFFER_PENDING],
