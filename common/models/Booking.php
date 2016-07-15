@@ -69,6 +69,8 @@ class Booking extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Inquiry::className(), ['id' => 'inquiry_id']);
     }
+    
+    
 
     public static function countNewAppointments()
     {

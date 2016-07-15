@@ -499,7 +499,7 @@ class Inquiry extends \yii\db\ActiveRecord
                     'id' => $doctor_offer->id,
                     'brand' => $doctor_offer->brandParam->brand->name,
                     'price' => $price,
-                    'status' => $doctor_offer->status == InquiryDoctorList::STATUS_FINALIZED ? Yii::t('backend', 'Purchased') : Yii::t('backend', 'Not Purchased')
+                    'status' => InquiryDoctorList::getAnswerStatus($doctor_offer->status)
                 ];
 
                 if ($doctor_offer->brandParam->brand->per == Brand::PER_SESSION) {
@@ -593,7 +593,7 @@ class Inquiry extends \yii\db\ActiveRecord
                     'price' => $price,
                     'param_name' => $type,
                     'amount' => $count,
-                    'status' => $doctor_offer->status == InquiryDoctorList::STATUS_FINALIZED ? Yii::t('backend', 'Purchased') : Yii::t('backend', 'Not Purchased')
+                    'status' => InquiryDoctorList::getAnswerStatus($doctor_offer->status)
                 ];
 
                 if (!isset($data[$doctor_offer->user_id])) {

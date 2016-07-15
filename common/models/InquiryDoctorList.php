@@ -159,8 +159,9 @@ class InquiryDoctorList extends \yii\db\ActiveRecord
     public static function getAnswerStatus($status)
     {
         $array = [
-            self::STATUS_ANSWER_YES => Yii::t('app','Answered yes'),
-            self::STATUS_FINALIZED => Yii::t('app','Completed'),
+            self::STATUS_ANSWER_YES => Yii::t('app','Not Purchased'),
+            self::STATUS_FINALIZED => Yii::t('app','Purchased'),
+            self::STATUS_BOOKED => Yii::t('app', 'Booked')
         ];
         return $status ? $array[$status] : Yii::t('app', 'Not provided');
     }

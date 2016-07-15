@@ -22,7 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' =>  'inquiry_id',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::a($model->inquiry->id, Url::toRoute(['inquiry/view', 'note_id' => $model->inquiry->id, 'doctor_id' =>  $model->inquiry->doctorAccepted->user_id]));
+                    if (Yii::$app->user->can('administrator')) {
+                        return $model->inquiry->id;
+                    } else {
+                        return Html::a($model->inquiry->id, Url::toRoute(['inquiry/view', 'note_id' => $model->inquiry->id, 'doctor_id' =>  Yii::$app->user->id]));
+                    }
+
                 }
             ],
             [
@@ -35,14 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => Yii::t('app', 'Email'),
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if ($model->inquiry->user->id == \common\models\User::GUEST_ACCOUNT_ID) {
-                        return 'guest';
+                    if ($model->inquiry->user->id == \common\models\User::GUEST_ACCOUNT_ID || !Yii::$app->user->can('administrator')) {
+                        return $model->email;
                     } else {
                         return Html::a($model->inquiry->user->email, Url::toRoute(['patient/view', 'id' => $model->inquiry->user->id]));
                     }
 
                 },
-                'visible' => Yii::$app->user->can('administrator'),
+               // 'visible' => Yii::$app->user->can('administrator'),
             ],
             'first_name',
             'last_name',
@@ -53,7 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->inquiry->getInquiryItem();
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}'],
         ],
     ]); ?>
 
