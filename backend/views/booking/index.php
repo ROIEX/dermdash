@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\BookingSearch */
@@ -19,6 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' =>  'inquiry_id',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->inquiry->id, Url::toRoute(['inquiry/view', 'note_id' => $model->inquiry->id, 'doctor_id' =>  $model->inquiry->doctorAccepted->user_id]));
+                }
             ],
             [
                 'attribute' => 'date',
@@ -26,7 +31,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \common\components\dateformatter\FormatDate::AmericanFormat($model->date);
                 }
             ],
-            'email:email',
+            [
+                'label' => Yii::t('app', 'Email'),
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->inquiry->user->id == \common\models\User::GUEST_ACCOUNT_ID) {
+                        return 'guest';
+                    } else {
+                        return Html::a($model->inquiry->user->email, Url::toRoute(['patient/view', 'id' => $model->inquiry->user->id]));
+                    }
+
+                },
+                'visible' => Yii::$app->user->can('administrator'),
+            ],
             'first_name',
             'last_name',
             'phone_number',

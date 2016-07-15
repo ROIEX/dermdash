@@ -69,4 +69,26 @@ class Booking extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Inquiry::className(), ['id' => 'inquiry_id']);
     }
+
+    public static function countNewAppointments()
+    {
+        if (Yii::$app->user->can('administrator')) {
+            $new_appointments = self::find()->where(['is_viewed_admin' => false])->count();
+        } else {
+            $new_appointments = self::find()
+                ->where(['is_viewed' => false])
+               // ->andWhere([])
+                ->count();
+        }
+
+//            $new_inquiries = Inquiry::find()
+//                ->where(['inquiry.is_viewed' => Inquiry::IS_NOT_VIEWED])
+//                ->join('LEFT JOIN', 'inquiry_doctor_list as list', 'list.inquiry_id = inquiry.id')
+//                ->andWhere(['list.user_id' => Yii::$app->user->id])
+//                ->andWhere(['!=', 'list.status', InquiryDoctorList::STATUS_FINALIZED])
+//                ->count();
+//        }
+
+        return $new_appointments;
+    }
 }

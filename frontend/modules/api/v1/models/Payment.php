@@ -18,12 +18,7 @@ use yii\helpers\ArrayHelper;
 
 class Payment extends Model
 {
-    const REGULAR_PAYMENT = 1;
-    const APPOINTMENT_PAYMENT = 2;
-
-    const SCENARIO_REGULAR = 'regular';
-    const SCENARIO_APPOINTMENT = 'appointment';
-
+    
     public $inquiry_doctor_id;
     public $stripeToken;
     public $amount;
@@ -31,32 +26,17 @@ class Payment extends Model
     public $promo_code;
     public $first_name;
     public $last_name;
-    public $phone_number;
-    public $date;
-    public $email;
-    public $payment_type;
 
     public function rules()
     {
         return [
-            [['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date'],'required'],
-            ['email', 'email'],
+            [['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name'],'required'],
             ['amount', 'integer'],
-            ['date', 'date', 'format' => 'MM/dd/yyyy HH:mm'],
-            ['payment_type', 'in', 'range' => [self::REGULAR_PAYMENT, self::APPOINTMENT_PAYMENT]],
             [['inquiry_doctor_id'], 'checkInquiry'],
             [['description', 'promo_code', 'first_name', 'last_name'], 'string'],
         ];
     }
-
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_REGULAR] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'amount', 'promo_code'];
-        $scenarios[self::SCENARIO_APPOINTMENT] = ['inquiry_doctor_id', 'stripeToken', 'first_name', 'last_name', 'payment_type', 'email', 'phone_number', 'date', 'amount', 'date', 'promo_code'];
-        return $scenarios;
-    }
-
+    
     /**
      * Validation for inquiry id.
      */
@@ -71,6 +51,8 @@ class Payment extends Model
                     // Than check min price with bonuses.
                 } elseif ($model->status == $model::STATUS_FINALIZED) {
                     $this->addError('inquiry_doctor_id', Yii::t('app', 'Already paid.'));
+                } elseif($model->status == $model::STATUS_BOOKED) {
+                    $this->addError('inquiry_doctor_id', Yii::t('app', 'You can`t purchase booked order.'));
                 }
             }
         } else {
@@ -135,7 +117,7 @@ class Payment extends Model
             $this->description
         );
 
-        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id, $this->first_name, $this->last_name, $this->payment_type);
+        $pay = $payment->pay($paid_offers[0]->inquiry_id, $paid_offers[0]->user_id, $this->first_name, $this->last_name);
         $profile = Yii::$app->user->identity->userProfile;
         $profile->reward = $profile->reward - $bonuses;
 
@@ -158,20 +140,7 @@ class Payment extends Model
                     $model->id,
                 ];
             }
-            //var_dump('loh');
-            if ($this->payment_type == self::APPOINTMENT_PAYMENT) {
-               // var_dump('pidr');
-                $appointment = new Booking();
-                $appointment->inquiry_id = $paid_offers[0]->inquiry_id;
-                $appointment->first_name = $this->first_name;
-                $appointment->last_name = $this->last_name;
-                $appointment->last_name = $this->last_name;
-                $appointment->email = $this->email;
-                $appointment->phone_number = $this->phone_number;
-                $appointment->date = $this->date;
-                $appointment->save();
-            }
-
+            
             $registration_usage = PromoUsed::find()
                 ->andWhere(['used_while' => PromoUsed::USED_WHILE_REGISTRATION])
                 ->andWhere(['counted' => PromoUsed::NOT_COUNTED])
@@ -196,9 +165,9 @@ class Payment extends Model
     public function attributeLabels()
     {
         return [
-            'stripeToken'=>Yii::t('app','Stripe Token'),
-            'amount'=> Yii::t('app','Amount'),
-            'description'=>Yii::t('app','Description')
+            'stripeToken' => Yii::t('app', 'Stripe Token'),
+            'amount' => Yii::t('app', 'Amount'),
+            'description' => Yii::t('app', 'Description')
         ];
     }
 }

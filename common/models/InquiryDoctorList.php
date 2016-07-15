@@ -33,6 +33,7 @@ class InquiryDoctorList extends \yii\db\ActiveRecord
     const STATUS_NOT_ANSWERED = 0;
     const STATUS_ANSWER_YES = 1;
     const STATUS_FINALIZED = 3;
+    const STATUS_BOOKED = 4;
 
     const VIEWED_STATUS_YES = 1;
     const VIEWED_STATUS_NO = 0;

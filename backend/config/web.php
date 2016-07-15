@@ -84,6 +84,11 @@ $config = [
                 'roles' => ['manager'],
             ],
             [
+                'controllers' => ['booking'],
+                'allow' => true,
+                'roles' => ['manager'],
+            ],
+            [
                 'controllers' => ['invoice'],
                 'allow' => true,
                 'roles' => ['manager'],

@@ -10,12 +10,14 @@ namespace frontend\modules\api\v1\controllers;
 
 
 use common\models\InquiryDoctorList;
+use frontend\modules\api\v1\models\Booking;
 use frontend\modules\api\v1\models\DoctorOffer;
 use frontend\modules\api\v1\models\GetDoctorList;
 use frontend\modules\api\v1\models\Inquiry;
 
 use frontend\modules\api\v1\models\PaymentHistory;
 use common\models\User;
+use frontend\modules\api\v1\resources\ModelError;
 use Yii;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBasicAuth;
@@ -55,9 +57,9 @@ class InquiryController extends Controller
         return $behaviors;
     }
 
-    
-
-
+    /**
+     * @return array
+     */
     public function actionCreate()
     {
         $model = new Inquiry();
@@ -84,6 +86,9 @@ class InquiryController extends Controller
         return $model->errors;
     }
 
+    /**
+     * @return array
+     */
     public function actionOfferSearch()
     {
         $model = new Inquiry();
@@ -108,7 +113,9 @@ class InquiryController extends Controller
         return $model->errors;
     }
 
-
+    /**
+     * @return array
+     */
     public function actionGetDoctorList()
     {
         $model = new GetDoctorList();
@@ -119,6 +126,9 @@ class InquiryController extends Controller
         return $model->errors;
     }
 
+    /**
+     * @return array
+     */
     public function actionGetDoctorOffers()
     {
         $model = new DoctorOffer();
@@ -128,6 +138,9 @@ class InquiryController extends Controller
         return $model->errors;
     }
 
+    /**
+     * @return int|string
+     */
     public function actionGetNewOffers()
     {
 
@@ -148,7 +161,7 @@ class InquiryController extends Controller
             ->count();
         return $unviewed_count;
     }
-
+    
     /**
      * @return array
      */
@@ -157,6 +170,9 @@ class InquiryController extends Controller
         return PaymentHistory::getHistory();
     }
 
+    /**
+     * @return array
+     */
     public function actionHistory()
     {
         $model = \common\models\Inquiry::find()
@@ -188,5 +204,16 @@ class InquiryController extends Controller
             }
         }
         return $data;
+    }
+    
+    public function actionBook()
+    {
+        $model = new Booking();
+        $model->load(\Yii::$app->request->post(),'');
+        if ($model->validate()) {
+            $model->book();
+            return ['success'];
+        }
+        return ModelError::get($model);
     }
 }

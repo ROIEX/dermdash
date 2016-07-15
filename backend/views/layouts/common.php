@@ -193,7 +193,7 @@ $bundle = BackendAsset::register($this);
                             'label' => Yii::t('backend', 'Appointments'),
                             'icon' => '<i class="fa fa-calendar-check-o"></i>',
                             'url' => ['/booking/index'],
-                            'badge'=> Inquiry::countUserActivities(),
+                            'badge'=> \common\models\Booking::countNewAppointments(),
                             'badgeBgClass' => 'label-success',
                             'visible' => Yii::$app->user->can('manager')
                         ],

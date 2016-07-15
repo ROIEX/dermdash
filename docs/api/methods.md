@@ -329,11 +329,7 @@ inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-do
 stripeToken = Column(String, nullable=False)
 first_name = Column(String, nullable=False)
 last_name = Column(String, nullable=False)
-email = Column(String, nullable=True)
-date = Column(String, nullable=True) format 'MM/dd/yyyy HH:mm' (11/13/2013 13:07)
-phone_number = Column(String, nullable=True)
 promo_code = Column(String, nullable=True)
-payment_type = Column(Integer, nullable=False) 1 - for regular payment / 2 - for appointment
 ```
 
 Response:
@@ -356,6 +352,53 @@ Fields:
 
 ```
 inquiry_id = Column(Integer, nullable=False)
+```
+
+Response:
+
+```
+{
+  "success": true,
+  "data": [
+    {
+      "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
+      "clinic": "John",
+      "distance": "10 mile"
+      "city": "Los Angeles",
+      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png",
+      "photos": {
+         "http://path/image.jpg",
+         "http://path/image.jpg1"
+      }
+
+      "price": "123",
+      "special_price": 321,
+      "photo": false,
+      "rating": {
+        "stars": null,
+        "reviews": null
+      },
+      "add_info"=> "Some information",
+      "time_after_create": 942 -- in seconds.
+    }
+  ]
+}
+```
+
+## Get doctor inquiry list [/inquiry/book] [post]
+
+This method is used for booking.
+
+
+Fields:
+
+```
+inquiry_doctor_id = Column(Integer, nullable=False) -- get id from method get-doctor-offers, can be array if some offers are being paid (inquiry_doctor_id[] = 123)
+first_name = Column(String, nullable=False)
+last_name = Column(String, nullable=False)
+email = Column(String, nullable=False)
+phone_number = Column(String, nullable=False)
+date = Column(String, nullable=True) format 'MM/dd/yyyy HH:mm' (11/13/2013 13:07)
 ```
 
 Response:
