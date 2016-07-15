@@ -24,6 +24,7 @@ class Booking extends Model
             [['inquiry_doctor_id', 'first_name', 'last_name', 'email', 'phone_number', 'date'], 'required'],
             ['email', 'email'],
             ['date', 'date', 'format' => 'MM/dd/yyyy HH:mm'],
+            ['date', 'checkExistingDate'],
             [['inquiry_doctor_id'], 'checkInquiry'],
             [['first_name', 'last_name', 'phone_number'], 'string'],
         ];
@@ -48,6 +49,16 @@ class Booking extends Model
             }
         } else {
             $this->addError('inquiry_doctor_id', Yii::t('app', 'Inquiry doctor not found.'));
+        }
+    }
+
+    public function checkExistingDate($attribute, $params)
+    {
+        $start_date = date("Y-m-d H:i:s", strtotime($this->$attribute) - 60 * 60);
+        $end_date = date("Y-m-d H:i:s", strtotime($this->$attribute) + 60 * 60);
+        $bookings = \common\models\Booking::find()->where(['between', 'date', $start_date, $end_date])->all();
+        if (!empty($bookings)) {
+            $this->addError($attribute, Yii::t('app', 'This date is already booked, please pick another one'));
         }
     }
 
