@@ -32,7 +32,6 @@ class BookingController extends Controller
      */
     public function actionIndex()
     {
-        
         $searchModel = new BookingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

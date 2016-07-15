@@ -4,6 +4,7 @@ namespace frontend\modules\api\v1\models;
 use common\components\Mandrill;
 use common\models\Doctor;
 use common\models\InquiryDoctorList;
+use common\models\User;
 use Yii;
 use yii\base\Model;
 use yii\helpers\BaseInflector;
@@ -39,12 +40,20 @@ class Booking extends Model
         if (!empty($models)) {
             foreach ($models as $model) {
                 /* @var $model InquiryDoctorList */
-                if ($model->inquiry->user_id != Yii::$app->user->id) {
-                    $this->addError('inquiry_doctor_id', Yii::t('app', 'This is not your inquiry doctor.'));
-                } elseif ($model->status == $model::STATUS_FINALIZED) {
+                if ($model->status == $model::STATUS_FINALIZED) {
                     $this->addError('inquiry_doctor_id', Yii::t('app', 'You can`t book paid offer.'));
                 } elseif ($model->status == $model::STATUS_BOOKED) {
                     $this->addError('inquiry_doctor_id', Yii::t('app', 'Already booked.'));
+                }
+
+                if (!Yii::$app->user->isGuest) {
+                    if ($model->inquiry->user_id != Yii::$app->user->id) {
+                        $this->addError('inquiry_doctor_id', Yii::t('app', 'This is not your inquiry doctor.'));
+                    }
+                } else {
+                    if ($model->inquiry->user_id != User::GUEST_ACCOUNT_ID) {
+                        $this->addError('inquiry_doctor_id', Yii::t('app', 'This is not your inquiry doctor.'));
+                    }
                 }
             }
         } else {
@@ -78,7 +87,6 @@ class Booking extends Model
             $booking->first_name = $this->first_name;
             $booking->last_name = $this->last_name;
             $booking->inquiry_id = $booked_offers[0]->inquiry_id;
-
             if ($booking->save(false) && $this->sendMail($booked_offers)) {
                 return true;
             }
@@ -235,9 +243,8 @@ class Booking extends Model
             ];
 
 
-            var_dump($mandrill->messages->sendTemplate('Patient Booking Receipt', [], $patient_message));
-            var_dump($mandrill->messages->sendTemplate('Doctor Booking Receipt', [], $doctor_message));
-            exit;
+            $mandrill->messages->sendTemplate('Patient Booking Receipt', [], $patient_message);
+            $mandrill->messages->sendTemplate('Doctor Booking Receipt', [], $doctor_message);
             return true;
         }
     }
