@@ -332,15 +332,7 @@ last_name = Column(String, nullable=False)
 promo_code = Column(String, nullable=True)
 ```
 
-Response:
 
-```
-{
-  "success": true,
-  "data": [
-    "success"
-  ]
-}
 ```
 
 
@@ -407,30 +399,9 @@ Response:
 {
   "success": true,
   "data": [
-    {
-      "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
-      "clinic": "John",
-      "distance": "10 mile"
-      "city": "Los Angeles",
-      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png",
-      "photos": {
-         "http://path/image.jpg",
-         "http://path/image.jpg1"
-      }
-
-      "price": "123",
-      "special_price": 321,
-      "photo": false,
-      "rating": {
-        "stars": null,
-        "reviews": null
-      },
-      "add_info"=> "Some information",
-      "time_after_create": 942 -- in seconds.
-    }
+    "success"
   ]
 }
-```
 
 
 ## Get payments history. [/inquiry/get-history] [get]
