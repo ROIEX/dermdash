@@ -23,6 +23,5 @@ class Module extends \frontend\modules\api\Module
         //$handler = new ApiErrorHandler;
         //\Yii::$app->set('errorHandler', $handler);
        // $handler->register();
-        Yii::warning(json_encode($_REQUEST,JSON_PRETTY_PRINT),'request_log');
     }
 }

@@ -62,6 +62,20 @@ $config = [
             'tablePrefix' => getenv('DB_TABLE_PREFIX'),
             'charset' => 'utf8',
             'enableSchemaCache' => YII_ENV_PROD,
+
+//            'slaveConfig' => [
+//                'username' => 'root',
+//                'password' => '',
+//                'attributes' => [
+//                    // use a smaller connection timeout
+//                    PDO::ATTR_TIMEOUT => 5,
+//                ],
+//            ],
+//
+//            'slaves' => [
+//                ['dsn' => 'mysql:host=localhost;port=3306;dbname=dermdash_slave'],
+//            ],
+
         ],
 
         'log' => [

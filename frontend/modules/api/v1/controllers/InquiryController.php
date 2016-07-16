@@ -143,11 +143,8 @@ class InquiryController extends Controller
      */
     public function actionGetNewOffers()
     {
-
         $inquiry = new \common\models\Inquiry();
-        $abandoned_offers = $inquiry->getAbandonedInquiryList()
-            ->andWhere(['!=', 'list.is_viewed_by_patient', InquiryDoctorList::VIEWED_STATUS_YES])
-            ->all();
+        $abandoned_offers = $inquiry->getAbandonedInquiryList();
 
         if (!empty($abandoned_offers)) {
             $inquiry_id_list = ArrayHelper::map($abandoned_offers, 'id', 'id');
