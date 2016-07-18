@@ -8,7 +8,6 @@
 
 namespace frontend\modules\api\v1\resources;
 
-
 use Yii;
 use yii\web\ErrorHandler;
 use yii\web\Response;
@@ -27,7 +26,6 @@ class ApiErrorHandler extends ErrorHandler
             $response = new Response();
         }
 
-
         $response->data = $this->convertExceptionToArray($exception);
         $response->setStatusCode($this->getCode($exception));
 
@@ -40,14 +38,13 @@ class ApiErrorHandler extends ErrorHandler
 
     protected function convertExceptionToArray($exception)
     {
-
         $arr = ['message' => $exception->getMessage(), 'code' => $this->getCode($exception)];
         return $arr;
     }
 
     private function getCode($exception)
     {
-        if (empty($exception->statusCode)){
+        if (empty($exception->statusCode)) {
             $code = 500;
         } else {
             $code = $exception->statusCode;

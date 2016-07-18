@@ -195,150 +195,156 @@ class DoctorOffer extends Model
             ->andWhere(['inquiry_doctor_list.user_id' => $this->doctor_id])
             ->all();
 
-        $id_list = ArrayHelper::map($inquiryDoctorList, 'id', 'id');
+        if (!empty($inquiryDoctorList)) {
+            $id_list = ArrayHelper::map($inquiryDoctorList, 'id', 'id');
 
-        InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['id' => $id_list]);
+            InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['id' => $id_list]);
 
-        if ($inquiryDoctorList[0]->inquiry->type == Inquiry::TYPE_BRAND) {
+            if ($inquiryDoctorList[0]->inquiry->type == Inquiry::TYPE_BRAND) {
 
-            /** @var InquiryDoctorList $doctor_offer */
-            foreach ($inquiryDoctorList as $doctor_offer) {
-                unset($returnData);
-                $price = $doctor_offer->price;
+                /** @var InquiryDoctorList $doctor_offer */
+                foreach ($inquiryDoctorList as $doctor_offer) {
+                    unset($returnData);
+                    $price = $doctor_offer->price;
 
-                $returnData[$doctor_offer->user_id] = [
-                    'id' => $doctor_offer->id,
-                    'brand' => $doctor_offer->brandParam->brand->name,
-                    'price' => $price,
-                    'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
-                ];
-
-                if ($doctor_offer->brandParam->brand->per == Brand::PER_SESSION) {
-
-
-                    if (is_numeric($doctor_offer->brandParam->value)) {
-                        $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
-                    } else {
-                        $returnData[$doctor_offer->user_id]['sessions'] = 1;
-                        $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
-                    }
-                    $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
-
-                } else {
-                    $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
-                    $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
-
-                }
-
-
-                if (!isset($data[$doctor_offer->user_id])) {
-                    $data[$doctor_offer->user_id] = [
-                        'clinic'=> $doctor_offer->user->doctor->clinic,
-                        'doctor' => $doctor_offer->user->userProfile->getFullName(),
-                        'photo'=> $doctor_offer->user->userProfile->avatar_path ? $doctor_offer->user->userProfile->avatar_base_url .'/'. $doctor_offer->user->userProfile->avatar_path : false,
-                        'address' =>[
-                            'zip_code' => $doctor_offer->user->userProfile->zipcode,
-                            'state_id' => $doctor_offer->user->userProfile->state_id,
-                            'city' => $doctor_offer->user->userProfile->city,
-                            'address'=> $doctor_offer->user->userProfile->address
-                        ],
-                        'data' => $returnData
+                    $returnData[$doctor_offer->user_id] = [
+                        'id' => $doctor_offer->id,
+                        'brand' => $doctor_offer->brandParam->brand->name,
+                        'price' => $price,
+                        'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
                     ];
-                } else {
-                    $data[$doctor_offer->user_id]['data'][] =  $returnData[$doctor_offer->user_id];
-                }
 
-            }
-        } elseif($inquiryDoctorList[0]->inquiry->type == Inquiry::TYPE_TREATMENT) {
+                    if ($doctor_offer->brandParam->brand->per == Brand::PER_SESSION) {
 
-            /** @var InquiryTreatment $doctor_offer */
-            foreach ($inquiryDoctorList as $doctor_offer) {
-                $is_brand_provided = BrandProvidedTreatment::find()
-                    ->where(['treatment_param_id' => $doctor_offer->param_id ])
-                    ->with('brandParam.brand')
-                    ->all();
-                $returnData = [];
-                $brands_array = [];
-                $price = $doctor_offer->price;
-                $type = 'Session';
-                $count = 0;
-                if ($doctor_offer->inquiryTreatment->treatment_intensity_id) {
-                    $treatment_intensity = TreatmentIntensity::find()->where(['id' => $doctor_offer->inquiryTreatment->treatment_intensity_id])->with('brandParam.brand')->all();
-                    foreach ($treatment_intensity as $intensity) {
-                        $count += $intensity->count * (isset($doctor_offer->treatmentParam->treatment->session->session_count) ? $doctor_offer->treatmentParam->treatment->session->session_count : 1)    ;
-                        $brands_array[] = $intensity->brandParam->brand->name;
+
+                        if (is_numeric($doctor_offer->brandParam->value)) {
+                            $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
+                        } else {
+                            $returnData[$doctor_offer->user_id]['sessions'] = 1;
+                            $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
+                        }
+                        $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
+
+                    } else {
+                        $returnData[$doctor_offer->user_id]['param_name'] = $doctor_offer->brandParam->brand->getPer($doctor_offer->brandParam->brand->per);
+                        $returnData[$doctor_offer->user_id]['param_value'] = $doctor_offer->brandParam->value;
+
                     }
 
-                    $type = Brand::getPer($treatment_intensity[0]->brandParam->brand->per);
-                    $procedure_name =  implode(', ', $brands_array);
 
-                }  elseif ($doctor_offer->inquiryTreatment->severity_id){
+                    if (!isset($data[$doctor_offer->user_id])) {
+                        $data[$doctor_offer->user_id] = [
+                            'clinic'=> $doctor_offer->user->doctor->clinic,
+                            'doctor' => $doctor_offer->user->userProfile->getFullName(),
+                            'photo'=> $doctor_offer->user->userProfile->avatar_path ? $doctor_offer->user->userProfile->avatar_base_url .'/'. $doctor_offer->user->userProfile->avatar_path : false,
+                            'address' =>[
+                                'zip_code' => $doctor_offer->user->userProfile->zipcode,
+                                'state_id' => $doctor_offer->user->userProfile->state_id,
+                                'city' => $doctor_offer->user->userProfile->city,
+                                'address'=> $doctor_offer->user->userProfile->address
+                            ],
+                            'data' => $returnData
+                        ];
+                    } else {
+                        $data[$doctor_offer->user_id]['data'][] =  $returnData[$doctor_offer->user_id];
+                    }
 
-                    $treatment_severity = TreatmentParamSeverity::find()
-                        ->where(['severity_id' => $doctor_offer->inquiryTreatment->severity_id])
-                        ->andWhere(['param_id' => $doctor_offer->param_id])
+                }
+            } elseif($inquiryDoctorList[0]->inquiry->type == Inquiry::TYPE_TREATMENT) {
+
+                /** @var InquiryTreatment $doctor_offer */
+                foreach ($inquiryDoctorList as $doctor_offer) {
+                    $is_brand_provided = BrandProvidedTreatment::find()
+                        ->where(['treatment_param_id' => $doctor_offer->param_id ])
                         ->with('brandParam.brand')
                         ->all();
-                    foreach ($treatment_severity as $severity) {
-                        $count += $severity->count;
-                        $brands_array[] = $severity->brandParam->brand->name;
+                    $returnData = [];
+                    $brands_array = [];
+                    $price = $doctor_offer->price;
+                    $type = 'Session';
+                    $count = 0;
+                    if ($doctor_offer->inquiryTreatment->treatment_intensity_id) {
+                        $treatment_intensity = TreatmentIntensity::find()->where(['id' => $doctor_offer->inquiryTreatment->treatment_intensity_id])->with('brandParam.brand')->all();
+                        foreach ($treatment_intensity as $intensity) {
+                            $count += $intensity->count * (isset($doctor_offer->treatmentParam->treatment->session->session_count) ? $doctor_offer->treatmentParam->treatment->session->session_count : 1)    ;
+                            $brands_array[] = $intensity->brandParam->brand->name;
+                        }
+
+                        $type = Brand::getPer($treatment_intensity[0]->brandParam->brand->per);
+                        $procedure_name =  implode(', ', $brands_array);
+
+                    }  elseif ($doctor_offer->inquiryTreatment->severity_id){
+
+                        $treatment_severity = TreatmentParamSeverity::find()
+                            ->where(['severity_id' => $doctor_offer->inquiryTreatment->severity_id])
+                            ->andWhere(['param_id' => $doctor_offer->param_id])
+                            ->with('brandParam.brand')
+                            ->all();
+                        foreach ($treatment_severity as $severity) {
+                            $count += $severity->count;
+                            $brands_array[] = $severity->brandParam->brand->name;
+                        }
+
+                        $type = Brand::getPer($treatment_severity[0]->brandParam->brand->per);
+                        $procedure_name =  implode(', ', $brands_array);
+
+
+                    } elseif(!empty($is_brand_provided)) {
+
+                        foreach ($is_brand_provided as $item_provided) {
+                            $count += $item_provided->count;
+                            $brands_array[] = $item_provided->brandParam->brand->name;
+                        }
+
+                        $type = Brand::getPer($is_brand_provided[0]->brandParam->brand->per);
+                        $procedure_name =  implode(', ', $brands_array);
+
+                    } else {
+                        $procedure_name = $doctor_offer->treatmentParam->treatment->name;
                     }
 
-                    $type = Brand::getPer($treatment_severity[0]->brandParam->brand->per);
-                    $procedure_name =  implode(', ', $brands_array);
-
-                } elseif(!empty($is_brand_provided)) {
-
-                    foreach ($is_brand_provided as $item_provided) {
-                        $count += $item_provided->count;
-                        $brands_array[] = $item_provided->brandParam->brand->name;
+                    if ($count == 0) {
+                        $count = !empty($doctor_offer->inquiryTreatment->session) ? $doctor_offer->inquiryTreatment->session->session_count : 0;
                     }
-
-                    $type = Brand::getPer($is_brand_provided[0]->brandParam->brand->per);
-                    $procedure_name =  implode(', ', $brands_array);
-
-                } else {
-                    $procedure_name = $doctor_offer->treatmentParam->treatment->name;
-                }
-
-                if ($count == 0) {
-                    $count = !empty($doctor_offer->inquiryTreatment->session) ? $doctor_offer->inquiryTreatment->session->session_count : 0;
-                }
-                $userProfile = UserProfile::findOne($doctor_offer->user_id);
-                $returnData = [
-                    'id' => $doctor_offer->id,
-                    'procedure_name' => $procedure_name,
-                    'param' => $doctor_offer->treatmentParam->value,
-                    'price' => $price,
-                    'param_name' => $type,
-                    'amount' => $count,
-                    'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
-                ];
-
-                if (!isset($data)) {
-                    $data = [
-                        'clinic'=> $doctor_offer->user->doctor->clinic,
-                        'photo'=> $userProfile->avatar_path ? $userProfile->avatar_base_url.'/'.$userProfile->avatar_path : false,
-                        'biography' => $userProfile->user->doctor->biography,
-                        'address'=>[
-                            'zip_code' => $userProfile->zipcode,
-                            'state_id' => $userProfile->state_id,
-                            'city' => $userProfile->city,
-                            'address' => $userProfile->address
-                        ],
-                        'rating'=>[
-                            'stars' => $userProfile->rating,
-                            'reviews' => $userProfile->reviews
-                        ],
-                        'data' => []
+                    $userProfile = UserProfile::findOne($doctor_offer->user_id);
+                    $returnData = [
+                        'id' => $doctor_offer->id,
+                        'procedure_name' => $procedure_name,
+                        'param' => $doctor_offer->treatmentParam->value,
+                        'price' => $price,
+                        'param_name' => $type,
+                        'amount' => $count,
+                        'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
                     ];
-                }
 
-                array_push($data['data'], $returnData);
+                    if (!isset($data)) {
+                        $data = [
+                            'clinic'=> $doctor_offer->user->doctor->clinic,
+                            'photo'=> $userProfile->avatar_path ? $userProfile->avatar_base_url.'/'.$userProfile->avatar_path : false,
+                            'biography' => $userProfile->user->doctor->biography,
+                            'address'=>[
+                                'zip_code' => $userProfile->zipcode,
+                                'state_id' => $userProfile->state_id,
+                                'city' => $userProfile->city,
+                                'address' => $userProfile->address
+                            ],
+                            'rating'=>[
+                                'stars' => $userProfile->rating,
+                                'reviews' => $userProfile->reviews
+                            ],
+                            'data' => []
+                        ];
+                    }
+
+                    array_push($data['data'], $returnData);
+                }
+            } else {
+                return false;
             }
-        } else {
-            return false;
+            return $data;
         }
-        return $data;
+
+        return false;
+
     }
 }
