@@ -194,7 +194,7 @@ class DoctorOffer extends Model
             ->with('user.userProfile')
             ->andWhere(['inquiry_doctor_list.user_id' => $this->doctor_id])
             ->all();
-        
+
         if (!empty($inquiryDoctorList)) {
             $id_list = ArrayHelper::map($inquiryDoctorList, 'id', 'id');
 
@@ -344,7 +344,8 @@ class DoctorOffer extends Model
             return $data;
         }
 
-        return false;
+        \Yii::$app->response->setStatusCode(409);
+        return Yii::t('app', 'No offers available');
 
     }
 }
