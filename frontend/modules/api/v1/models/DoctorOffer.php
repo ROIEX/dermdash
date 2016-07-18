@@ -2,22 +2,17 @@
 
 namespace frontend\modules\api\v1\models;
 
-
 use common\models\Brand;
 use common\models\BrandProvidedTreatment;
-use common\models\DoctorBrand;
-use common\models\DoctorTreatment;
 use common\models\Inquiry;
 use common\models\InquiryDoctorList;
 use common\models\InquiryTreatment;
 use common\models\Settings;
 use common\models\TreatmentIntensity;
 use common\models\TreatmentParamSeverity;
-use common\models\TreatmentSession;
 use frontend\modules\api\v1\resources\UserProfile;
 use Yii;
 use yii\base\Model;
-use yii\helpers\Inflector;
 use yii\helpers\ArrayHelper;
 
 class DoctorOffer extends Model
@@ -235,15 +230,30 @@ class DoctorOffer extends Model
 
 
                     if (!isset($data[$doctor_offer->user_id])) {
+
+                        $photos = $doctor_offer->user->doctor->doctorPhotos;
+                        $photo_array = [];
+                        if (!empty($photos)) {
+                            foreach ($photos as $photo) {
+                                $photo_array[] = $photo->base_url . '/' . $photo->path;
+                            }
+                        }
+                        $userProfile = UserProfile::findOne($doctor_offer->user_id);
                         $data[$doctor_offer->user_id] = [
                             'clinic'=> $doctor_offer->user->doctor->clinic,
                             'doctor' => $doctor_offer->user->userProfile->getFullName(),
                             'photo'=> $doctor_offer->user->userProfile->avatar_path ? $doctor_offer->user->userProfile->avatar_base_url .'/'. $doctor_offer->user->userProfile->avatar_path : false,
+                            'photos' =>  $photo_array,
                             'address' =>[
                                 'zip_code' => $doctor_offer->user->userProfile->zipcode,
                                 'state_id' => $doctor_offer->user->userProfile->state_id,
                                 'city' => $doctor_offer->user->userProfile->city,
                                 'address'=> $doctor_offer->user->userProfile->address
+                            ],
+                            'rating' => [
+                                'stars' => $userProfile->rating,
+                                'reviews' => $userProfile->reviews,
+                                'mobile_url' => $userProfile->mobile_url
                             ],
                             'data' => $returnData
                         ];
