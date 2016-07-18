@@ -239,13 +239,13 @@ class SaveDoctorsBehavior extends Behavior
                         $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     } else {
                         $prices[$doctor->user_id] =  $doctor_brand->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
-                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     }
 
                     if (!empty($special_prices[$doctor->user_id])) {
-                        $special_prices[$doctor->user] += !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                        $special_prices[$doctor->user_id] += !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     } else {
-                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
                     }
                 }
             }

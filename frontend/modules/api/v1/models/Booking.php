@@ -19,6 +19,8 @@ class Booking extends Model
     public $date;
     public $email;
 
+    public $inquiry;
+
     public function rules()
     {
         return [
@@ -38,6 +40,7 @@ class Booking extends Model
     {
         $models = InquiryDoctorList::findAll($this->inquiry_doctor_id);
         if (!empty($models)) {
+            $this->inquiry = $models[0];
             foreach ($models as $model) {
                 /* @var $model InquiryDoctorList */
                 if ($model->status == $model::STATUS_FINALIZED) {
@@ -65,9 +68,13 @@ class Booking extends Model
     {
         $start_date = date("Y-m-d H:i:s", strtotime($this->$attribute) - 60 * 60);
         $end_date = date("Y-m-d H:i:s", strtotime($this->$attribute) + 60 * 60);
-        $bookings = \common\models\Booking::find()->where(['between', 'date', $start_date, $end_date])->all();
+        $bookings = \common\models\Booking::find()
+            ->where(['inquiry_id' => $this->inquiry])
+            ->andWhere(['between', 'date', $start_date, $end_date])
+            ->all();
         if (!empty($bookings)) {
-            $this->addError($attribute, Yii::t('app', 'This date is already booked, please pick another one'));
+            $this->addError($attribute, Yii::t('app', '{date} is already booked, please pick another one',
+                ['date' => date("Y-m-d H:i", strtotime($this->$attribute)) ]));
         }
     }
 

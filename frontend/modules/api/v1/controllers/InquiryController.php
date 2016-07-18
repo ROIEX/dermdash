@@ -209,7 +209,6 @@ class InquiryController extends Controller
         $model->load(\Yii::$app->request->post(),'');
         if ($model->validate()) {
             if ($model->book()) {
-                
                 return ['success'];
             };
             return ['error'];
