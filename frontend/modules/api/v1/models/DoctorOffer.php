@@ -206,12 +206,14 @@ class DoctorOffer extends Model
                 foreach ($inquiryDoctorList as $doctor_offer) {
                     unset($returnData);
                     $price = $doctor_offer->price;
+                    $special_price = $doctor_offer->special_price;
 
                     $returnData[$doctor_offer->user_id] = [
                         'id' => $doctor_offer->id,
                         'brand' => $doctor_offer->brandParam->brand->name,
                         'price' => $price,
-                        'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
+                        'special_price' => $special_price,
+                        'reward' => (!is_null($special_price) ? $special_price : $price ) * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100
                     ];
 
                     if ($doctor_offer->brandParam->brand->per == Brand::PER_SESSION) {
@@ -261,6 +263,7 @@ class DoctorOffer extends Model
                     $returnData = [];
                     $brands_array = [];
                     $price = $doctor_offer->price;
+                    $special_price = $doctor_offer->special_price;
                     $type = 'Session';
                     $count = 0;
                     if ($doctor_offer->inquiryTreatment->treatment_intensity_id) {
@@ -312,15 +315,27 @@ class DoctorOffer extends Model
                         'procedure_name' => $procedure_name,
                         'param' => $doctor_offer->treatmentParam->value,
                         'price' => $price,
+                        'special_price' => $special_price,
                         'param_name' => $type,
                         'amount' => $count,
-                        'reward' => ($price * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100)
+                        'reward' => (!is_null($special_price) ? $special_price : $price) * Settings::findOne(Settings::REWARD_AFTER_PAYMENT)->value / 100
                     ];
 
+
                     if (!isset($data)) {
+
+                        $photos = $doctor_offer->user->doctor->doctorPhotos;
+                        $photo_array = [];
+                        if (!empty($photos)) {
+                            foreach ($photos as $photo) {
+                                $photo_array[] = $photo->base_url . '/' . $photo->path;
+                            }
+                        }
+
                         $data = [
                             'clinic'=> $doctor_offer->user->doctor->clinic,
                             'photo'=> $userProfile->avatar_path ? $userProfile->avatar_base_url.'/'.$userProfile->avatar_path : false,
+                            'photos' =>  $photo_array,
                             'biography' => $userProfile->user->doctor->biography,
                             'address'=>[
                                 'zip_code' => $userProfile->zipcode,
@@ -330,7 +345,8 @@ class DoctorOffer extends Model
                             ],
                             'rating'=>[
                                 'stars' => $userProfile->rating,
-                                'reviews' => $userProfile->reviews
+                                'reviews' => $userProfile->reviews,
+                                'mobile_url' => $userProfile->mobile_url
                             ],
                             'data' => []
                         ];
