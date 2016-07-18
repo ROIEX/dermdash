@@ -194,12 +194,12 @@ class DoctorOffer extends Model
             ->with('user.userProfile')
             ->andWhere(['inquiry_doctor_list.user_id' => $this->doctor_id])
             ->all();
-        var_dump($inquiryDoctorList);
+        
         if (!empty($inquiryDoctorList)) {
             $id_list = ArrayHelper::map($inquiryDoctorList, 'id', 'id');
 
             InquiryDoctorList::updateAll(['is_viewed_by_patient' => InquiryDoctorList::VIEWED_STATUS_YES], ['id' => $id_list]);
-            var_dump($inquiryDoctorList[0]->inquiry);exit;
+
             if ($inquiryDoctorList[0]->inquiry->type == Inquiry::TYPE_BRAND) {
 
                 /** @var InquiryDoctorList $doctor_offer */
