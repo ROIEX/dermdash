@@ -377,7 +377,39 @@ Response:
 }
 ```
 
-## Get doctor inquiry list [/inquiry/book] [post]
+## Get doctor inquiry list [/inquiry/get-doctor-list] [post]
+
+This method is used for payment. Id is inquiry_doctor_id in payment method.
+
+Fields:
+
+```
+inquiry_id = Column(Integer, nullable=False)
+```
+
+Response:
+
+```
+{
+  "success": true,
+  "data": [
+    {
+      "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
+      "clinic": "John",
+      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png"
+      "price": "123",
+      "photo": false,
+      "rating": {
+        "stars": null,
+        "reviews": null
+      },
+      "time_after_create": 942 -- in seconds.
+    }
+  ]
+}
+```
+
+## Book an offer [/inquiry/book] [post]
 
 This method is used for booking.
 
@@ -750,6 +782,7 @@ Response (treatment):
         "id": 25,
         "procedure_name": "Chemical Peel",
         "param": "3 sessions",
+        "price": "222",
         "special_price": "123",
         "sessions": 0,
         "reward": 30.75

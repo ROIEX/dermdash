@@ -4,6 +4,7 @@ namespace frontend\modules\api\v1\models;
 
 use common\models\Brand;
 use common\models\BrandProvidedTreatment;
+use common\models\DoctorBrand;
 use common\models\Inquiry;
 use common\models\InquiryDoctorList;
 use common\models\InquiryTreatment;
@@ -175,7 +176,7 @@ class DoctorOffer extends Model
                 'reviews'=>$userProfile->reviews,
                 'mobile_url' => $userProfile->mobile_url
             ],
-            'data'=>$returnData
+            'data' => $returnData
         ];
         return $data;
     }
