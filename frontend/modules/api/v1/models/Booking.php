@@ -48,7 +48,7 @@ class Booking extends Model
                 } elseif ($model->status == $model::STATUS_BOOKED) {
                     $this->addError('inquiry_doctor_id', Yii::t('app', 'Already booked.'));
                 }
-
+                
                 if (!Yii::$app->user->isGuest) {
                     if ($model->inquiry->user_id != Yii::$app->user->id) {
                         $this->addError('inquiry_doctor_id', Yii::t('app', 'This is not your inquiry doctor.'));

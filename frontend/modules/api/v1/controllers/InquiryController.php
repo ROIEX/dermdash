@@ -205,6 +205,12 @@ class InquiryController extends Controller
     
     public function actionBook()
     {
+        $authHeader = Yii::$app->request->getHeaders()->get('Authorization');
+        $authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches);
+        if ($authHeader) {
+            Yii::$app->user->loginByAccessToken($matches[1], HttpBearerAuth::className());
+        }
+        
         $model = new Booking();
         $model->load(\Yii::$app->request->post(),'');
         if ($model->validate()) {
