@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($model->inquiry->user->id == \common\models\User::GUEST_ACCOUNT_ID || !Yii::$app->user->can('administrator')) {
                         return $model->email;
                     } else {
-                        return Html::a($model->inquiry->user->email, Url::toRoute(['patient/view', 'id' => $model->inquiry->user->id]));
+                        return Html::a($model->email, Url::toRoute(['patient/view', 'id' => $model->inquiry->user->id]));
                     }
 
                 },

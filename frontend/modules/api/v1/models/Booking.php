@@ -248,8 +248,7 @@ class Booking extends Model
                     ]
                 ],
             ];
-
-
+            
             $mandrill->messages->sendTemplate('Patient Booking Receipt', [], $patient_message);
             $mandrill->messages->sendTemplate('Doctor Booking Receipt', [], $doctor_message);
             return true;
