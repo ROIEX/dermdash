@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => Yii::t('app', 'Email'),
                 'format' => 'raw',
-                'value' => function ($model) {
+                'value' => function($model) {
                     if ($model->inquiry->user->id == \common\models\User::GUEST_ACCOUNT_ID || !Yii::$app->user->can('administrator')) {
                         return $model->email;
                     } else {
@@ -51,6 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'first_name',
             'last_name',
             'phone_number',
+            [
+                'label' => Yii::t('backend', 'Clinic Name'),
+                'value' => function($model) {
+                    return $model->inquiry->getBookedDoctor()->clinic;
+                }
+            ],
             [
                 'label' => Yii::t('backend', 'Reason'),
                 'value' => function($model) {

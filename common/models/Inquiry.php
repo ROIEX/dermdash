@@ -23,6 +23,7 @@ use yii\helpers\VarDumper;
  * @property User $user
  * @property InquiryBrand[] $inquiryBrands
  * @property InquiryTreatment[] $inquiryTreatments
+ * @property InquiryDoctorList[] $BookedInquiry
  * @property InquiryDoctorList $doctorAccepted
  * @property InquiryDoctorList[] $inquiryDoctorLists
  * @property InquiryDoctorList[] $existingDoctorOffer
@@ -40,6 +41,7 @@ class Inquiry extends \yii\db\ActiveRecord
     const STATUS_COMPLETED = 1;
     const STATUS_ABANDONED = 2;
     const STATUS_REFUNDED = 3;
+    const STATUS_BOOKED = 4;
 
     const INQUIRY_DAYS_ACTIVE = 2;
 
@@ -195,6 +197,14 @@ class Inquiry extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return $this
+     */
+    public function getBookedInquiry()
+    {
+        return $this->hasMany(InquiryDoctorList::className(), ['inquiry_id' => 'id'])->where([InquiryDoctorList::tableName() . '.' .'status' => InquiryDoctorList::STATUS_BOOKED]);
+    }
+
+    /**
      * @return array
      */
     public static function getCureTypeArray()
@@ -242,6 +252,14 @@ class Inquiry extends \yii\db\ActiveRecord
         } else {
             return '';
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBookedDoctor()
+    {
+        return InquiryDoctorList::find()->where(['=', 'status', InquiryDoctorList::STATUS_BOOKED])->one()->user->doctor;
     }
 
     /**
@@ -346,6 +364,7 @@ class Inquiry extends \yii\db\ActiveRecord
             self::STATUS_COMPLETED => Yii::t('app','Purchased'),
             self::STATUS_ABANDONED => Yii::t('app','Voided'),
             self::STATUS_REFUNDED => Yii::t('app','Refunded'),
+            self::STATUS_BOOKED => Yii::t('app','Booked'),
         ];
 
         return ($status === false) ? $array : $array[$status];
