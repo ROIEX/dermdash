@@ -354,6 +354,7 @@ Response:
   "data": [
     {
       "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
+      "inquiry_id": 4
       "clinic": "John",
       "distance": "10 mile"
       "city": "Los Angeles",
@@ -371,38 +372,6 @@ Response:
         "reviews": null
       },
       "add_info"=> "Some information",
-      "time_after_create": 942 -- in seconds.
-    }
-  ]
-}
-```
-
-## Get doctor inquiry list [/inquiry/get-doctor-list] [post]
-
-This method is used for payment. Id is inquiry_doctor_id in payment method.
-
-Fields:
-
-```
-inquiry_id = Column(Integer, nullable=False)
-```
-
-Response:
-
-```
-{
-  "success": true,
-  "data": [
-    {
-      "doctor_id": 4, -- Use this id for getting in method get inquiry doctor offers.
-      "clinic": "John",
-      "photo": "http://localhost/botox/storage/web/source/1/j4DnpszEy7epcUMf_N8QY0SRhbs7vLRG.png"
-      "price": "123",
-      "photo": false,
-      "rating": {
-        "stars": null,
-        "reviews": null
-      },
       "time_after_create": 942 -- in seconds.
     }
   ]
