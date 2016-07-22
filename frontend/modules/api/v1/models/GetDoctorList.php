@@ -75,9 +75,10 @@ class GetDoctorList extends Model
                         $photo_array[] =  $photo->base_url . '/' . $photo->path;
                     }
                 }
-
+         
                 $returnData[$userProfile->user_id] = [
                     'doctor_id' => $userProfile->user_id,
+                    'inquiry_id' => $list->inquiry_id,
                     'clinic'=> $list->user->doctor->clinic,
                     'city' => $list->user->userProfile->city,
                     'distance' => $distance,

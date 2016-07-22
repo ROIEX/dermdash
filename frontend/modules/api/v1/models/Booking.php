@@ -225,7 +225,7 @@ class Booking extends Model
                             ],
                             [
                                 'name' => 'patient_name',
-                                'content' => $this->first_name . ' ' . $this->last_name,
+                                'content' => $this->first_name . ' ' . strtoupper(substr($this->last_name, 0, 1)) . '.',
                             ],
                             [
                                 'name' => 'invoice_number',
