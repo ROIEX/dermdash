@@ -181,6 +181,10 @@ class Booking extends Model
                                 'content' => $doctor->clinic,
                             ],
                             [
+                                'name' => 'price',
+                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price : $list_model->price,
+                            ],
+                            [
                                 'name' => 'doctor_phone',
                                 'content' => $doctor->profile->phone,
                             ],
@@ -236,7 +240,11 @@ class Booking extends Model
                                 'content' => $this->email,
                             ],
                             [
-                                'name' => 'patient_phone',
+                                'name' => 'price',
+                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price : $list_model->price,
+                            ],
+                            [
+                                'name' => 'phone_number',
                                 'content' => $this->phone_number,
                             ],
                             [
