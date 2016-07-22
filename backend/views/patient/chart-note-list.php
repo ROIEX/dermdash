@@ -50,7 +50,7 @@ $this->registerJs($js);
                     'label' => Yii::t('app', 'Visit Status'),
                     'value' => function($data) {
                         if (!empty($data->bookedInquiry)) {
-                            return Yii::t('app', 'Booked');
+                            return Yii::t('app', 'Appointment Scheduled');
                         }
 
                         if (isset($data->payment)) {
@@ -63,7 +63,7 @@ $this->registerJs($js);
                     'label' => Yii::t('app', 'Purchase Status'),
                     'value' => function($data) {
                         if (!empty($data->bookedInquiry)) {
-                            return Yii::t('app', 'Booked');
+                            return Yii::t('app', 'Appointment Scheduled');
                         }
 
                         return $data->getInquiryStatus($data, true);
