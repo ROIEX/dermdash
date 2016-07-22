@@ -38,7 +38,7 @@ class InquiryController extends Controller
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::className(),
 
-            'except' => ['offer-search', 'book'],
+            'except' => ['offer-search', 'book', 'get-doctor-offers'],
             'authMethods' => [
                 [
                     'class' => HttpBasicAuth::className(),
