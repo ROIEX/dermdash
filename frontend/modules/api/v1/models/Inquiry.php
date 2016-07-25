@@ -30,7 +30,6 @@ class Inquiry extends Model
 
     public $treatment_param_id;
     public $session_id;
-   // public $additional_attribute_id;
     public $severity_id;
     public $treatment_intensity_id;
 
@@ -47,7 +46,7 @@ class Inquiry extends Model
             [['brand_param_id'],'required','on'=>self::SCENARIO_BRAND],
             ['count','integer','on'=>self::SCENARIO_BRAND],
             [['treatment_param_id'],'required','on'=>self::SCENARIO_TREATMENT],
-            [['session_id','severity_id','treatment_intensity_id'],'safe','on'=>self::SCENARIO_TREATMENT],
+            [['session_id', 'severity_id', 'treatment_intensity_id'], 'safe', 'on'=>self::SCENARIO_TREATMENT],
             ['session_id','required','when'=>function($model){
                 /* @var $model self */
                 $treatmentParam = TreatmentParam::findOne($model->treatment_param_id);
@@ -278,6 +277,7 @@ class Inquiry extends Model
                 }
             }
         }
+
         return false;
     }
 }

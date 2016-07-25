@@ -92,21 +92,20 @@ class InquiryController extends Controller
     public function actionOfferSearch()
     {
         $model = new Inquiry();
-        if ($model->load(Yii::$app->request->post(), '') && $model->validate()) {
-            $model->setNeededScenario();
+        if ($model->load(Yii::$app->request->post(), '')) {
             if (Yii::$app->user->isGuest) {
                 Yii::$app->user->login(User::findOne(User::GUEST_ACCOUNT_ID));
             }
-            if ($model->validate()) {
-                if ($model->save()) {
-                    $list_model = new GetDoctorList();
-                    $list_model->inquiry_id = $model->id;
-                    $result = $list_model->getDoctorList();
-                    if (Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
-                        Yii::$app->user->logout();
-                    }
-                    return $result;
-                }
+            $model->setNeededScenario();
+            $model->load(Yii::$app->request->post(), '');
+            if ($model->validate() && $model->save()) {
+                $list_model = new GetDoctorList();
+                $list_model->inquiry_id = $model->id;
+                $result = $list_model->getDoctorList();
+                return $result;
+            }
+            if (Yii::$app->user->identity->id == User::GUEST_ACCOUNT_ID) {
+                Yii::$app->user->logout();
             }
             return $model->errors;
         }

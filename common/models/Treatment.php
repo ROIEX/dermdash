@@ -167,6 +167,14 @@ class Treatment extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return $this
+     */
+    public function getActiveTreatmentParams()
+    {
+        return $this->hasMany(TreatmentParam::className(), ['treatment_id' => 'id'])->where(['status' =>true]);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getTreatmentSessions()

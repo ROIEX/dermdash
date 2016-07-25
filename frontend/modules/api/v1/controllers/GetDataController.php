@@ -62,7 +62,7 @@ class GetDataController extends Controller
     public function actionBodyParts()
     {
         return new ActiveDataProvider([
-            'query'=>BodyPart::find()
+            'query' => BodyPart::find()
         ]);
     }
 

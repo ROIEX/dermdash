@@ -99,7 +99,7 @@ class CollectData
         foreach ($allTreatments as $treatment) {
             /* @var $treatment Treatment */
             $params = [];
-            foreach ($treatment->treatmentParams as $param) {
+            foreach ($treatment->activeTreatmentParams as $param) {
                 /* @var $param TreatmentParam */
                 $severities = [];
                 foreach ($param->filledSeverity as $severity) {
