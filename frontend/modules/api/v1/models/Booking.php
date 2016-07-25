@@ -94,7 +94,7 @@ class Booking extends Model
             $booking->first_name = $this->first_name;
             $booking->last_name = $this->last_name;
             $booking->inquiry_id = $booked_offers[0]->inquiry_id;
-            if ($booking->save(false) && $this->sendMail($booked_offers)) {
+            if ($booking->save(false) && $this->sendMail($booked_offers, $booking->date)) {
                 return true;
             }
 
@@ -104,7 +104,7 @@ class Booking extends Model
         }
     }
 
-    public function sendMail($booked_offers)
+    public function sendMail($booked_offers, $date)
     {
         /** @var InquiryDoctorList $list_model */
         foreach ($booked_offers as $list_model) {
@@ -155,6 +155,10 @@ class Booking extends Model
                             [
                                 'name' => 'invoice_item',
                                 'content' => $item,
+                            ],
+                            [
+                                'name' => 'app_date',
+                                'content' => date("m-d-Y H:i", strtotime($date)),
                             ],
                             [
                                 'name' => 'current_year',
@@ -251,14 +255,18 @@ class Booking extends Model
                                 'name' => 'invoice_item',
                                 'content' => $item,
                             ],
+                            [
+                                'name' => 'invoice_number',
+                                'content' => $list_model->inquiry_id,
+                            ],
 
                         ]
                     ]
                 ],
             ];
             
-            $mandrill->messages->sendTemplate('Patient Booking Receipt', [], $patient_message);
-            $mandrill->messages->sendTemplate('Doctor Booking Receipt', [], $doctor_message);
+            $mandrill->messages->sendTemplate('Patient Appointment Confirmation', [], $patient_message);
+            $mandrill->messages->sendTemplate('Doctor Appointment Confirmation', [], $doctor_message);
             return true;
         }
     }
