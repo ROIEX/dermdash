@@ -228,6 +228,14 @@ class Booking extends Model
                                 'content' => Yii::$app->name,
                             ],
                             [
+                                'name' => 'app_date',
+                                'content' => date("F j, Y", strtotime($date)),
+                            ],
+                            [
+                                'name' => 'app_time',
+                                'content' => date("H:i a", strtotime($date)),
+                            ],
+                            [
                                 'name' => 'current_year',
                                 'content' => date('Y'),
                             ],
@@ -245,7 +253,7 @@ class Booking extends Model
                             ],
                             [
                                 'name' => 'price',
-                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price : $list_model->price,
+                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price . ' $' : $list_model->price . ' $',
                             ],
                             [
                                 'name' => 'phone_number',
