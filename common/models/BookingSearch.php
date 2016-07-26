@@ -41,7 +41,7 @@ class BookingSearch extends Booking
      */
     public function search($params)
     {
-        $query = Booking::find()->with('inquiry');
+        $query = Booking::find()->with('inquiry')->orderBy('id DESC');
         $id_list = ArrayHelper::getColumn($query->all(), 'id');
         
         if (Yii::$app->user->can('administrator')) {

@@ -565,7 +565,7 @@ class Inquiry extends \yii\db\ActiveRecord
                 if ($doctor_offer->inquiryTreatment->treatment_intensity_id) {
                     $treatment_intensity = TreatmentIntensity::find()->where(['id' => $doctor_offer->inquiryTreatment->treatment_intensity_id])->with('brandParam.brand')->all();
                     foreach ($treatment_intensity as $intensity) {
-                        $count += $intensity->count * (isset($doctor_offer->treatmentParam->treatment->session->session_count) ? $doctor_offer->treatmentParam->treatment->session->session_count : 1)    ;
+                        $count += $intensity->count * (isset($doctor_offer->treatmentParam->treatment->treatmentSessions->session_count) ? $doctor_offer->treatmentParam->treatment->treatmentSessions->session_count : 1)    ;
                         $brands_array[] = $intensity->brandParam->brand->name;
                     }
 
