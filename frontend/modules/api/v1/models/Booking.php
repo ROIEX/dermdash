@@ -158,7 +158,11 @@ class Booking extends Model
                             ],
                             [
                                 'name' => 'app_date',
-                                'content' => date("m-d-Y H:i", strtotime($date)),
+                                'content' => date("F j, Y", strtotime($date)),
+                            ],
+                            [
+                                'name' => 'app_time',
+                                'content' => date("H:i a", strtotime($date)),
                             ],
                             [
                                 'name' => 'current_year',
