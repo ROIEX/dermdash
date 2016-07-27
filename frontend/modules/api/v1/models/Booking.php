@@ -190,7 +190,7 @@ class Booking extends Model
                             ],
                             [
                                 'name' => 'price',
-                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price : $list_model->price,
+                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? '$' . $list_model->special_price : '$' . $list_model->price,
                             ],
                             [
                                 'name' => 'doctor_phone',
@@ -257,7 +257,7 @@ class Booking extends Model
                             ],
                             [
                                 'name' => 'price',
-                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ? $list_model->special_price . ' $' : $list_model->price . ' $',
+                                'content' => (!is_null($list_model->special_price) && !empty($list_model->special_price)) ?  '$' . $list_model->special_price : '$' . $list_model->price,
                             ],
                             [
                                 'name' => 'phone_number',
