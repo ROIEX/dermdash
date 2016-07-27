@@ -94,7 +94,7 @@ class Inquiry extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'user_id' => Yii::t('app', 'User ID'),
             'type' => Yii::t('app', 'Type'),
-            'created_at' => Yii::t('app', 'Created At'),
+            'created_at' => Yii::t('app', 'Created at'),
             'comment' => Yii::t('app', 'Comment'),
         ];
     }

@@ -31,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'created_at',
+                'value' => function($model) {
+                    return \common\components\dateformatter\FormatDate::AmericanFormatFromTimestamp($model->created_at);
+                }
+            ],
+            [
                 'attribute' => 'date',
                 'value' => function($model) {
                     return \common\components\dateformatter\FormatDate::AmericanFormat($model->date);

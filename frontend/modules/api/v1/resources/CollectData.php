@@ -78,7 +78,7 @@ class CollectData
                 'brand_name'=>$brand->name,
                 'sub_string'=>$brand->sub_string,
                 'instruction'=>$brand->instruction,
-                'icon_url'=>$icon_url,
+                'icon_url' => $icon_url,
                 'treatment_id'=>$brand->treatment_id,
                 'is_dropdown'=>$brand->is_dropdown,
                 'param_multiselect'=>$brand->param_multiselect,
@@ -126,11 +126,7 @@ class CollectData
                     'count'=>$session->session_count
                 ];
             }
-            $icon_url = $treatment->icon_path ? Yii::$app->glide->createSignedUrl([
-                'glide/index',
-                'path' => $treatment->icon_path,
-                'w' => 200
-            ], true) : false;
+            $icon_url = $treatment->icon_path ? $treatment->icon_base_url . $treatment->icon_path : false;
             $intensities = [];
             foreach ($treatment->treatmentIntensity as $intensity) {
                 $intensities[] = [
@@ -144,7 +140,7 @@ class CollectData
                 'treatment_id' => $treatment->id,
                 'sub_string'=>$treatment->sub_string,
                 'instruction'=>$treatment->instruction,
-                'icon_url'=>$icon_url,
+                'icon_url'=> $icon_url,
                 'param_multiselect'=>$treatment->param_multiselect,
                 'select_both_button'=>$treatment->select_both_button,
                 'buttons_in_row'=>$treatment->buttons_in_row,

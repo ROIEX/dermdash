@@ -35,6 +35,12 @@ $this->registerJs($js);
             }
         ],
         [
+            'attribute' => 'created_at',
+            'value' => function($model) {
+                return FormatDate::AmericanFormatFromTimestamp($model->created_at);
+            }
+        ],
+        [
             'label' => Yii::t('app', 'Patient'),
             'format' => 'raw',
             'value' => function ($data) {

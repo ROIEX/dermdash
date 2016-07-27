@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -12,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $inquiry_id
  * @property integer $is_viewed
  * @property integer $is_viewed_admin
+ * @property integer $created_at
  * @property string $first_name
  * @property string $last_name
  * @property string $email
@@ -28,6 +31,18 @@ class Booking extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'booking';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ]
+        ];
     }
 
     public function beforeSave($insert)
