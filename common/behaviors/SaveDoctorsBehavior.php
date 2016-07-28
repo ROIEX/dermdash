@@ -92,7 +92,6 @@ class SaveDoctorsBehavior extends Behavior
             return true;
         }
         if (!$model->severity && !$model->treatmentIntensity) {
-
             $query = new Query();
             $query->select('`doctor`.`user_id`,`doctor_treatment`.`price`,`doctor_treatment`.`special_price`')
                 ->from(Doctor::tableName())
@@ -131,6 +130,7 @@ class SaveDoctorsBehavior extends Behavior
                 return $e->getMessage();
             }
         } elseif($model->treatmentIntensity && !$model->severity){
+
 
             $brand_query = DoctorBrand::find()
                 ->where(['brand_param_id' =>  $model->treatmentIntensity->brand_param_id])
@@ -196,6 +196,7 @@ class SaveDoctorsBehavior extends Behavior
                 return $e->getMessage();
             }
         } else {
+
             $brand_params_array = [];
             foreach ($model->getTreatmentSeveritiesByParam() as $severity) {
                 $brand_params_array[] = $severity->brandParam->id;
@@ -235,20 +236,21 @@ class SaveDoctorsBehavior extends Behavior
                 foreach ($doctors as $doctor) {
                     $doctor_brand = $doctor->getDoctorBrandPrice($treatmentParamSeverity->brandParam->brand->brandParams[0]->id);
                     if (!empty($prices[$doctor->user_id])) {
-                        $prices[$doctor->user_id] +=  $doctor_brand->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
-                        $special_prices[$doctor->user] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                        $prices[$doctor->user_id] +=  $doctor_brand->price * $treatmentParamSeverity->brandParam->value * $treatmentParamSeverity->count;
+                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price * $treatmentParamSeverity->brandParam->value * $treatmentParamSeverity->count : null;
                     } else {
                         $prices[$doctor->user_id] =  $doctor_brand->price * $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count;
-                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
+                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price * $treatmentParamSeverity->brandParam->value * $treatmentParamSeverity->count : null;
                     }
 
-                    if (!empty($special_prices[$doctor->user_id])) {
-                        $special_prices[$doctor->user_id] += !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
-                    } else {
-                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price* $treatmentParamSeverity->brandParam->value *$treatmentParamSeverity->count : null;
-                    }
+//                    if (!empty($special_prices[$doctor->user_id])) {
+//                        $special_prices[$doctor->user_id] += !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price * $treatmentParamSeverity->brandParam->value * $treatmentParamSeverity->count : 0;
+//                    } else {
+//                        $special_prices[$doctor->user_id] = !is_null($doctor_brand->special_price) ?  $doctor_brand->special_price * $treatmentParamSeverity->brandParam->value * $treatmentParamSeverity->count : null;
+//                    }
                 }
             }
+
             foreach ($prices as $doctor_id => $price) {
                 $modelList = new InquiryDoctorList();
                 $modelList->user_id = $doctor_id;
