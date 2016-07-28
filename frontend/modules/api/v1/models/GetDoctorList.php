@@ -56,6 +56,7 @@ class GetDoctorList extends Model
             $userProfile = UserProfile::findOne(['user_id' => $list->user_id]);
             if (!empty($returnData[$userProfile->user_id])) {
                 $returnData[$userProfile->user_id]['price'] += $list->price;
+                $returnData[$userProfile->user_id]['special_price'] += $list->special_price;
             } else {
                 if (Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
                     $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
