@@ -257,9 +257,9 @@ class Inquiry extends \yii\db\ActiveRecord
     /**
      * @return mixed
      */
-    public function getBookedDoctor()
+    public function getBookedDoctor($inquiry_id)
     {
-        return InquiryDoctorList::find()->where(['=', 'status', InquiryDoctorList::STATUS_BOOKED])->one()->user->doctor;
+        return InquiryDoctorList::find()->where(['inquiry_id' => $inquiry_id])->andWhere(['=', 'status', InquiryDoctorList::STATUS_BOOKED])->one()->user->doctor;
     }
 
     /**

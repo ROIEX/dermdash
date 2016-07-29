@@ -59,8 +59,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone_number',
             [
                 'label' => Yii::t('backend', 'Clinic Name'),
+                'format' => 'raw',
                 'value' => function($model) {
-                    return $model->inquiry->getBookedDoctor()->clinic;
+                    $doctor = $model->inquiry->getBookedDoctor($model->inquiry_id);
+                    return Html::a($doctor->clinic, Url::toRoute(['/doctor/view', 'id' => $doctor->id]));
                 }
             ],
             [
