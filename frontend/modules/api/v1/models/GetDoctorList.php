@@ -37,7 +37,6 @@ class GetDoctorList extends Model
     public function getDoctorList()
     {
         $curl = new Curl();
-       // $curl->setOption(CURLOPT_CAINFO, Yii::getAlias('@base') . "../../cacert.pem");
         $inquiryDoctorList = InquiryDoctorList::findAll([
             'inquiry_id' => $this->inquiry_id
         ]);
@@ -56,7 +55,7 @@ class GetDoctorList extends Model
             $userProfile = UserProfile::findOne(['user_id' => $list->user_id]);
             if (!empty($returnData[$userProfile->user_id])) {
                 $returnData[$userProfile->user_id]['price'] += $list->price;
-                $returnData[$userProfile->user_id]['special_price'] += $list->special_price;
+                $returnData[$userProfile->user_id]['special_price'] += $list->special_price != 0 ? $list->special_price : $list->price;
             } else {
                 if (Yii::$app->user->identity->id != User::GUEST_ACCOUNT_ID) {
                     $result = $curl->get('https://www.zipcodeapi.com/rest/' . Yii::$app->params['zipCodeServiceApiKey'] .'/distance.json/'. $userProfile->zipcode .'/'. Yii::$app->user->identity->userProfile->zipcode .'/mile');
@@ -76,7 +75,8 @@ class GetDoctorList extends Model
                         $photo_array[] =  $photo->base_url . '/' . $photo->path;
                     }
                 }
-         
+
+
                 $returnData[$userProfile->user_id] = [
                     'doctor_id' => $userProfile->user_id,
                     'inquiry_id' => $list->inquiry_id,
@@ -86,7 +86,7 @@ class GetDoctorList extends Model
                     'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'photos' =>  $photo_array,
                     'price' => $list->price,
-                    'special_price' => $list->special_price,
+                    'special_price' => $list->special_price == $list->price ? '' : $list->special_price,
                     'rating'=> [
                         'stars' => $userProfile->rating,
                         'reviews' => $userProfile->reviews
