@@ -124,12 +124,16 @@ class DoctorTreatment extends \yii\db\ActiveRecord
                 if (array_key_exists($treatment_params[$treatment_param_id]->treatment->id, $treatment_discounts)) {
                     foreach ($treatment_discounts[$treatment_params[$treatment_param_id]->treatment->id] as $session_id => $discount_value) {
                         $session = TreatmentSession::findOne(['id' => $session_id]);
+                        $special_price = isset($treatment_special[$treatment_param_id]) ? abs($treatment_special[$treatment_param_id]) : null;
+                        if (!is_null($special_price)) {
+                            $special_price *= (1 - $discount_value / 100) * $session->session_count;
+                        }
                         $doctor_treatment_param_list[] = [
                             'user_id' => $user_id,
                             'treatment_param_id' => $treatment_param_id,
                             'treatment_session_id' => $session_id,
                             'price' => (double)($treatment_param_value * (1 - $discount_value / 100)) * $session->session_count,
-                            'special_price' => isset($treatment_special[$treatment_param_id]) ? abs($treatment_special[$treatment_param_id]) : null
+                            'special_price' => $special_price
                         ];
                     }
                 }
