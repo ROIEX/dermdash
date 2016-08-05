@@ -76,7 +76,6 @@ class GetDoctorList extends Model
                     }
                 }
 
-
                 $returnData[$userProfile->user_id] = [
                     'doctor_id' => $userProfile->user_id,
                     'inquiry_id' => $list->inquiry_id,
@@ -86,7 +85,7 @@ class GetDoctorList extends Model
                     'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'photos' =>  $photo_array,
                     'price' => $list->price,
-                    'special_price' => $list->special_price == $list->price ? '' : $list->special_price,
+                    'special_price' => $list->special_price != 0 ? $list->special_price : $list->price,
                     'rating'=> [
                         'stars' => $userProfile->rating,
                         'reviews' => $userProfile->reviews
