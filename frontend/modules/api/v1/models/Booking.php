@@ -94,6 +94,9 @@ class Booking extends Model
             $booking->first_name = $this->first_name;
             $booking->last_name = $this->last_name;
             $booking->inquiry_id = $booked_offers[0]->inquiry_id;
+            $booking->is_viewed = 0;
+            $booking->is_viewed_admin = 0;
+            
             if ($booking->save(false) && $this->sendMail($booked_offers, $booking->date)) {
                 return true;
             }
@@ -277,8 +280,8 @@ class Booking extends Model
                 ],
             ];
             
-            $mandrill->messages->sendTemplate('Patient Appointment Confirmation', [], $patient_message);
-            $mandrill->messages->sendTemplate('Doctor Appointment Confirmation', [], $doctor_message);
+            //$mandrill->messages->sendTemplate('Patient Appointment Confirmation', [], $patient_message);
+            //$mandrill->messages->sendTemplate('Doctor Appointment Confirmation', [], $doctor_message);
             return true;
         }
     }

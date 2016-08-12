@@ -63,7 +63,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model) {
                     $doctor = $model->inquiry->getBookedDoctor($model->inquiry_id);
                     return Html::a($doctor->clinic, Url::toRoute(['/doctor/view', 'id' => $doctor->id]));
-                }
+                },
+                'visible' => Yii::$app->user->can('administrator')
+
             ],
             [
                 'label' => Yii::t('backend', 'Reason'),

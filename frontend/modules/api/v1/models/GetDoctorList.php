@@ -94,8 +94,8 @@ class GetDoctorList extends Model
                     'time_after_create' => time() - $inquiryDoctorList[0]->inquiry->created_at
 
                 ];
-            }
 
+            }
         }
         return array_values($returnData);
     }

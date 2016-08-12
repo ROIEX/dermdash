@@ -97,10 +97,13 @@ class Booking extends \yii\db\ActiveRecord
             $new_appointments = self::find()->where(['is_viewed_admin' => false])->count();
             
         } else {
-            $booked_inquiriry_ids = ArrayHelper::getColumn(InquiryDoctorList::find()->where(['user_id' => Yii::$app->user->id])->all(), 'inquiry_id');
+            $booked_inquiry_ids = ArrayHelper::getColumn(InquiryDoctorList::find()
+                ->where(['user_id' => Yii::$app->user->id])
+                ->andWhere(['status' => Inquiry::STATUS_BOOKED])
+                ->all(), 'inquiry_id');
             $new_appointments = self::find()
                 ->where(['is_viewed' => false])
-                ->andWhere(['in', 'inquiry_id', $booked_inquiriry_ids])
+                ->andWhere(['in', 'inquiry_id', $booked_inquiry_ids])
                 ->count();
         }
         

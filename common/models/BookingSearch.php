@@ -41,7 +41,14 @@ class BookingSearch extends Booking
      */
     public function search($params)
     {
-        $query = Booking::find()->with('inquiry')->orderBy('id DESC');
+        $query = Booking::find();
+        if (!Yii::$app->user->can('administrator')) {
+            $query->join('LEFT JOIN', 'inquiry_doctor_list as list', 'booking.inquiry_id = list.inquiry_id')
+                ->where(['list.user_id' => Yii::$app->user->id])
+                ->andWhere(['list.status' => Inquiry::STATUS_BOOKED]);
+        }
+
+        $query = $query->with('inquiry')->orderBy('id DESC');
         $id_list = ArrayHelper::getColumn($query->all(), 'id');
         
         if (Yii::$app->user->can('administrator')) {
