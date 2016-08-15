@@ -512,8 +512,7 @@ class Inquiry extends \yii\db\ActiveRecord
             /** @var InquiryDoctorList $doctor_offer */
             foreach ($inquiryDoctorList as $doctor_offer) {
                 unset($returnData);
-                $price = $doctor_offer->price;
-
+                $price = $doctor_offer->special_price != 0 ? $doctor_offer->special_price :$doctor_offer->price;
                 $returnData[$doctor_offer->user_id] = [
                     'id' => $doctor_offer->id,
                     'brand' => $doctor_offer->brandParam->brand->name,
@@ -559,7 +558,8 @@ class Inquiry extends \yii\db\ActiveRecord
                     ->all();
                 $returnData = [];
                 $brands_array = [];
-                $price = $doctor_offer->price;
+                $price = $doctor_offer->special_price != 0 ? $doctor_offer->special_price :$doctor_offer->price;
+                $special_price = $doctor_offer->special_price != 0 ? $doctor_offer->special_price : Yii::t('backend', 'Not set');
                 $type = 'Session';
                 $count = 0;
                 if ($doctor_offer->inquiryTreatment->treatment_intensity_id) {
@@ -628,6 +628,7 @@ class Inquiry extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+        
         return $data;
     }
 }

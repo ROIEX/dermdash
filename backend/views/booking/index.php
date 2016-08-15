@@ -23,7 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model) {
                     if (Yii::$app->user->can('administrator')) {
-                        return $model->inquiry->id;
+                        //return $model->inquiry->id;
+                        return Html::a($model->inquiry->id, Url::toRoute(['inquiry/view', 'note_id' => $model->inquiry->id]));
                     } else {
                         return Html::a($model->inquiry->id, Url::toRoute(['inquiry/view', 'note_id' => $model->inquiry->id, 'doctor_id' =>  Yii::$app->user->id]));
                     }
