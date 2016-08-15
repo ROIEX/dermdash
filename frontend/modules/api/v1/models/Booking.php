@@ -280,8 +280,8 @@ class Booking extends Model
                 ],
             ];
             
-            //$mandrill->messages->sendTemplate('Patient Appointment Confirmation', [], $patient_message);
-            //$mandrill->messages->sendTemplate('Doctor Appointment Confirmation', [], $doctor_message);
+            $mandrill->messages->sendTemplate('Patient Appointment Confirmation', [], $patient_message);
+            $mandrill->messages->sendTemplate('Doctor Appointment Confirmation', [], $doctor_message);
             return true;
         }
     }
