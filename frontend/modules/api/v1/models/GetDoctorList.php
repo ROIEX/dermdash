@@ -80,6 +80,7 @@ class GetDoctorList extends Model
                     'doctor_id' => $userProfile->user_id,
                     'inquiry_id' => $list->inquiry_id,
                     'clinic'=> $list->user->doctor->clinic,
+                    'biography' => $list->user->doctor->biography,
                     'city' => $list->user->userProfile->city,
                     'distance' => $distance,
                     'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
