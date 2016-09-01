@@ -15,7 +15,6 @@ use common\models\TreatmentCategory;
 use frontend\modules\api\v1\resources\CollectData;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
-use yii\helpers\Json;
 use yii\rest\Controller;
 
 class GetDataController extends Controller

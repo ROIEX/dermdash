@@ -82,6 +82,7 @@ class GetDoctorList extends Model
                     'clinic'=> $list->user->doctor->clinic,
                     'biography' => $list->user->doctor->biography,
                     'city' => $list->user->userProfile->city,
+                    'phone' => $list->user->userProfile->phone,
                     'distance' => $distance,
                     'photo' => $userProfile->avatar_path ? $userProfile->avatar_base_url . '/' . $userProfile->avatar_path : false,
                     'photos' =>  $photo_array,
